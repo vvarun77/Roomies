@@ -1,6 +1,5 @@
 import React, { useState } from "react"; 
 import { NavigationContainer } from '@react-navigation/native';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { 
 	View, 
 	Text, 
@@ -12,22 +11,29 @@ import {
 import {styles} from "./Style.js";
 import {TodoScreen} from "./TodoTab.js";
 import { PayScreen } from "./PayTab.js";
+import SignUpScreen from "./SignUpScreen.tsx";
+import { ClerkProvider, SignedIn, SignedOut } from "@clerk/clerk-expo";
+import Constants from "expo-constants"
+import HomeScreen from "./HomeScreen.js";
+import SignInScreen from "./SignInScreen.tsx";
+import { createStackNavigator } from '@react-navigation/stack';
+import { SignUpButton } from "@clerk/clerk-react";
+import { SignInWithMetamaskButton } from "@clerk/clerk-react";
 
-const Tab = createMaterialTopTabNavigator();
-const tabs = [{name: "Todo", component: TodoScreen}, {name: "Purchases", component: PayScreen}];
 
 const App = () => { 
+	
+	const Stack = createStackNavigator();
 	return ( 
-		<View style={styles.container}> 
-			<Text style={styles.heading}>Roomie</Text> 
-			<NavigationContainer>
-    <Tab.Navigator>
-      {
-        tabs.map(tab => <Tab.Screen key={tab.name} name={tab.name} component={tab.component} />)
-      }
-    </Tab.Navigator>
-  </NavigationContainer>
-		</View> 
+        <ClerkProvider publishableKey={Constants.expoConfig.extra.clerkPublishableKey}>
+             <NavigationContainer>
+             <Stack.Navigator>
+                <Stack.Screen name="SignIn" component={SignInScreen} />
+             <Stack.Screen name="SignUp" component={SignUpScreen}  />
+            <Stack.Screen name="Home" component={HomeScreen} />
+            </Stack.Navigator>
+                 </NavigationContainer>
+        </ClerkProvider>
 	); 
 }; 
 
