@@ -28,9 +28,9 @@ const App = () => {
         <ClerkProvider publishableKey={Constants.expoConfig.extra.clerkPublishableKey}>
              <NavigationContainer>
              <Stack.Navigator>
-                <Stack.Screen name="SignIn" component={SignInScreen} />
+            <Stack.Screen name="SignIn" component={SignInScreen} />
              <Stack.Screen name="SignUp" component={SignUpScreen}  />
-            <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen name="Home" component={HomeScreen} options={{ gestureEnabled: false }} />
 			<Stack.Screen name="ToDo" component={TodoScreen} />
 			<Stack.Screen name="Payments" component={PayScreen} />
             </Stack.Navigator>
