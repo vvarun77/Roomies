@@ -35,7 +35,8 @@ export default function SignInScreen() {
       });
       // This is an important step,
       // This indicates the user is signed in
-      await setActive({ session: completeSignIn.createdSessionId }).then( () => { navigation.navigate("Home")});
+      await setActive({ session: completeSignIn.createdSessionId })
+      navigation.navigate("Home")
      
     } catch (err: any) {
         console.error(JSON.stringify(err, null, 2));

@@ -12,23 +12,32 @@ import {styles} from "./Style.js";
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import React, { useState } from "react"; 
 import { NavigationContainer } from "@react-navigation/native";
+import {useNavigation} from '@react-navigation/native';
+import { Button } from "react-native";
+import { SignOutButton } from "@clerk/clerk-react";
+
 
 const Tab = createMaterialTopTabNavigator();
 const tabs = [{name: "Todo", component: TodoScreen}, {name: "Purchases", component: PayScreen}];
 
-const HomeScreen = () => { 
+export default function HomeScreen () { 
+    const navigation = useNavigation();
+    React.useLayoutEffect(() => {
+        navigation.setOptions({
+          headerLeft: null,
+        });
+      }, [navigation]);
+    const handleTodoClick = async () =>{
+        navigation.navigate('ToDo')
+    }
+    const handlePayClick = async () => {
+        navigation.navigate('Payments')
+    }
 	return ( 
 		<View style={styles.container}> 
-			<Text style={styles.heading}>Roomie</Text> 
-			<NavigationContainer independent={true}>
-    <Tab.Navigator>
-      {
-        tabs.map(tab => <Tab.Screen key={tab.name} name={tab.name} component={tab.component} />)
-      }
-    </Tab.Navigator>
-  </NavigationContainer>
+		<Text style={styles.heading}>Roomie</Text> 
+        <Button onPress={handleTodoClick} title="todo"> Todo List </Button>
+        <Button onPress={handlePayClick} title="pay"> Payments </Button>
 		</View> 
 	); 
 }; 
-
-export default HomeScreen;
