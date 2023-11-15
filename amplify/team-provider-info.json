@@ -1,0 +1,35 @@
+{
+  "roomie": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-roomie-roomie-04551-authRole",
+      "UnauthRoleArn": "arn:aws:iam::608746320597:role/amplify-roomie-roomie-04551-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::608746320597:role/amplify-roomie-roomie-04551-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-roomie-roomie-04551-deployment",
+      "UnauthRoleName": "amplify-roomie-roomie-04551-unauthRole",
+      "StackName": "amplify-roomie-roomie-04551",
+      "StackId": "arn:aws:cloudformation:us-east-1:608746320597:stack/amplify-roomie-roomie-04551/62e155f0-8393-11ee-9f60-1202312cd4f9",
+      "AmplifyAppId": "d2jdt2r7sedmxy"
+    },
+    "categories": {
+      "function": {
+        "tasksLambda": {
+          "deploymentBucketName": "amplify-roomie-roomie-04551-deployment",
+          "s3Key": "amplify-builds/tasksLambda-45447151376178427645-build.zip"
+        }
+      },
+      "storage": {
+        "taskTable": {}
+      },
+      "api": {
+        "tasksApi": {}
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d2jdt2r7sedmxy",
+          "type": "cicd"
+        }
+      }
+    }
+  }
+}

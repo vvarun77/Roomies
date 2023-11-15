@@ -1,0 +1,10 @@
+{
+  "resourceName": "taskTable",
+  "tableName": "taskTable",
+  "partitionKey": {
+    "fieldName": "userID",
+    "fieldType": "string"
+  },
+  "gsi": [],
+  "triggerFunctions": []
+}

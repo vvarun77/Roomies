@@ -1,5 +1,5 @@
 const express = require('express');
-const { clerkClient, createClerkClient } = require('@clerk/clerk-sdk-node');
+const { createClerkClient } = require('@clerk/clerk-sdk-node');
 var cors = require('cors');
 
 const app = express();
