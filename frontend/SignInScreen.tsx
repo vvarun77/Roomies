@@ -2,18 +2,8 @@ import React from "react";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useSignIn } from "@clerk/clerk-expo";
 import {useNavigation} from '@react-navigation/native';
-import { StyleSheet } from "react-native";
 import { useClerk } from "@clerk/clerk-react";
-import axios from "axios";
-import { getMaxListeners } from "events";
 
-const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      justifyContent: "center", // Center vertically
-      alignItems: "center",     // Center horizontally
-    },
-  });
  
 export default function SignInScreen() {
   const navigation = useNavigation();
@@ -73,9 +63,6 @@ export default function SignInScreen() {
       </TouchableOpacity>
       <TouchableOpacity onPress={onNewUserPress}>
         <Text>New user? Sign up here!</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={testing}>
-        <Text>test</Text>
       </TouchableOpacity>
     </View>
   );

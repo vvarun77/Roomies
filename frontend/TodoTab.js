@@ -8,20 +8,52 @@ import {
 	StyleSheet, 
 } from "react-native"; 
 import {styles} from "./Style.js";
-import React, { useState } from "react"; 
+import React, { useState, useEffect } from "react"; 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 export function TodoScreen({route}, components) {
 	const [task, setTask] = useState(""); 
 	const [tasks, setTasks] = useState([]); 
 	const [editIndex, setEditIndex] = useState(-1); 
-	const handleAddTask = () => { 
+
+	useEffect(() => {
+		getData().then((retrievedTasks) => {
+		  setTasks(retrievedTasks);
+		});
+	  }, []);
+
+	const storeData = async (value) => {
+		try {
+		  await AsyncStorage.setItem('tasks', value);
+		} catch (e) {
+		  console.log(JSON.stringify(e, null, 2))
+		}
+	  };
+
+	  async function getData () {
+		try {
+			const jsonValue = await AsyncStorage.getItem('tasks');
+			const jsonTasks = jsonValue != null ? JSON.parse(jsonValue) : null;
+			return jsonTasks !== null ? jsonTasks.tasks : [];
+		} catch (error) {
+			console.log(JSON.stringify(error, null, 2));
+			return []; // Return an empty array or handle the error as needed
+		}
+	  };
+
+	const handleAddTask = async () => { 
 		if (task) { 
 			if (editIndex !== -1) { 
 				const updatedTasks = [...tasks]; 
 				updatedTasks[editIndex] = task; 
+				await storeData(JSON.stringify({"tasks": updatedTasks}))
 				setTasks(updatedTasks); 
 				setEditIndex(-1); 
+				await getData().then( (retrievedtasks) => console.log(retrievedtasks))
 			} else { 
 				setTasks([...tasks, task]); 
+				await storeData(JSON.stringify({"tasks": [...tasks, task]}))
+				await getData().then( (retrievedtasks) => console.log(retrievedtasks))
 			} 
 			setTask(""); 
 		} 
@@ -33,10 +65,11 @@ export function TodoScreen({route}, components) {
 		setEditIndex(index); 
 	}; 
 
-	const handleDeleteTask = (index) => { 
+	const handleDeleteTask = async (index) => { 
 		const updatedTasks = [...tasks]; 
 		updatedTasks.splice(index, 1); 
 		setTasks(updatedTasks); 
+		await storeData(JSON.stringify({"tasks": updatedTasks}))
 	}; 
 
 	const renderItem = ({ item, index }) => ( 

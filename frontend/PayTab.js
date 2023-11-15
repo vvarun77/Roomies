@@ -8,35 +8,69 @@ import {
 	StyleSheet, 
 } from "react-native"; 
 import {styles} from "./Style.js";
-import React, { useState } from "react"; 
+import React, { useState, useEffect } from "react"; 
+import AsyncStorage, { useAsyncStorage } from '@react-native-async-storage/async-storage';
+
 export function PayScreen({route}, components) {
-	const [task, setTask] = useState(""); 
-	const [tasks, setTasks] = useState([]); 
+	const [purchase, setPurchase] = useState(""); 
+	const [purchases, setPurchases] = useState([]); 
 	const [editIndex, setEditIndex] = useState(-1); 
-	const handleAddTask = () => { 
-		if (task) { 
+	const purchaseStorage = useAsyncStorage('purchase')
+
+	useEffect(() => {
+		getData().then((retrievedPurchases) => {
+		  setPurchases(retrievedPurchases);
+		});
+	  }, []);
+
+	const storeData = async (value) => {
+		try {
+		  await purchaseStorage.setItem(value)	
+		} catch (e) {
+		  console.log(JSON.stringify(e, null, 2))
+		}
+	  };
+
+	  async function getData () {
+		try {
+			const jsonValue = await purchaseStorage.getItem()
+			const jsonTasks = jsonValue != null ? JSON.parse(jsonValue) : null;
+			return jsonTasks !== null ? jsonTasks.tasks : [];
+		} catch (error) {
+			console.log(JSON.stringify(error, null, 2));
+			return []; // Return an empty array or handle the error as needed
+		}
+	  };
+
+	const handleAddPurchase = async () => { 
+		if (purchase) { 
 			if (editIndex !== -1) { 
-				const updatedTasks = [...tasks]; 
-				updatedTasks[editIndex] = task; 
-				setTasks(updatedTasks); 
+				const updatedPurchases = [...purchases]; 
+				updatedPurchases[editIndex] = purchase; 
+				await storeData(JSON.stringify({"tasks": updatedPurchases}))
+				setPurchases(updatedPurchases); 
 				setEditIndex(-1); 
+				await getData().then( (retrievedpurchases) => console.log(retrievedpurchases))
 			} else { 
-				setTasks([...tasks, task]); 
+				setPurchases([...purchases, purchase]); 
+				await storeData(JSON.stringify({"tasks": [...purchases, purchase]}))
+				await getData().then( (retrievedpurchases) => console.log(retrievedpurchases))
 			} 
-			setTask(""); 
+			setPurchase(""); 
 		} 
 	}; 
 
-	const handleEditTask = (index) => { 
-		const taskToEdit = tasks[index]; 
-		setTask(taskToEdit); 
+	const handleEditPurchase = (index) => { 
+		const purchaseToEdit = purchases[index]; 
+		setPurchase(purchaseToEdit); 
 		setEditIndex(index); 
 	}; 
 
-	const handleDeleteTask = (index) => { 
-		const updatedTasks = [...tasks]; 
-		updatedTasks.splice(index, 1); 
-		setTasks(updatedTasks); 
+	const handleDeletePurchase = async (index) => { 
+		const updatedPurchases = [...purchases]; 
+		updatedPurchases.splice(index, 1); 
+		setPurchases(updatedPurchases); 
+		await storeData(JSON.stringify({"tasks": updatedPurchases}))
 	}; 
 
 	const renderItem = ({ item, index }) => ( 
@@ -46,12 +80,12 @@ export function PayScreen({route}, components) {
 			<View 
 				style={styles.taskButtons}> 
 				<TouchableOpacity 
-					onPress={() => handleEditTask(index)}> 
+					onPress={() => handleEditPurchase(index)}> 
 					<Text 
 						style={styles.editButton}> Edit</Text> 
 				</TouchableOpacity> 
 				<TouchableOpacity 
-					onPress={() => handleDeleteTask(index)}> 
+					onPress={() => handleDeletePurchase(index)}> 
 					<Text 
 						style={styles.deleteButton}>Delete</Text> 
 				</TouchableOpacity> 
@@ -64,18 +98,18 @@ export function PayScreen({route}, components) {
 			<TextInput 
 				style={styles.input} 
 				placeholder="Enter purchase"
-				value={task} 
-				onChangeText={(text) => setTask(text)} 
+				value={purchase} 
+				onChangeText={(text) => setPurchase(text)} 
 			/> 
 			<TouchableOpacity 
 				style={styles.addButton} 
-				onPress={handleAddTask}> 
+				onPress={handleAddPurchase}> 
 				<Text style={styles.addButtonText}> 
 					{editIndex !== -1 ? "Update Purchase" : "Add Purchase"} 
 				</Text> 
 			</TouchableOpacity> 
 			<FlatList 
-				data={tasks} 
+				data={purchases} 
 				renderItem={renderItem} 
 				keyExtractor={(item, index) => index.toString()} 
 			/> 
