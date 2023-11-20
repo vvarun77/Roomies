@@ -61,7 +61,7 @@ export default function SignUpScreen() {
  
       await setActive({ session: completeSignUp.createdSessionId });
 
-      axios.post('http://192.168.0.111:3000/createUser', {email: email, userpassword: userpassword}, 
+      axios.post('https://npttiggp4i.execute-api.us-east-1.amazonaws.com/default/signUpClerk-roomie', {email: email, userpassword: userpassword}, 
       {
         headers: {
         'Content-Type': "application/json",
