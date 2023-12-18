@@ -1,0 +1,12 @@
+projects:
+  roomie:
+    schemaPath: src/graphql/schema.json
+    includes:
+      - /frontend/GroupTab.js
+    excludes:
+      - ./amplify/**
+    extensions:
+      amplify:
+        codeGenTarget: javascript
+        generatedFileName: ''
+        docsFilePath: /frontend

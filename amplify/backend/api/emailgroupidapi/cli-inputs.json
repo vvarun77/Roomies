@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "paths": {
+    "/emailtogid": {
+      "name": "/emailtogid",
+      "lambdaFunction": "emailgidlambda",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}

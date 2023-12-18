@@ -1,5 +1,35 @@
 {
   "api": {
+    "emailgroupidapi": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "emailgidlambda"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    },
+    "roomie": {
+      "dependsOn": [],
+      "output": {
+        "authConfig": {
+          "additionalAuthenticationProviders": [],
+          "defaultAuthentication": {
+            "apiKeyConfig": {
+              "apiKeyExpirationDays": 7
+            },
+            "authenticationType": "API_KEY"
+          }
+        }
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "AppSync"
+    },
     "tasksApi": {
       "dependsOn": [
         {
@@ -16,6 +46,25 @@
     }
   },
   "function": {
+    "emailgidlambda": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributeEnvMap": {
+            "Arn": "TABLE_ARN",
+            "Name": "TABLE_NAME"
+          },
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "storage",
+          "resourceName": "taskTable"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "tasksLambda": {
       "build": true,
       "dependsOn": [
@@ -44,6 +93,22 @@
     }
   },
   "parameters": {
+    "AMPLIFY_function_emailgidlambda_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "emailgidlambda"
+        }
+      ]
+    },
+    "AMPLIFY_function_emailgidlambda_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "emailgidlambda"
+        }
+      ]
+    },
     "AMPLIFY_function_tasksLambda_deploymentBucketName": {
       "usedBy": [
         {

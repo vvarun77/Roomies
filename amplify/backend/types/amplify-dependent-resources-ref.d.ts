@@ -1,5 +1,15 @@
 export type AmplifyDependentResourcesAttributes = {
   "api": {
+    "emailgroupidapi": {
+      "ApiId": "string",
+      "ApiName": "string",
+      "RootUrl": "string"
+    },
+    "roomie": {
+      "GraphQLAPIEndpointOutput": "string",
+      "GraphQLAPIIdOutput": "string",
+      "GraphQLAPIKeyOutput": "string"
+    },
     "tasksApi": {
       "ApiId": "string",
       "ApiName": "string",
@@ -7,6 +17,13 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "function": {
+    "emailgidlambda": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
     "tasksLambda": {
       "Arn": "string",
       "LambdaExecutionRole": "string",
