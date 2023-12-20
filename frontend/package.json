@@ -10,6 +10,7 @@
     "clean": "rm -rf node_modules && yarn upgrade"
   },
   "dependencies": {
+    "@apollo/client": "^3.8.8",
     "@clerk/backend": "^0.34.1",
     "@clerk/clerk-expo": "^0.19.16",
     "@expo/ngrok": "^4.1.0",
@@ -21,6 +22,7 @@
     "@react-navigation/stack": "^6.3.20",
     "@tradle/react-native-http": "^2.0.1",
     "@types/react": "~18.2.14",
+    "apollo-link-context": "^1.0.20",
     "assert": "^1.5.1",
     "async-storage": "^0.1.0",
     "axios": "^1.6.1",

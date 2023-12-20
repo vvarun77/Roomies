@@ -10,21 +10,29 @@ import {
 import {styles} from "./Style.js";
 import React, { useState, useEffect } from "react"; 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { createTodo } from "./mutations.js";
+import {useMutation, gql} from '@apollo/client';
 
 export function TodoScreen({route}, components) {
 	const [task, setTask] = useState(""); 
 	const [tasks, setTasks] = useState([]); 
 	const [editIndex, setEditIndex] = useState(-1); 
+	const [addTodo, { data, loading, error }] = useMutation(createTodo);
 
 	useEffect(() => {
 		getData().then((retrievedTasks) => {
 		  setTasks(retrievedTasks);
 		});
 	  }, []);
-
+	  
 	const storeData = async (value) => {
 		try {
 		  await AsyncStorage.setItem('tasks', value);
+		  /*
+		  if (loading) return 'Submitting...';
+		  if (error) return `Submission error! ${error.message}`;
+		  addTodo({ variables: { input: {name: "heyyyy"} } }); template for usage
+		  */
 		} catch (e) {
 		  console.log(JSON.stringify(e, null, 2))
 		}
