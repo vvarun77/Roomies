@@ -9,8 +9,8 @@ export const createTodo = gql`
   ) {
     createTodo(input: $input, condition: $condition) {
       id
-      name
-      description
+      todos
+      payments
       createdAt
       updatedAt
       __typename
@@ -24,8 +24,8 @@ export const updateTodo = gql`
   ) {
     updateTodo(input: $input, condition: $condition) {
       id
-      name
-      description
+      todos
+      payments
       createdAt
       updatedAt
       __typename

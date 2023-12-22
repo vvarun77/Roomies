@@ -33,13 +33,14 @@ export function TodoScreen({route}, components) {
 	
 	useEffect(() => {
 		if(!loading && error){
-			addTodoHook({ variables: { input: {id: user.unsafeMetadata.groupid, name: []} } })
+			async function addEmpty() {
+				//await addTodoHook({ variables: { input: {id: user.unsafeMetadata.groupid, todos: ["hh"]} } })
+			}
 			console.log(error)
 		}
 		if (!loading){
-			var intermediateData = data.getTodo.name.replace(/([a-zA-Z0-9_]+)/g, '"$1"')
-			var finalData = JSON.parse(intermediateData)
-			setTasks(finalData)
+			setTasks(data.getTodo.todos)
+			console.log(data.getTodo.todos)
 		}
 		
 		}, []);
@@ -47,13 +48,11 @@ export function TodoScreen({route}, components) {
 	  
 	const storeData = async (value) => {
 		try {
-		  await AsyncStorage.setItem('tasks', value);
-		  const val = JSON.parse(value).tasks
-		  await updateTodoHook({ variables: { input: {id: user.unsafeMetadata.groupid, name: val} } });
+		  //await AsyncStorage.setItem('tasks', value);
+		  //const val = JSON.parse(value).tasks
+		  await updateTodoHook({ variables: { input: {id: user.unsafeMetadata.groupid, todos: tasks} } });
 		  
 		  /*
-		  if (loading) return 'Submitting...';
-		  if (error) return `Submission error! ${error.message}`;
 		  addTodo({ variables: { input: {name: value, id: user.unsafeMetadata} } }); template for usage
 		  */
 		} catch (e) {
@@ -74,7 +73,7 @@ export function TodoScreen({route}, components) {
 				await storeData(JSON.stringify({"tasks": [...tasks, task]}))
 			} 
 			if (!loading){
-				console.log(data.getTodo.name)
+				console.log(data.getTodo.todos)
 				setTask(""); 
 			}
 			

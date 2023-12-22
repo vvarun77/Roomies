@@ -6,8 +6,8 @@ export const getTodo =  gql`
   query GetTodo($id: ID!) {
     getTodo(id: $id) {
       id
-      name
-      description
+      todos
+      payments
       createdAt
       updatedAt
       __typename
@@ -23,8 +23,8 @@ export const listTodos = gql`
     listTodos(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        name
-        description
+        todos
+        payments
         createdAt
         updatedAt
         __typename
