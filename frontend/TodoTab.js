@@ -33,20 +33,15 @@ export function TodoScreen({route}, components) {
 	
 	useEffect(() => {
 		if(!loading && error){
+			addTodoHook({ variables: { input: {id: user.unsafeMetadata.groupid, name: []} } })
 			console.log(error)
 		}
 		if (!loading){
 			var intermediateData = data.getTodo.name.replace(/([a-zA-Z0-9_]+)/g, '"$1"')
 			var finalData = JSON.parse(intermediateData)
 			setTasks(finalData)
-			console.log(finalData)
 		}
 		
-		/*
-		getData().then((retrievedTasks) => {
-		  setTasks(retrievedTasks);
-		}); 
-		*/
 		}, []);
 		
 	  
@@ -54,7 +49,6 @@ export function TodoScreen({route}, components) {
 		try {
 		  await AsyncStorage.setItem('tasks', value);
 		  const val = JSON.parse(value).tasks
-		  //await addTodo({ variables: { input: {id: user.unsafeMetadata.groupid, name: value} } });
 		  await updateTodoHook({ variables: { input: {id: user.unsafeMetadata.groupid, name: val} } });
 		  
 		  /*
@@ -67,19 +61,6 @@ export function TodoScreen({route}, components) {
 		}
 	  };
 
-	  /*
-	  async function getData () {
-		try {
-			const jsonValue = await AsyncStorage.getItem('tasks');
-			const jsonTasks = jsonValue != null ? JSON.parse(jsonValue) : null;
-			return jsonTasks !== null ? jsonTasks.tasks : [];
-		} catch (error) {
-			console.log(JSON.stringify(error, null, 2));
-			return []; // Return an empty array or handle the error as needed
-		}
-	  };
-	  */
-
 	const handleAddTask = async () => { 
 		if (task) { 
 			if (editIndex !== -1) { 
@@ -88,19 +69,15 @@ export function TodoScreen({route}, components) {
 				await storeData(JSON.stringify({"tasks": updatedTasks}))
 				setTasks(updatedTasks); 
 				setEditIndex(-1); 
-				if (!loading){
-					console.log(data.getTodo.name)
-				}
-				await getData().then( (retrievedtasks) => console.log(retrievedtasks))
 			} else { 
 				setTasks([...tasks, task]); 
 				await storeData(JSON.stringify({"tasks": [...tasks, task]}))
-				if (!loading){
-					console.log(data.getTodo.name)
-				}
-				await getData().then( (retrievedtasks) => console.log(retrievedtasks))
 			} 
-			setTask(""); 
+			if (!loading){
+				console.log(data.getTodo.name)
+				setTask(""); 
+			}
+			
 		} 
 	}; 
 
