@@ -43,7 +43,7 @@ export default function SignUpScreen() {
  
       // change the UI to our pending section.
       setPendingVerification(true);
-    } catch (err: any) {
+    } catch (err) {
       console.error(JSON.stringify(err, null, 2));
     }
   };
@@ -75,10 +75,10 @@ export default function SignUpScreen() {
         console.log(JSON.stringify(error));
       });
 
-      navigation.navigate('Home');
-    } catch (err: any) {
+      navigation.navigate('Groups');
+    } catch (err) {
         if(err.errors[0].code == "verification_already_verified"){
-            navigation.navigate('Home');
+            navigation.navigate('Groups');
         }
         else{
             console.error(JSON.stringify(err, null, 2));

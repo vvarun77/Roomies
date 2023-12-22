@@ -1,6 +1,7 @@
-// GroupScreen.js
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import {useAuth} from "@clerk/clerk-expo"
     // need to create lookup for users
     // tasks[groupId[email]]
     // https://f0ik5w7k41.execute-api.us-east-1.amazonaws.com/default/emailToGroupId
@@ -9,10 +10,30 @@ import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 const GroupingScreen = () => {
   const [groupName, setGroupName] = useState('');
   const [groupCode, setGroupCode] = useState('');
+  const navigation = useNavigation();
+  const { isLoaded, userId, sessionId, getToken } = useAuth()
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerLeft: null,
+    });
+  }, [navigation]);
 
   const handleCreateGroup = () => {
     // Handle creating a group
+    
     console.log('Creating group:', groupName);
+    axios.post('https://etex9zchp4.execute-api.us-east-1.amazonaws.com/default/groupClerk-roomie', 
+        {
+            "userId": userId
+        }, 
+        {
+            headers: {
+                'Content-Type': "application/json",
+                'Accept': "application/json",
+            }  
+        }
+    )  
+    
     // Add your logic to create a group
   };
 
@@ -22,12 +43,16 @@ const GroupingScreen = () => {
     // Add your logic to join a group
   };
 
+  const handleHomeClick = async () =>{
+    navigation.navigate('Home')
+}
+
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>Group App</Text>
+      <Text style={styles.heading}>Join or Create a Room!</Text>
 
       <View style={styles.inputContainer}>
-        <Text style={styles.label}>Group Name:</Text>
+        <Text style={styles.label}>Room Name:</Text>
         <TextInput
           style={styles.input}
           placeholder="Enter group name"
@@ -38,7 +63,7 @@ const GroupingScreen = () => {
       </View>
 
       <View style={styles.inputContainer}>
-        <Text style={styles.label}>Group Code:</Text>
+        <Text style={styles.label}>Room Code:</Text>
         <TextInput
           style={styles.input}
           placeholder="Enter group code"
@@ -47,6 +72,7 @@ const GroupingScreen = () => {
         />
         <Button title="Join Group" onPress={handleJoinGroup} />
       </View>
+      <Button onPress={handleHomeClick} title="Home"> Go to Home </Button>
     </View>
   );
 };

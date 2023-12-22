@@ -12,6 +12,7 @@ import {styles} from "./Style.js";
 import {TodoScreen} from "./TodoTab.js";
 import { PayScreen } from "./PayTab.js";
 import SignUpScreen from "./SignUpScreen.tsx";
+import GroupingScreen from "./GroupingScreen.js";
 import { ClerkProvider, SignedIn, SignedOut } from "@clerk/clerk-expo";
 import Constants from "expo-constants"
 import HomeScreen from "./HomeScreen.js";
@@ -59,6 +60,7 @@ const App = () => {
             <Stack.Screen name="Home" component={HomeScreen} options={{ gestureEnabled: false }} />
 			<Stack.Screen name="Payments" component={PayScreen} />
 			<Stack.Screen name="ToDo" component={TodoScreen} />
+			<Stack.Screen name="Groups" component={GroupingScreen} />
             </Stack.Navigator>
                  </NavigationContainer>
         </ClerkProvider>
