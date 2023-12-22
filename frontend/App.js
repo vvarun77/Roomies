@@ -11,12 +11,12 @@ import {
 import {styles} from "./Style.js";
 import {TodoScreen} from "./TodoTab.js";
 import { PayScreen } from "./PayTab.js";
-import SignUpScreen from "./SignUpScreen.tsx";
+import SignUpScreen from "./SignUpScreen.js";
 import GroupingScreen from "./GroupingScreen.js";
 import { ClerkProvider, SignedIn, SignedOut } from "@clerk/clerk-expo";
 import Constants from "expo-constants"
 import HomeScreen from "./HomeScreen.js";
-import SignInScreen from "./SignInScreen.tsx";
+import SignInScreen from "./SignInScreen.js";
 import { createStackNavigator } from '@react-navigation/stack';
 import { SignUpButton } from "@clerk/clerk-react";
 import { SignInWithMetamaskButton } from "@clerk/clerk-react";

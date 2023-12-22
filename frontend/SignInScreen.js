@@ -31,7 +31,7 @@ export default function SignInScreen() {
       await setActive({ session: completeSignIn.createdSessionId })
       navigation.navigate("Home")
      
-    } catch (err: any) {
+    } catch (err) {
         console.error(JSON.stringify(err, null, 2));
     }
   };

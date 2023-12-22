@@ -10,34 +10,64 @@ import {
 import {styles} from "./Style.js";
 import React, { useState, useEffect } from "react"; 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { createTodo } from "./mutations.js";
-import {useMutation, gql} from '@apollo/client';
+import { createTodo, updateTodo, deleteTodo } from "./mutations.js";
+import { getTodo } from "./queries.js";
+import {useMutation, useQuery, gql} from '@apollo/client';
+import {useUser} from "@clerk/clerk-react";
 
 export function TodoScreen({route}, components) {
 	const [task, setTask] = useState(""); 
 	const [tasks, setTasks] = useState([]); 
 	const [editIndex, setEditIndex] = useState(-1); 
-	const [addTodo, { data, loading, error }] = useMutation(createTodo);
-
+	const [addTodoHook, { data: createData, loading: createLoading, error: createError }] = useMutation(createTodo);
+	const [updateTodoHook, { data: updateData, loading: updateLoading, error: updateError }] = useMutation(updateTodo);
+	const [deleteTodoHook, { data: deleteData, loading: deleteLoading, error: deleteError }] = useMutation(deleteTodo);
+	const { user } = useUser();
+	const groupid = user.unsafeMetadata.groupid;
+	
+	const { data , loading , error } = useQuery(getTodo, 
+		{
+			variables: {id: groupid}, 
+			pollInterval: 500,
+		});
+	
 	useEffect(() => {
+		if(!loading && error){
+			console.log(error)
+		}
+		if (!loading){
+			var intermediateData = data.getTodo.name.replace(/([a-zA-Z0-9_]+)/g, '"$1"')
+			var finalData = JSON.parse(intermediateData)
+			setTasks(finalData)
+			console.log(finalData)
+		}
+		
+		/*
 		getData().then((retrievedTasks) => {
 		  setTasks(retrievedTasks);
-		});
-	  }, []);
+		}); 
+		*/
+		}, []);
+		
 	  
 	const storeData = async (value) => {
 		try {
 		  await AsyncStorage.setItem('tasks', value);
+		  const val = JSON.parse(value).tasks
+		  //await addTodo({ variables: { input: {id: user.unsafeMetadata.groupid, name: value} } });
+		  await updateTodoHook({ variables: { input: {id: user.unsafeMetadata.groupid, name: val} } });
+		  
 		  /*
 		  if (loading) return 'Submitting...';
 		  if (error) return `Submission error! ${error.message}`;
-		  addTodo({ variables: { input: {name: "heyyyy"} } }); template for usage
+		  addTodo({ variables: { input: {name: value, id: user.unsafeMetadata} } }); template for usage
 		  */
 		} catch (e) {
 		  console.log(JSON.stringify(e, null, 2))
 		}
 	  };
 
+	  /*
 	  async function getData () {
 		try {
 			const jsonValue = await AsyncStorage.getItem('tasks');
@@ -48,6 +78,7 @@ export function TodoScreen({route}, components) {
 			return []; // Return an empty array or handle the error as needed
 		}
 	  };
+	  */
 
 	const handleAddTask = async () => { 
 		if (task) { 
@@ -57,10 +88,16 @@ export function TodoScreen({route}, components) {
 				await storeData(JSON.stringify({"tasks": updatedTasks}))
 				setTasks(updatedTasks); 
 				setEditIndex(-1); 
+				if (!loading){
+					console.log(data.getTodo.name)
+				}
 				await getData().then( (retrievedtasks) => console.log(retrievedtasks))
 			} else { 
 				setTasks([...tasks, task]); 
 				await storeData(JSON.stringify({"tasks": [...tasks, task]}))
+				if (!loading){
+					console.log(data.getTodo.name)
+				}
 				await getData().then( (retrievedtasks) => console.log(retrievedtasks))
 			} 
 			setTask(""); 

@@ -3,7 +3,7 @@ import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useSignUp } from "@clerk/clerk-expo";
 import { StyleSheet } from "react-native";
 import {useNavigation} from '@react-navigation/native';
-import { Clerk } from '@clerk/backend';
+//import { Clerk } from '@clerk/backend';
 import axios from "axios";
 
 const styles = StyleSheet.create({
