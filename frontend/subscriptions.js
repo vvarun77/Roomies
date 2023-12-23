@@ -6,8 +6,8 @@ export const onCreateTodo = gql`
   subscription OnCreateTodo($filter: ModelSubscriptionTodoFilterInput) {
     onCreateTodo(filter: $filter) {
       id
-      name
-      description
+      todos
+      payments
       createdAt
       updatedAt
       __typename
@@ -18,8 +18,8 @@ export const onUpdateTodo = gql`
   subscription OnUpdateTodo($filter: ModelSubscriptionTodoFilterInput) {
     onUpdateTodo(filter: $filter) {
       id
-      name
-      description
+      todos
+      payments
       createdAt
       updatedAt
       __typename
