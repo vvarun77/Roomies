@@ -71,13 +71,9 @@ export function TodoScreen({route}, components) {
 				updatedTasks[editIndex] = task; 
 				setTasks(tasks => updatedTasks); 
 				console.log("Updated tasks:", updatedTasks);
-				//await updateTodoHook({ variables: { input: {id: user.unsafeMetadata.groupid, todos: tasks} } });
-				//console.log("Data after update:", data.getTodo.todos);
-				setEditIndex(-1); 
 				setTask(""); 
 			} else { 
 				await setTasks(tasks => [...tasks, task]); 
-				//await updateTodoHook({ variables: { input: {id: user.unsafeMetadata.groupid, todos: tasks} } });
 				setTask("");  	
 			} 
 		} 
