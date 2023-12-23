@@ -2,6 +2,11 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useAuth} from "@clerk/clerk-expo"
+import axios from "axios";
+import { useMutation } from '@apollo/client';
+import { createTodo } from "./mutations.js";
+import {useUser} from "@clerk/clerk-react";
+
     // need to create lookup for users
     // tasks[groupId[email]]
     // https://f0ik5w7k41.execute-api.us-east-1.amazonaws.com/default/emailToGroupId
@@ -10,19 +15,21 @@ import {useAuth} from "@clerk/clerk-expo"
 const GroupingScreen = () => {
   const [groupName, setGroupName] = useState('');
   const [groupCode, setGroupCode] = useState('');
+  const [addTodoHook, { data: createData, loading: createLoading, error: createError }] = useMutation(createTodo);
   const navigation = useNavigation();
   const { isLoaded, userId, sessionId, getToken } = useAuth()
+  const { user } = useUser();
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: null,
     });
   }, [navigation]);
 
-  const handleCreateGroup = () => {
+  const handleCreateGroup = async () => {
     // Handle creating a group
     
     console.log('Creating group:', groupName);
-    axios.post('https://etex9zchp4.execute-api.us-east-1.amazonaws.com/default/groupClerk-roomie', 
+    await axios.post('https://etex9zchp4.execute-api.us-east-1.amazonaws.com/default/groupClerk-roomie', 
         {
             "userId": userId
         }, 
@@ -32,14 +39,32 @@ const GroupingScreen = () => {
                 'Accept': "application/json",
             }  
         }
-    )  
-    
-    // Add your logic to create a group
+    )
+    .then(response => {
+        addTodoHook({ variables: { input: {id: response.data, todos: [], payments: []} } }) 
+      } 
+    ) 
+    .catch(error => {
+      // Handle error
+      console.error('Axios request error:', error);
+  });
   };
 
   const handleJoinGroup = () => {
     // Handle joining a group
     console.log('Joining group:', groupCode);
+    axios.post('https://etex9zchp4.execute-api.us-east-1.amazonaws.com/default/groupClerk-roomie', 
+    {
+        "userId": userId,
+        "groupid": groupCode
+    }, 
+    {
+        headers: {
+            'Content-Type': "application/json",
+            'Accept': "application/json",
+        }  
+    }
+)  
     // Add your logic to join a group
   };
 
