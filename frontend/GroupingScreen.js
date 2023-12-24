@@ -5,12 +5,7 @@ import {useAuth} from "@clerk/clerk-expo"
 import axios from "axios";
 import { useMutation } from '@apollo/client';
 import { createTodo } from "./mutations.js";
-import {useUser} from "@clerk/clerk-react";
-
-    // need to create lookup for users
-    // tasks[groupId[email]]
-    // https://f0ik5w7k41.execute-api.us-east-1.amazonaws.com/default/emailToGroupId
-    // /default/emailToGroupId
+import {useUser, useClerk} from "@clerk/clerk-react";
 
 const GroupingScreen = () => {
   const [groupName, setGroupName] = useState('');
@@ -19,6 +14,7 @@ const GroupingScreen = () => {
   const navigation = useNavigation();
   const { isLoaded, userId, sessionId, getToken } = useAuth()
   const { user } = useUser();
+  const { signOut } = useClerk();
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: null,
@@ -42,8 +38,11 @@ const GroupingScreen = () => {
     )
     .then(response => {
         addTodoHook({ variables: { input: {id: response.data, todos: [], payments: []} } }) 
-      } 
-    ) 
+      })
+    .then(response => {
+      signOut();
+      navigation.navigate('SignIn')
+    })
     .catch(error => {
       // Handle error
       console.error('Axios request error:', error);
@@ -68,8 +67,8 @@ const GroupingScreen = () => {
     // Add your logic to join a group
   };
 
-  const handleHomeClick = async () =>{
-    navigation.navigate('Home')
+  const handleSignInClick = async () =>{
+    navigation.navigate('SignIn')
 }
 
   return (
@@ -97,7 +96,7 @@ const GroupingScreen = () => {
         />
         <Button title="Join Group" onPress={handleJoinGroup} />
       </View>
-      <Button onPress={handleHomeClick} title="Home"> Go to Home </Button>
+      <Button onPress={handleSignInClick} title="SignIn"> Back to Sign In </Button>
     </View>
   );
 };
