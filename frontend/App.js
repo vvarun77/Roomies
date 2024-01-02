@@ -25,7 +25,7 @@ import { setContext } from "apollo-link-context";
 import awsmobile from "./src/aws-exports.js";
 
 const App = () => { 
-	
+
 	const Stack = createStackNavigator();
 	// Initialize Apollo Client
 	const httpLink = createHttpLink({
@@ -36,7 +36,7 @@ const App = () => {
 		return {
 		  headers: {
 			...headers,
-			'x-api-key': "da2-t4mbt7yumreztnlwdgejptkpyu"
+			'x-api-key': "da2-64cftv3ewvesfjjuoyfdjzihha"
 		  }
 		};
 	  });

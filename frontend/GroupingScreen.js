@@ -49,13 +49,13 @@ const GroupingScreen = () => {
   });
   };
 
-  const handleJoinGroup = () => {
+  const handleJoinGroup = async () => {
     // Handle joining a group
     console.log('Joining group:', groupCode);
-    axios.post('https://etex9zchp4.execute-api.us-east-1.amazonaws.com/default/groupClerk-roomie', 
+    await axios.post('https://etex9zchp4.execute-api.us-east-1.amazonaws.com/default/groupClerk-roomie', 
     {
         "userId": userId,
-        "groupid": groupCode
+        "groupId": groupCode
     }, 
     {
         headers: {
@@ -63,8 +63,11 @@ const GroupingScreen = () => {
             'Accept': "application/json",
         }  
     }
-)  
-    // Add your logic to join a group
+  )
+  .then(response => {
+    signOut();
+    navigation.navigate('SignIn')
+  }) 
   };
 
   const handleSignInClick = async () =>{
