@@ -9,7 +9,6 @@ import {
 } from "react-native"; 
 import {styles} from "./Style.js";
 import React, { useState, useEffect, useRef } from "react"; 
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createTodo, updateTodo, deleteTodo } from "./mutations.js";
 import { getTodo } from "./queries.js";
 import {useMutation, useQuery, gql, selectHttpOptionsAndBody} from '@apollo/client';

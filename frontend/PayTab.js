@@ -8,56 +8,74 @@ import {
 	StyleSheet, 
 } from "react-native"; 
 import {styles} from "./Style.js";
-import React, { useState, useEffect } from "react"; 
-import AsyncStorage, { useAsyncStorage } from '@react-native-async-storage/async-storage';
+import React, { useState, useEffect, useRef } from "react";
+import { createTodo, updateTodo, deleteTodo } from "./mutations.js";
+import { getTodo } from "./queries.js";
+import {useMutation, useQuery, gql, selectHttpOptionsAndBody} from '@apollo/client';
+import {useUser} from "@clerk/clerk-react";
 
 export function PayScreen({route}, components) {
 	const [purchase, setPurchase] = useState(""); 
 	const [purchases, setPurchases] = useState([]); 
 	const [editIndex, setEditIndex] = useState(-1); 
-	const purchaseStorage = useAsyncStorage('purchase')
+	const [addPurchaseHook, { data: createData, loading: createLoading, error: createError }] = useMutation(createTodo);
+	const [updatePurchaseHook, { data: updateData, loading: updateLoading, error: updateError }] = useMutation(updateTodo);
+	const [deletePurchaseHook, { data: deleteData, loading: deleteLoading, error: deleteError }] = useMutation(deleteTodo);
+	const { user } = useUser();
+	const isMounted = useRef(false);
+	const groupid = user.unsafeMetadata.groupid;
 
-	useEffect(() => {
-		getData().then((retrievedPurchases) => {
-		  setPurchases(retrievedPurchases);
+	const { data , loading , error } = useQuery(getTodo, 
+		{
+			variables: {id: groupid}, 
+			pollInterval: 500
 		});
-	  }, []);
+		useEffect(() => {
+			if(!loading && error){
+				async function addEmpty() {
+					await addPurchaseHook({ variables: { input: {id: user.unsafeMetadata.groupid, payments: []} } })
+				}
+				addEmpty().then()
+				console.log(error)
+			}
+	
+			if (!loading && data.getTodo.payments.length != 0){
+				setPurchases(data.getTodo.payments)
+				console.log(data.getTodo.payments)
+			}
+			
+			}, [data]);
 
-	const storeData = async (value) => {
-		try {
-		  await purchaseStorage.setItem(value)	
-		} catch (e) {
-		  console.log(JSON.stringify(e, null, 2))
-		}
-	  };
-
-	  async function getData () {
-		try {
-			const jsonValue = await purchaseStorage.getItem()
-			const jsonTasks = jsonValue != null ? JSON.parse(jsonValue) : null;
-			return jsonTasks !== null ? jsonTasks.tasks : [];
-		} catch (error) {
-			console.log(JSON.stringify(error, null, 2));
-			return []; // Return an empty array or handle the error as needed
-		}
-	  };
+			useEffect(() => {
+				async function updatePurchases() {
+				  await updatePurchaseHook({
+					variables: { input: { id: user.unsafeMetadata.groupid, payments: purchases } },
+				  });
+				  if(loading) console.log("loading!");
+				  if(error) console.log("error in api");
+				}
+				if(isMounted.current){
+					updatePurchases();
+				}
+				else{
+					isMounted.current = true;
+				}
+			  }, [purchases]);
 
 	const handleAddPurchase = async () => { 
 		if (purchase) { 
 			if (editIndex !== -1) { 
 				const updatedPurchases = [...purchases]; 
 				updatedPurchases[editIndex] = purchase; 
-				await storeData(JSON.stringify({"tasks": updatedPurchases}))
-				setPurchases(updatedPurchases); 
-				setEditIndex(-1); 
-				await getData().then( (retrievedpurchases) => console.log(retrievedpurchases))
+				setPurchases(purchases => updatedPurchases); 
+				console.log("Updated Purchases:", updatedPurchases);
+				setPurchase(""); 
 			} else { 
-				setPurchases([...purchases, purchase]); 
-				await storeData(JSON.stringify({"tasks": [...purchases, purchase]}))
-				await getData().then( (retrievedpurchases) => console.log(retrievedpurchases))
+				await setPurchases(purchases => [...purchases, purchase]); 
+				setPurchase("");  	
 			} 
-			setPurchase(""); 
 		} 
+		console.log(purchases)
 	}; 
 
 	const handleEditPurchase = (index) => { 
@@ -70,7 +88,6 @@ export function PayScreen({route}, components) {
 		const updatedPurchases = [...purchases]; 
 		updatedPurchases.splice(index, 1); 
 		setPurchases(updatedPurchases); 
-		await storeData(JSON.stringify({"tasks": updatedPurchases}))
 	}; 
 
 	const renderItem = ({ item, index }) => ( 
