@@ -22,7 +22,10 @@
         "emailtogroupidlambda": {},
         "tt": {},
         "groupidlambda": {},
-        "emailgidlambda": {},
+        "emailgidlambda": {
+          "deploymentBucketName": "amplify-roomie-roomie-04551-deployment",
+          "s3Key": "amplify-builds/emailgidlambda-65754c69477976645733-build.zip"
+        },
         "taskTable": {}
       },
       "storage": {

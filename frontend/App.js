@@ -22,7 +22,7 @@ import { SignUpButton } from "@clerk/clerk-react";
 import { SignInWithMetamaskButton } from "@clerk/clerk-react";
 import { ApolloClient, InMemoryCache, ApolloProvider, createHttpLink } from '@apollo/client';
 import { setContext } from "apollo-link-context";
-import awsmobile from "./src/aws-exports.js";
+import awsmobile from "./aws-exports.js";
 
 const App = () => { 
 
