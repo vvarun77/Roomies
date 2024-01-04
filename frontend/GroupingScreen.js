@@ -23,11 +23,12 @@ const GroupingScreen = () => {
 
   const handleCreateGroup = async () => {
     // Handle creating a group
-    
+    // add group id to meta data and create lambada function using AWS
     console.log('Creating group:', groupName);
     await axios.post('https://etex9zchp4.execute-api.us-east-1.amazonaws.com/default/groupClerk-roomie', 
         {
-            "userId": userId
+            "userId": userId,
+            "groupName": groupName
         }, 
         {
             headers: {
