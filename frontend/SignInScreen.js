@@ -1,11 +1,29 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useSignIn } from "@clerk/clerk-expo";
 import {useNavigation} from '@react-navigation/native';
-import { useClerk } from "@clerk/clerk-react";
+import { useClerk } from "@clerk/clerk-react"
+import * as Linking from 'expo-linking';
 
  
 export default function SignInScreen() {
+  const url = Linking.useURL();
+	const handleURL = (url) => {
+		const { hostname, path, queryParams } = Linking.parse(url);
+		if (path === 'signup') {
+			console.log('Navigating to ' + path)
+			navigation.navigate('SignUp')
+		} else {
+			console.log(path, queryParams);
+		}
+	}
+	useEffect(() => {
+		if (url) {
+			handleURL(url);
+		} else {
+			console.log('No URL');
+		}
+	}, [url])
   const navigation = useNavigation();
   const { signIn, setActive, isLoaded } = useSignIn();
  

@@ -1,4 +1,4 @@
-import React, { useState } from "react"; 
+import React, { useState, useEffect } from "react"; 
 import { NavigationContainer } from '@react-navigation/native';
 import { 
 	View, 
@@ -24,9 +24,9 @@ import { SignInWithMetamaskButton } from "@clerk/clerk-react";
 import { ApolloClient, InMemoryCache, ApolloProvider, createHttpLink } from '@apollo/client';
 import { setContext } from "apollo-link-context";
 import awsmobile from "./aws-exports.js";
-import * as Linking from 'expo-linking';
 
 const App = () => { 
+	
 	const Stack = createStackNavigator();
 	// Initialize Apollo Client
 	const httpLink = createHttpLink({
@@ -54,6 +54,7 @@ const App = () => {
 	  //this would be used to pass parameters to the log in screen?
 	  //if it contains clerk token route to signUp?
 	  //const prefix = Linking.createURL('/')
+	  /*
 		const config = {
 			screens: {
 			  SignIn: 'signin', // Add this line for deep linking to SignIn screen
@@ -69,13 +70,14 @@ const App = () => {
 			const linking = {
 			prefixes: [Linking.createURL('/'), 'exp://i8-72z.farhankhan2.8081.exp.direct']
 		};
-		console.log(linking)
+		*/
+	
 
 	return (
 		<ApolloProvider client={client}>
         <ClerkProvider publishableKey={Constants.expoConfig.extra.clerkPublishableKey}>
-             <NavigationContainer linking={linking} fallback={<Text>Loading...</Text>}>
-             <Stack.Navigator>
+             <NavigationContainer>
+        	<Stack.Navigator>
             <Stack.Screen name="SignIn" component={SignInScreen} />
              <Stack.Screen name="SignUp" component={SignUpScreen}  />
             <Stack.Screen name="Home" component={HomeScreen} options={{ gestureEnabled: false }} />
