@@ -41,7 +41,7 @@ export default function HomeScreen () {
 		<Text style={styles.heading}>Roomie</Text> 
         <Button onPress={handleTodoClick} title="todo"> Todo List </Button>
         <Button onPress={handlePayClick} title="pay"> Payments </Button>
-        <Button onPress={handleInvite} title="pay"> Invite Friends </Button>
+        <Button onPress={handleInvite} title="invite"> Invite Friends </Button>
         <Button onPress={handleLogOut} title="logout"> Logout </Button>
 		</View> 
 	); 

@@ -11,6 +11,7 @@ import {
 import {styles} from "./Style.js";
 import {TodoScreen} from "./TodoTab.js";
 import { PayScreen } from "./PayTab.js";
+import InviteScreen from "./Invite.js";
 import SignUpScreen from "./SignUpScreen.js";
 import GroupingScreen from "./GroupingScreen.js";
 import { ClerkProvider, SignedIn, SignedOut } from "@clerk/clerk-expo";
@@ -58,6 +59,7 @@ const App = () => {
             <Stack.Screen name="SignIn" component={SignInScreen} />
              <Stack.Screen name="SignUp" component={SignUpScreen}  />
             <Stack.Screen name="Home" component={HomeScreen} options={{ gestureEnabled: false }} />
+			<Stack.Screen name="Invite" component={InviteScreen}/>
 			<Stack.Screen name="Payments" component={PayScreen} />
 			<Stack.Screen name="ToDo" component={TodoScreen} />
 			<Stack.Screen name="Groups" component={GroupingScreen} />
