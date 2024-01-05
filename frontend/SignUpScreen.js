@@ -20,8 +20,12 @@ export default function SignUpScreen() {
   const { isLoaded, signUp, setActive } = useSignUp();
     var email;
     var userpassword;
+    var fName;
+    var lName;
   const [emailAddress, setEmailAddress] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [firstName, setFirstName] = React.useState("");
+  const [lastName, setLastName] = React.useState("");
   const [pendingVerification, setPendingVerification] = React.useState(false);
   const [code, setCode] = React.useState("");
  
@@ -33,11 +37,15 @@ export default function SignUpScreen() {
  
     try {
       await signUp.create({
+        firstName,
+        lastName,
         emailAddress,
         password,
       });
     email = emailAddress;
     userpassword = password;
+    fName = firstName;
+    lName = lastName;
       // send the email.
       await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
  
@@ -61,7 +69,7 @@ export default function SignUpScreen() {
  
       await setActive({ session: completeSignUp.createdSessionId });
 
-      axios.post('https://npttiggp4i.execute-api.us-east-1.amazonaws.com/default/signUpClerk-roomie', {email: email, userpassword: userpassword}, 
+      axios.post('https://npttiggp4i.execute-api.us-east-1.amazonaws.com/default/signUpClerk-roomie', {email: email, userpassword: userpassword, fName: fName, lName: lName}, 
       {
         headers: {
         'Content-Type': "application/json",
@@ -89,8 +97,21 @@ export default function SignUpScreen() {
   return (
     <View style={styles.container}>
       {!pendingVerification && (
+        
         <View>
           <View>
+          <TextInput
+              value={firstName}
+              placeholder="First Name"
+              placeholderTextColor="#000"
+              onChangeText={(firstName) => setFirstName(firstName)}
+            />
+          <TextInput
+              value={lastName}
+              placeholder="Last Name"
+              placeholderTextColor="#000"
+              onChangeText={(lastName) => setLastName(lastName)}
+            />
             <TextInput
               autoCapitalize="none"
               value={emailAddress}
