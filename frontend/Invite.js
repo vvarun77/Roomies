@@ -12,8 +12,18 @@ import {useNavigation} from '@react-navigation/native';
 import { Button } from "react-native";
 import { useClerk } from "@clerk/clerk-react";
 import axios from "axios";
-
+import * as Linking from 'expo-linking';
 const InviteScreen = () =>  { 
+    //create invite deep link and maybe add group id to redirect URL
+    // ex of https://www.example.com/my-sign-up?__clerk_ticket=..... I will create param for group id, here just get it from the current user
+    // i want to create a link to the sign up page with the group ID, which will then be checked by app.js to see if the app was opened with
+    // a clerk token which will add the group id to the user when they sign up
+    //this is so when we generate links when testing -> we can open our own, later we would need to use a scheme
+    const prefix = Linking.useURL();
+    	//console.log(prefix);
+		const linking = {
+		prefixes: [prefix],
+    };
     const [emailAddress, setEmailAddress] = useState("");
     const redirectUrl = "";
     const bearer = "Bearer sk_test_mRxO1J7Wy4ea8bbTK71socEYQEcP48mud9xjNdtN5s"
@@ -58,30 +68,3 @@ const InviteScreen = () =>  {
 }; 
 
 export default InviteScreen;
-/*
-import axios from "axios";
-// this function creates an invitation for a user to join the app, although I also need to set
-// up the seperate signup page 
-export const handler = async (event) => {
-  // curl https://api.clerk.com/v1/invitations -X POST -d '{"email_address": "email@example.com", "redirect_url": "https://www.example.com/my-sign-up"}' 
-  //-H "Authorization:Bearer {{bapi}}" -H 'Content-Type:application/json'
-  //key -> pk_test_Zmlyc3QtZG9scGhpbi05OS5jbGVyay5hY2NvdW50cy5kZXYk
-  // or sk_test_mRxO1J7Wy4ea8bbTK71socEYQEcP48mud9xjNdtN5s depending on where it's used
-  var email_address = ""
-  //var redirect_url = ""
-  var authkey = ""
-  var bearer = "Bearer "
-        await axios.post('https://api.clerk.com/v1/invitations', 
-          {
-            "email_address": email_address,
-          },
-          {
-            headers: {
-              'Authorization': bearer + authkey,
-              'Content-Type': "application/json",
-            }  
-          }
-        );
-      }
-};
-*/
