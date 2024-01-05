@@ -2,6 +2,7 @@
   "expo": {
     "name": "Roomies",
     "slug": "roomie",
+    "scheme": "roomies",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
