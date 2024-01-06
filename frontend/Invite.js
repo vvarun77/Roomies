@@ -18,12 +18,12 @@ const InviteScreen = () =>  {
     // ex of https://www.example.com/my-sign-up?__clerk_ticket=..... I will create param for group id, here just get it from the current user
     // i want to create a link to the sign up page with the group ID, which will then be checked by app.js to see if the app was opened with
     // a clerk token which will add the group id to the user when they sign up
-    //this is so when we generate links when testing -> we can open our own, later we would need to use a scheme
-    const prefix = Linking.useURL();
+    //this is so when we generate links when testing -> we can open our own, later we would need to use the scheme
+    
+    //exp://10.18.175.3:8081 -> is what my exp start returns
     	//console.log(prefix);
-		const linking = {
-		prefixes: [prefix],
-    };
+    const url = "exp://10.18.175.3:8081/--/signup";
+
     const [emailAddress, setEmailAddress] = useState("");
     const redirectUrl = "";
     const bearer = "Bearer sk_test_mRxO1J7Wy4ea8bbTK71socEYQEcP48mud9xjNdtN5s"
@@ -33,7 +33,7 @@ const InviteScreen = () =>  {
         await axios.post('https://api.clerk.com/v1/invitations', 
         {
           "email_address": emailAddress,
-          //"redirect_url": "www.google.com"
+          "redirect_url": url
         },
         {
           headers: {
