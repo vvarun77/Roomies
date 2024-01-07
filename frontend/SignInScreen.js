@@ -13,7 +13,6 @@ export default function SignInScreen() {
 		const { hostname, path, queryParams } = Linking.parse(url);
 		if (path === 'signup') {
 			console.log('Navigating to ' + path)
-      console.log('Parameters ' + queryParams)
 			navigation.navigate('SignUp')
 		} else {
 			console.log(path, queryParams);
@@ -51,7 +50,7 @@ export default function SignInScreen() {
       await setActive({ session: completeSignIn.createdSessionId })
       navigation.navigate("Home")
      
-    } catch (err) {
+      } catch (err) {
         console.error(JSON.stringify(err, null, 2));
     }
   };
