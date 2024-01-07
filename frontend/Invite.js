@@ -17,9 +17,7 @@ import axios from "axios";
 import queryString from 'query-string';
 import * as Linking from 'expo-linking';
 
-const InviteScreen = () =>  { 
-
- 
+const InviteScreen = () =>  {  
     //this is so when we generate links when testing -> we can open our own, later we would need to use the scheme
     
     //exp://10.18.175.3:8081 -> is what my exp start returns

@@ -11,8 +11,7 @@ export default function SignInScreen() {
   const url = Linking.useURL();
 	const handleURL = (url) => {
 		const { hostname, path, queryParams } = Linking.parse(url);
-		if (path === 'signup') {
-			console.log('Navigating to ' + path)
+		if (path === 'signup') {      
 			navigation.navigate('SignUp')
 		} else {
 			console.log(path, queryParams);

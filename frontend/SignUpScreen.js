@@ -35,23 +35,22 @@ export default function SignUpScreen() {
 
   const [groupCode, setGroupCode] = useState(""); 
   const [groupName, setGroupName] = useState(""); 
-  const [ticket, setTicket] = useState(""); 
+  //const [ticket, setTicket] = useState(""); 
   const [autoJoin, setAutoJoin] = useState(); 
+  
   const url = Linking.useURL();
-  //goal with this is to get params and pass group code and name to metadata to account
-  //
+
 	const handleURL = (url) => {
 		const { hostname, path, queryParams } = Linking.parse(url);
 		if (path === 'signup') {
       const parsed = queryString.parseUrl(url);
       setGroupCode(parsed.query.groupId);
       setGroupName(parsed.query.groupName);
-      setTicket(parsed.query.__clerk_ticket);
-      console.log("set group information" , groupCode,  groupName, ticket);
       setAutoJoin(true);
     } else {
       setAutoJoin(false);
-    } 
+      console.log("set to false")
+    }
 	}
 	useEffect(() => {
 		if (url) {
@@ -70,16 +69,6 @@ export default function SignUpScreen() {
     //only if the user is has a group code, then execute new sign up, else sign up via ticket
     try {
       //link contains parameters then set ticket stratgey, maybe if else with different questions
-      if(autoJoin) {
-        await signUp.create({
-          strategy: "ticket",
-          ticket,
-          firstName,
-          lastName,
-          emailAddress,
-          password,
-        });
-      } else {
       await signUp.create({
         firstName,
         lastName,
@@ -97,7 +86,6 @@ export default function SignUpScreen() {
  
       // change the UI to our pending section.
       setPendingVerification(true);
-    }
     } catch (err) {
       console.error(JSON.stringify(err, null, 2));
     }
@@ -113,8 +101,8 @@ export default function SignUpScreen() {
       const completeSignUp = await signUp.attemptEmailAddressVerification({
         code,
       });
- 
       await setActive({ session: completeSignUp.createdSessionId });
+      console.log(completeSignUp.createdSessionId );
 
       axios.post('https://npttiggp4i.execute-api.us-east-1.amazonaws.com/default/signUpClerk-roomie', {
         email: email, userpassword: userpassword, fName: fName, lName: lName}, 
@@ -131,17 +119,17 @@ export default function SignUpScreen() {
       .catch(function (error) {
         console.log(JSON.stringify(error));
       });
-
       navigation.navigate('Groups');
     } catch (err) {
         if(err.errors[0].code == "verification_already_verified"){
-            navigation.navigate('Groups');
+          navigation.navigate('Groups');
         }
         else{
             console.error(JSON.stringify(err, null, 2));
         }
     }
-  };
+  }
+  
 
   return (
     //the first view checks is autojoin is set, and then conditionally renders join name
