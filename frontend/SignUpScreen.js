@@ -1,10 +1,10 @@
 import * as React from "react";
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import {Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useSignUp } from "@clerk/clerk-expo";
 import { StyleSheet } from "react-native";
 import {useNavigation} from '@react-navigation/native';
-//import { Clerk } from '@clerk/backend';
 import axios from "axios";
+import * as Linking from 'expo-linking';
 
 const styles = StyleSheet.create({
     container: {
@@ -13,22 +13,43 @@ const styles = StyleSheet.create({
       alignItems: "center",     // Center horizontally
     },
   });
-  
+
 export default function SignUpScreen() {
-    //const clerk = Clerk({ apiKey: 'pk_test_Zmlyc3QtZG9scGhpbi05OS5jbGVyay5hY2NvdW50cy5kZXYk' });
-    const navigation = useNavigation();
+
+  // check if url contains clerk key, group id, and group name, if so set the text in ui to join the group
+  // set clerk method to ticket
+  const navigation = useNavigation();
   const { isLoaded, signUp, setActive } = useSignUp();
-    var email;
-    var userpassword;
-    var fName;
-    var lName;
+  var email;
+  var userpassword;
+  var fName;
+  var lName;
   const [emailAddress, setEmailAddress] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [firstName, setFirstName] = React.useState("");
   const [lastName, setLastName] = React.useState("");
   const [pendingVerification, setPendingVerification] = React.useState(false);
   const [code, setCode] = React.useState("");
- 
+  const [groupCode, setGroupCode] = useState(""); 
+  const [groupName, setGroupName] = useState(""); 
+
+  const url = Linking.useURL();
+	const handleURL = (url) => {
+		const { hostname, path, queryParams } = Linking.parse(url);
+		if (path === 'signup') {
+			console.log('Navigating to ' + path)
+      console.log('Parameters ' + queryParams)
+		} else {
+			console.log(path, queryParams);
+		}
+	}
+	useEffect(() => {
+		if (url) {
+			handleURL(url);
+		} else {
+			console.log('No URL');
+		}
+	}, [url])
   // start the sign up process.
   const onSignUpPress = async () => {
     if (!isLoaded) {
@@ -36,6 +57,7 @@ export default function SignUpScreen() {
     }
  
     try {
+      //link contains parameters then set ticket stratgey, maybe if else with different questions
       await signUp.create({
         firstName,
         lastName,
@@ -46,6 +68,7 @@ export default function SignUpScreen() {
     userpassword = password;
     fName = firstName;
     lName = lastName;
+
       // send the email.
       await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
  

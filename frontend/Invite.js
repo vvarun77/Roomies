@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { 
 	View, 
 	Text, 
@@ -8,11 +8,15 @@ import {
 	StyleSheet, 
 } from "react-native"; 
 import {styles} from "./Style.js"; 
+import {useAuth} from "@clerk/clerk-expo"
+import {useUser, useClerk} from "@clerk/clerk-react";
 import {useNavigation} from '@react-navigation/native';
 import { Button } from "react-native";
-import { useClerk } from "@clerk/clerk-react";
+
 import axios from "axios";
+import queryString from 'query-string';
 import * as Linking from 'expo-linking';
+
 const InviteScreen = () =>  { 
     //create invite deep link and maybe add group id to redirect URL
     // ex of https://www.example.com/my-sign-up?__clerk_ticket=..... I will create param for group id, here just get it from the current user
@@ -22,18 +26,39 @@ const InviteScreen = () =>  {
     
     //exp://10.18.175.3:8081 -> is what my exp start returns
     	//console.log(prefix);
-    const url = "exp://10.18.175.3:8081/--/signup";
-
+    //
+    //const url = "exp://10.18.175.3:8081/--/signup";
+    const { isLoaded, userId, sessionId, getToken, User } = useAuth()
+    const { user } = useUser();
+    const [redirect, setRedirect] = useState('');
+    const groupId = user.unsafeMetadata.groupid;
+    const groupName = user.unsafeMetadata.groupname;
     const [emailAddress, setEmailAddress] = useState("");
-    const redirectUrl = "";
-    const bearer = "Bearer sk_test_mRxO1J7Wy4ea8bbTK71socEYQEcP48mud9xjNdtN5s"
+    const bearer = "Bearer sk_test_mRxO1J7Wy4ea8bbTK71socEYQEcP48mud9xjNdtN5s";
+
+    const constructLink = () => {
+      const queryParams = {
+        groupId,
+        groupName,
+      };
+      const queryStringified = queryString.stringify(queryParams);
+
+      // Construct your full link with the query parameters
+      const redirect_url = `exp://10.18.175.3:8081/--/signup?${queryStringified}`;
+
+      // Now `fullLink` contains the link with the query parameters
+      //console.log('Full Link:', redirect_url);
+      setRedirect(redirect_url);
+    }
+
     const handleInvite = async () => {
+        //constructLink();
         // Handle joining a group
-        console.log('sending invite');
+        console.log('sending invite', redirect);
         await axios.post('https://api.clerk.com/v1/invitations', 
         {
           "email_address": emailAddress,
-          "redirect_url": url
+          "redirect_url": redirect
         },
         {
           headers: {
@@ -47,8 +72,8 @@ const InviteScreen = () =>  {
       }).catch(error => {
         // Handle error
         console.error('Axios request error:', error);
-    });
-      };
+      });
+    };
 
 	return ( 
 		<View style={styles.container}> 

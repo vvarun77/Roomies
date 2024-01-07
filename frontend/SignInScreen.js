@@ -5,7 +5,6 @@ import {useNavigation} from '@react-navigation/native';
 import { useClerk } from "@clerk/clerk-react"
 import * as Linking from 'expo-linking';
 
- 
 export default function SignInScreen() {
   // add logic to check for sign up token
   // clerk token + group id + group name
@@ -14,6 +13,7 @@ export default function SignInScreen() {
 		const { hostname, path, queryParams } = Linking.parse(url);
 		if (path === 'signup') {
 			console.log('Navigating to ' + path)
+      console.log('Parameters ' + queryParams)
 			navigation.navigate('SignUp')
 		} else {
 			console.log(path, queryParams);
