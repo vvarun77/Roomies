@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useAuth} from "@clerk/clerk-expo"
@@ -17,10 +17,13 @@ const GroupingScreen = () => {
   const { isLoaded, userId, sessionId, getToken } = useAuth();
   const { user } = useUser();
   const { signOut } = useClerk();
-  const [autoJoin, setAutoJoin] = useState(false); 
-  const url = Linking.useURL();
+  var autoJoin = false;
+  var url = Linking.useURL();
+  var groupNameText = "";
+  var groupCodeText = "";
   const [urlState, setUrlState] = useState(undefined);
-  const [result, setResult] = useState(undefined);
+  const isMounted = useRef(false);
+  // const [result, setResult] = useState(undefined);
 
 
   //const url = Linking.useURL();
@@ -31,45 +34,20 @@ const GroupingScreen = () => {
   }, [navigation]);
 
 
-  useEffect(() => {
-    const updateURL = async () => {
-      if (urlState === undefined) {
-        try {
-          // It seems like url is always null from the useURL (possibly because of the async nature of getInitialURL) until we explicitly call getInitialUrl.
-          // So therefore, the first time the URL gets a value from useURL, we call getInitialURL ourselves to get the first value.
-          // See https://github.com/expo/expo/issues/23333
-          const initialUrl = await Linking.getInitialURL();
-          setUrlState(initialUrl);
-          return initialUrl; // Return the initial URL if needed
-        } catch (error) {
-          console.error("Error updating URL:", error);
-          return null; // Return null or handle the error as needed
-        }
-      }
+ console.log(url);
 
-      if (url === urlState) {
-        return urlState;
-      }
-
-      setUrlState(url);
-      return url; // Return the updated URL
-    };
-
-    const result = updateURL();
-    
-    // Now 'result' will contain the result of the updateURL function (initial URL or updated URL)
-  }, [url, urlState]);
 	useEffect(() => {
     const handleURL = async (url) => {
       const { hostname, path, queryParams } = Linking.parse(url);
       if (path === 'signup') {
         const parsed = queryString.parseUrl(url);
-        setGroupCode(parsed.query.groupId);
-        setGroupName(parsed.query.groupName);
-        setAutoJoin(true);
-        console.log("auto join set to", autoJoin, groupId, groupName);
+        // setGroupCode(parsed.query.groupId);
+        // setGroupName(parsed.query.groupName);
+        // setAutoJoin(true);
+        groupCodeText = parsed.query.groupId;
+        groupNameText = parsed.query.groupName;
+        autoJoin = true;
       }
-      console.log("set group information" , groupCode,  groupName);
     }
     const autoJoinGroup = async () => {
       console.log(autoJoin);
@@ -77,8 +55,8 @@ const GroupingScreen = () => {
         await axios.post('https://etex9zchp4.execute-api.us-east-1.amazonaws.com/default/groupClerk-roomie', 
           {
               "userId": userId,
-              "groupId": groupCode,
-              "groupName": groupName
+              "groupId": groupCodeText,
+              "groupName": groupNameText
           }, 
           {
               headers: {
@@ -92,17 +70,17 @@ const GroupingScreen = () => {
           navigation.navigate('SignIn');
         }); 
     };
-		if (url) {
-			handleURL(url);
-      console.log("handled url", autoJoin);
-		} else {
-			console.log('No URL');
-		}
-    console.log("autoJoin is set to", autoJoin);
-    if(autoJoin) {
-      console.log("calling function");
-      autoJoinGroup();
-    }
+      if (url) {
+        handleURL(url);
+        console.log("handled url", autoJoin);
+      } else {
+        console.log('No URL');
+      }
+      console.log("autoJoin is set to", autoJoin);
+      if(autoJoin) {
+        console.log("calling function");
+        autoJoinGroup();
+      }
   }, [url]);
 
 

@@ -37,14 +37,17 @@ export default function SignUpScreen() {
   const [groupName, setGroupName] = useState(""); 
   //const [ticket, setTicket] = useState(""); 
   const [autoJoin, setAutoJoin] = useState(); 
+  var groupId;
   
   const url = Linking.useURL();
 
 	const handleURL = (url) => {
 		const { hostname, path, queryParams } = Linking.parse(url);
 		if (path === 'signup') {
+      console.log(url);
       const parsed = queryString.parseUrl(url);
       setGroupCode(parsed.query.groupId);
+      groupId = parsed.query.groupId;
       setGroupName(parsed.query.groupName);
       setAutoJoin(true);
     } else {
@@ -55,6 +58,7 @@ export default function SignUpScreen() {
 	useEffect(() => {
 		if (url) {
 			handleURL(url);
+      console.log(groupId);
 		} else {
 			console.log('No URL');
 		}
