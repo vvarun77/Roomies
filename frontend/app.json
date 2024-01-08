@@ -2,6 +2,7 @@
   "expo": {
     "name": "Roomies",
     "slug": "roomie",
+    "scheme": "roomies",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -31,7 +32,7 @@
     "extra": {
       "clerkPublishableKey": "pk_test_Zmlyc3QtZG9scGhpbi05OS5jbGVyay5hY2NvdW50cy5kZXYk",
       "eas": {
-        "projectId": "13572f25-5a69-4f93-95f5-4882e390ab14"
+        "projectId": ""
       }
     }
   }

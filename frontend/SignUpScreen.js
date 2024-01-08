@@ -1,10 +1,12 @@
 import * as React from "react";
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import {Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useSignUp } from "@clerk/clerk-expo";
 import { StyleSheet } from "react-native";
 import {useNavigation} from '@react-navigation/native';
-//import { Clerk } from '@clerk/backend';
 import axios from "axios";
+import * as Linking from 'expo-linking';
+import { useEffect, useState } from "react";
+import queryString from 'query-string';
 
 const styles = StyleSheet.create({
     container: {
@@ -13,39 +15,71 @@ const styles = StyleSheet.create({
       alignItems: "center",     // Center horizontally
     },
   });
-  
+
 export default function SignUpScreen() {
-    //const clerk = Clerk({ apiKey: 'pk_test_Zmlyc3QtZG9scGhpbi05OS5jbGVyay5hY2NvdW50cy5kZXYk' });
-    const navigation = useNavigation();
+
+  // check if url contains clerk key, group id, and group name, if so set the text in ui to join the group
+  // set clerk method to ticket
+  const navigation = useNavigation();
   const { isLoaded, signUp, setActive } = useSignUp();
-    var email;
-    var userpassword;
-    var fName;
-    var lName;
+  var email;
+  var userpassword;
+  var fName;
+  var lName;
   const [emailAddress, setEmailAddress] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [firstName, setFirstName] = React.useState("");
   const [lastName, setLastName] = React.useState("");
   const [pendingVerification, setPendingVerification] = React.useState(false);
   const [code, setCode] = React.useState("");
- 
+
+  const [groupName, setGroupName] = useState(""); 
+  //ticket can be used later for users who accept invites to not verify email, but it will take some rewriting
+  //const [ticket, setTicket] = useState(""); 
+  const [autoJoin, setAutoJoin] = useState(); 
+  
+  const url = Linking.useURL();
+
+	const handleURL = (url) => {
+		const { hostname, path, queryParams } = Linking.parse(url);
+		if (path === 'signup') {
+      console.log(url);
+      const parsed = queryString.parseUrl(url);
+      setAutoJoin(true);
+    } else {
+      setAutoJoin(false);
+      console.log("set to false")
+    }
+	}
+	useEffect(() => {
+		if (url) {
+			handleURL(url);
+		} else {
+			console.log('No URL');
+		}
+	}, [url]);
   // start the sign up process.
   const onSignUpPress = async () => {
     if (!isLoaded) {
       return;
     }
- 
+
+
+    //only if the user is has a group code, then execute new sign up, else sign up via ticket
     try {
+      //link contains parameters then set ticket stratgey, maybe if else with different questions
       await signUp.create({
         firstName,
         lastName,
         emailAddress,
         password,
       });
+  
     email = emailAddress;
     userpassword = password;
     fName = firstName;
     lName = lastName;
+
       // send the email.
       await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
  
@@ -66,38 +100,43 @@ export default function SignUpScreen() {
       const completeSignUp = await signUp.attemptEmailAddressVerification({
         code,
       });
- 
       await setActive({ session: completeSignUp.createdSessionId });
+      console.log(completeSignUp.createdSessionId );
 
-      axios.post('https://npttiggp4i.execute-api.us-east-1.amazonaws.com/default/signUpClerk-roomie', {email: email, userpassword: userpassword, fName: fName, lName: lName}, 
+      axios.post('https://npttiggp4i.execute-api.us-east-1.amazonaws.com/default/signUpClerk-roomie', {
+        email: email, userpassword: userpassword, fName: fName, lName: lName}, 
       {
         headers: {
         'Content-Type': "application/json",
         'Accept': "application/json",
         }  
-    }  )  
+      }  
+      )  
       .then(function (response) {
         console.log(response);
       })
       .catch(function (error) {
         console.log(JSON.stringify(error));
       });
-
       navigation.navigate('Groups');
     } catch (err) {
         if(err.errors[0].code == "verification_already_verified"){
-            navigation.navigate('Groups');
+          navigation.navigate('Groups');
         }
         else{
             console.error(JSON.stringify(err, null, 2));
         }
     }
-  };
- 
+  }
+  
+
   return (
+    //the first view checks is autojoin is set, and then conditionally renders join name
     <View style={styles.container}>
+        <View>
+          {autoJoin ? <Text>You've been Invited to join {groupName} !</Text> : <Text></Text>}
+        </View>
       {!pendingVerification && (
-        
         <View>
           <View>
           <TextInput

@@ -32,11 +32,16 @@ export default function HomeScreen () {
         signOut()
         navigation.navigate('SignIn')
     }
+    const handleInvite = async () => {
+        // navigate user to new page where axios post is made (page still needs to be made)
+        navigation.navigate('Invite') 
+    }
 	return ( 
 		<View style={styles.container}> 
 		<Text style={styles.heading}>Roomie</Text> 
         <Button onPress={handleTodoClick} title="todo"> Todo List </Button>
         <Button onPress={handlePayClick} title="pay"> Payments </Button>
+        <Button onPress={handleInvite} title="invite"> Invite Friends </Button>
         <Button onPress={handleLogOut} title="logout"> Logout </Button>
 		</View> 
 	); 

@@ -1,4 +1,4 @@
-import React, { useState } from "react"; 
+import React, { useState, useEffect } from "react"; 
 import { NavigationContainer } from '@react-navigation/native';
 import { 
 	View, 
@@ -11,6 +11,7 @@ import {
 import {styles} from "./Style.js";
 import {TodoScreen} from "./TodoTab.js";
 import { PayScreen } from "./PayTab.js";
+import InviteScreen from "./Invite.js";
 import SignUpScreen from "./SignUpScreen.js";
 import GroupingScreen from "./GroupingScreen.js";
 import { ClerkProvider, SignedIn, SignedOut } from "@clerk/clerk-expo";
@@ -25,7 +26,7 @@ import { setContext } from "apollo-link-context";
 import awsmobile from "./aws-exports.js";
 
 const App = () => { 
-
+	
 	const Stack = createStackNavigator();
 	// Initialize Apollo Client
 	const httpLink = createHttpLink({
@@ -49,15 +50,38 @@ const App = () => {
 		  apiKey: awsmobile.aws_appsync_apiKey
 		}
 	  });
+	  
+	  //this would be used to pass parameters to the log in screen?
+	  //if it contains clerk token route to signUp?
+	  //const prefix = Linking.createURL('/')
+	  /*
+		const config = {
+			screens: {
+			  SignIn: 'signin', // Add this line for deep linking to SignIn screen
+			  SignUp: 'signup',
+			  Home: 'home',
+			  Invite: 'invite',
+			  Payments: 'payments',
+			  ToDo: 'todo',
+			  Groups: 'groups',
+			},
+		  };
+    		//console.log(prefix);
+			const linking = {
+			prefixes: [Linking.createURL('/'), 'exp://i8-72z.farhankhan2.8081.exp.direct']
+		};
+		*/
+	
 
 	return (
 		<ApolloProvider client={client}>
         <ClerkProvider publishableKey={Constants.expoConfig.extra.clerkPublishableKey}>
              <NavigationContainer>
-             <Stack.Navigator>
+        	<Stack.Navigator>
             <Stack.Screen name="SignIn" component={SignInScreen} />
              <Stack.Screen name="SignUp" component={SignUpScreen}  />
             <Stack.Screen name="Home" component={HomeScreen} options={{ gestureEnabled: false }} />
+			<Stack.Screen name="Invite" component={InviteScreen}/>
 			<Stack.Screen name="Payments" component={PayScreen} />
 			<Stack.Screen name="ToDo" component={TodoScreen} />
 			<Stack.Screen name="Groups" component={GroupingScreen} />

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useAuth} from "@clerk/clerk-expo"
@@ -6,20 +6,80 @@ import axios from "axios";
 import { useMutation } from '@apollo/client';
 import { createTodo } from "./mutations.js";
 import {useUser, useClerk} from "@clerk/clerk-react";
+import * as Linking from 'expo-linking';
+import queryString from 'query-string';
 
 const GroupingScreen = () => {
-  const [groupName, setGroupName] = useState('');
-  const [groupCode, setGroupCode] = useState('');
+  const [groupName, setGroupName] = useState("");
+  const [groupCode, setGroupCode] = useState("");
   const [addTodoHook, { data: createData, loading: createLoading, error: createError }] = useMutation(createTodo);
   const navigation = useNavigation();
-  const { isLoaded, userId, sessionId, getToken } = useAuth()
-  const { user } = useUser();
+  const { isLoaded, userId, sessionId, getToken } = useAuth();
+
   const { signOut } = useClerk();
+  var autoJoin = false;
+  var url = Linking.useURL();
+  var groupNameText = "";
+  var groupCodeText = "";
+  // const [result, setResult] = useState(undefined);
+
+
+  //const url = Linking.useURL();
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: null,
     });
   }, [navigation]);
+
+
+
+	useEffect(() => {
+    const handleURL = async (url) => {
+      //parse URL for parameter
+      const { hostname, path, queryParams } = Linking.parse(url);
+      if (path === 'signup') {
+        const parsed = queryString.parseUrl(url);
+        // setGroupCode(parsed.query.groupId);
+        // setGroupName(parsed.query.groupName);
+        // setAutoJoin(true);
+        groupCodeText = parsed.query.groupId;
+        groupNameText = parsed.query.groupName;
+        autoJoin = true;
+      }
+    }
+    const autoJoinGroup = async () => {
+      //automatically send join from url parameters 
+        await axios.post('https://etex9zchp4.execute-api.us-east-1.amazonaws.com/default/groupClerk-roomie', 
+          {
+              "userId": userId,
+              "groupId": groupCodeText,
+              "groupName": groupNameText
+          }, 
+          {
+              headers: {
+                  'Content-Type': "application/json",
+                  'Accept': "application/json",
+              }  
+          }
+        )
+        .then(response => {
+          signOut();
+          navigation.navigate('SignIn');
+        }); 
+    };
+      if (url) {
+        handleURL(url);
+        console.log("handled url", autoJoin);
+      } else {
+        console.log('No URL');
+      }
+      console.log("autoJoin is set to", autoJoin);
+      if(autoJoin) {
+        console.log("calling function");
+        autoJoinGroup();
+      }
+  }, [url]);
+
 
   const handleCreateGroup = async () => {
     // Handle creating a group
@@ -73,7 +133,7 @@ const GroupingScreen = () => {
 
   const handleSignInClick = async () =>{
     navigation.navigate('SignIn')
-}
+  };
 
   return (
     <View style={styles.container}>
