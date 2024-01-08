@@ -52,7 +52,8 @@ const InviteScreen = () =>  {
         {
           "email_address": emailAddress,
           //since we are using custom flow, we use deeplinking to redirect to our app
-          "redirect_url": url
+          "redirect_url": url,
+          "ignore_existing": true
         },
         {
           headers: {
