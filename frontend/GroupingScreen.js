@@ -15,14 +15,12 @@ const GroupingScreen = () => {
   const [addTodoHook, { data: createData, loading: createLoading, error: createError }] = useMutation(createTodo);
   const navigation = useNavigation();
   const { isLoaded, userId, sessionId, getToken } = useAuth();
-  const { user } = useUser();
+
   const { signOut } = useClerk();
   var autoJoin = false;
   var url = Linking.useURL();
   var groupNameText = "";
   var groupCodeText = "";
-  const [urlState, setUrlState] = useState(undefined);
-  const isMounted = useRef(false);
   // const [result, setResult] = useState(undefined);
 
 
@@ -34,10 +32,10 @@ const GroupingScreen = () => {
   }, [navigation]);
 
 
- console.log(url);
 
 	useEffect(() => {
     const handleURL = async (url) => {
+      //parse URL for parameter
       const { hostname, path, queryParams } = Linking.parse(url);
       if (path === 'signup') {
         const parsed = queryString.parseUrl(url);
@@ -50,8 +48,7 @@ const GroupingScreen = () => {
       }
     }
     const autoJoinGroup = async () => {
-      console.log(autoJoin);
-        console.log("called", autoJoin)
+      //automatically send join from url parameters 
         await axios.post('https://etex9zchp4.execute-api.us-east-1.amazonaws.com/default/groupClerk-roomie', 
           {
               "userId": userId,

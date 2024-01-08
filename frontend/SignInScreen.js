@@ -8,6 +8,8 @@ import * as Linking from 'expo-linking';
 export default function SignInScreen() {
   // add logic to check for sign up token
   // clerk token + group id + group name
+
+  //send user to signup, if they were sent a signup link
   const url = Linking.useURL();
 	const handleURL = (url) => {
 		const { hostname, path, queryParams } = Linking.parse(url);

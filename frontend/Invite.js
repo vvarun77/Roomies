@@ -15,13 +15,10 @@ import { Button } from "react-native";
 
 import axios from "axios";
 import queryString from 'query-string';
-import * as Linking from 'expo-linking';
 
 const InviteScreen = () =>  {  
-    //this is so when we generate links when testing -> we can open our own, later we would need to use the scheme
-    
-    //exp://10.18.175.3:8081 -> is what my exp start returns
-    	//console.log(prefix);
+    //exp://10.18.175.3:8081 -> is what my exp start returns so thats what i use to accept an invite
+    //console.log(prefix);
     
     const { isLoaded, userId, sessionId, getToken, User } = useAuth()
     const { user } = useUser();
@@ -32,29 +29,29 @@ const InviteScreen = () =>  {
     //const url = "exp://10.18.175.3:8081/--/signup";
 
     const constructLink = () => {
+      //group id to send with link
       const queryParams = {
         groupId,
         groupName,
       };
       const queryStringified = queryString.stringify(queryParams);
-
+      // will need to be changed later to scheme roomies:// somethiing like that
+      // string should be changed to what you see when you run yarn start
       const redirect_url = "exp://10.18.175.3:8081/--/signup?" + queryStringified;
-      
-
-      // Now `fullLink` contains the link with the query parameters
-      console.log('Full Link:', redirect_url);
       return redirect_url;
     }
 
     const handleInvite = async () => {
+        //only one invite can be sent per email
         //const redirect_url = "exp://10.18.175.3:8081/--/signup?";
-        // Handle joining a group
+        //creates invite
         const url = constructLink();
         console.log('sending invite');
         console.log(url);
         await axios.post('https://api.clerk.com/v1/invitations', 
         {
           "email_address": emailAddress,
+          //since we are using custom flow, we use deeplinking to redirect to our app
           "redirect_url": url
         },
         {

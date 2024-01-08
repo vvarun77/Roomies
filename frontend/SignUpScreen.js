@@ -33,11 +33,10 @@ export default function SignUpScreen() {
   const [pendingVerification, setPendingVerification] = React.useState(false);
   const [code, setCode] = React.useState("");
 
-  const [groupCode, setGroupCode] = useState(""); 
   const [groupName, setGroupName] = useState(""); 
+  //ticket can be used later for users who accept invites to not verify email, but it will take some rewriting
   //const [ticket, setTicket] = useState(""); 
   const [autoJoin, setAutoJoin] = useState(); 
-  var groupId;
   
   const url = Linking.useURL();
 
@@ -46,9 +45,6 @@ export default function SignUpScreen() {
 		if (path === 'signup') {
       console.log(url);
       const parsed = queryString.parseUrl(url);
-      setGroupCode(parsed.query.groupId);
-      groupId = parsed.query.groupId;
-      setGroupName(parsed.query.groupName);
       setAutoJoin(true);
     } else {
       setAutoJoin(false);
@@ -58,7 +54,6 @@ export default function SignUpScreen() {
 	useEffect(() => {
 		if (url) {
 			handleURL(url);
-      console.log(groupId);
 		} else {
 			console.log('No URL');
 		}
