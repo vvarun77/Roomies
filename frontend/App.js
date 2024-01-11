@@ -37,7 +37,7 @@ const App = () => {
 		return {
 		  headers: {
 			...headers,
-			'x-api-key': "da2-64cftv3ewvesfjjuoyfdjzihha"
+			'x-api-key': "da2-yiptmxwrnva2jk3xi6dwdg7p4m"
 		  }
 		};
 	  });
