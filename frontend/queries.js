@@ -8,6 +8,10 @@ export const getTodo =  gql`
       id
       todos
       payments
+      groupMembers {
+        id
+        status
+      }
       createdAt
       updatedAt
       __typename
