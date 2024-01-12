@@ -11,6 +11,10 @@ export const createTodo = gql`
       id
       todos
       payments
+      groupMembers{
+        id
+        status
+      }
       createdAt
       updatedAt
       __typename
@@ -26,6 +30,10 @@ export const updateTodo = gql`
       id
       todos
       payments
+      groupMembers{
+        id
+        status
+      }
       createdAt
       updatedAt
       __typename

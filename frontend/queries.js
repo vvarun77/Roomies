@@ -29,6 +29,7 @@ export const listTodos = gql`
         id
         todos
         payments
+        groupMembers
         createdAt
         updatedAt
         __typename
