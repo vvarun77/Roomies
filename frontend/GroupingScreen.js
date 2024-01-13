@@ -3,8 +3,8 @@ import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useAuth} from "@clerk/clerk-expo"
 import axios from "axios";
-import { useMutation } from '@apollo/client';
-import { createTodo } from "./mutations.js";
+import { useMutation, useQuery } from '@apollo/client';
+import { createTodo, updateTodo, getTodo } from "./mutations.js";
 import {useUser, useClerk} from "@clerk/clerk-react";
 import * as Linking from 'expo-linking';
 import queryString from 'query-string';
@@ -13,8 +13,10 @@ const GroupingScreen = () => {
   const [groupName, setGroupName] = useState("");
   const [groupCode, setGroupCode] = useState("");
   const [addTodoHook, { data: createData, loading: createLoading, error: createError }] = useMutation(createTodo);
+  const [updateTodoHook, { data: updateData, loading: updateLoading, error: updateError }] = useMutation(updateTodo);
   const navigation = useNavigation();
   const { isLoaded, userId, sessionId, getToken } = useAuth();
+  const { user } = useUser();
 
   const { signOut } = useClerk();
   var autoJoin = false;
@@ -98,7 +100,7 @@ const GroupingScreen = () => {
         }
     )
     .then(response => {
-        addTodoHook({ variables: { input: {id: response.data, todos: [], payments: []} } }) 
+        addTodoHook({ variables: { input: {id: response.data, todos: [], payments: [], groupMembers: [{id: userId, status: "happy"}]} } }) 
       })
     .then(response => {
       signOut();
@@ -113,6 +115,12 @@ const GroupingScreen = () => {
   const handleJoinGroup = async () => {
     // Handle joining a group
     console.log('Joining group:', groupCode);
+    const { data , loading , error } = useQuery(getTodo, 
+      {
+        variables: {id: groupid}, 
+        pollInterval: 500
+      });
+    const groupid = user.unsafeMetadata.groupid;
     await axios.post('https://etex9zchp4.execute-api.us-east-1.amazonaws.com/default/groupClerk-roomie', 
     {
         "userId": userId,
@@ -125,6 +133,14 @@ const GroupingScreen = () => {
         }  
     }
   )
+  .then(response => {
+    var newData = data.getTodo.groupMembers
+    newData.push({id: userId, status: "happy"})
+    updateTodoHook({
+      variables: { input: { id: groupCode, groupMembers: newData } },
+      });
+
+  })
   .then(response => {
     signOut();
     navigation.navigate('SignIn')

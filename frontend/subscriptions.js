@@ -8,6 +8,7 @@ export const onCreateTodo = gql`
       id
       todos
       payments
+      groupMembers
       createdAt
       updatedAt
       __typename
@@ -20,6 +21,7 @@ export const onUpdateTodo = gql`
       id
       todos
       payments
+      groupMembers
       createdAt
       updatedAt
       __typename
