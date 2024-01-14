@@ -23,8 +23,8 @@ export function PayScreen({route}, components) {
 	const [deletePurchaseHook, { data: deleteData, loading: deleteLoading, error: deleteError }] = useMutation(deleteTodo);
 	const { user } = useUser();
 	const isMounted = useRef(false);
-	const groupid = user.unsafeMetadata.groupid;
 
+	const groupid = user.unsafeMetadata.groupid;
 	const { data , loading , error } = useQuery(getTodo, 
 		{
 			variables: {id: groupid}, 

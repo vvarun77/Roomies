@@ -22,6 +22,7 @@ const InviteScreen = () =>  {
     
     const { isLoaded, userId, sessionId, getToken, User } = useAuth()
     const { user } = useUser();
+
     const groupId = user.unsafeMetadata.groupid;
     const groupName = user.unsafeMetadata.groupname;
     const [emailAddress, setEmailAddress] = useState("");
@@ -38,7 +39,7 @@ const InviteScreen = () =>  {
       // will need to be changed later to scheme roomies:// somethiing like that
       // string should be changed to what you see when you run yarn start
       //exp://10.19.168.70:8081 - varun
-      const redirect_url = "exp://10.13.7.222:8081/--/signup?" + queryStringified;
+      const redirect_url = "exp://10.0.0.183:8081/--/signup?" + queryStringified;
       return redirect_url;
     }
 

@@ -43,19 +43,16 @@ export default function SignUpScreen() {
 	const handleURL = (url) => {
 		const { hostname, path, queryParams } = Linking.parse(url);
 		if (path === 'signup') {
-      console.log(url);
       const parsed = queryString.parseUrl(url);
+      setGroupName(parsed.query.groupName);
       setAutoJoin(true);
     } else {
       setAutoJoin(false);
-      console.log("set to false")
     }
 	}
 	useEffect(() => {
 		if (url) {
 			handleURL(url);
-		} else {
-			console.log('No URL');
 		}
 	}, [url]);
   // start the sign up process.
@@ -147,7 +144,7 @@ export default function SignUpScreen() {
     <SafeAreaView style={styles.newcontainer}>
       {!pendingVerification && (
         <View style={styles.containerClass}>
-          <Text style={styles.header}>Sign Up</Text>
+          {autoJoin ? <Text style={styles.header} >You've been Invited to join {groupName} !</Text> : <Text style={styles.header}>Sign Up</Text>}
           <View style={styles.textBoxesContainer}>
             <View style={styles.textBoxes}>
               <ReusableTextFiled

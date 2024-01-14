@@ -84,9 +84,6 @@ const App = () => {
              <Stack.Screen name="SignUp" component={SignUpScreen} options={{headerShown: false }}  />
 			 <Stack.Screen name="Tab" component={TabNavigation} options={{headerShown: false }} />
             <Stack.Screen name="Home" component={HomeScreen} options={{ gestureEnabled: false, headerShown: false  }} />
-			<Stack.Screen name="Invite" component={InviteScreen}/>
-			<Stack.Screen name="Payments" component={PayScreen} />
-			<Stack.Screen name="ToDo" component={TodoScreen} />
 			<Stack.Screen name="Groups" component={GroupingScreen} />
             </Stack.Navigator>
                  </NavigationContainer>
