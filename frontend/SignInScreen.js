@@ -3,6 +3,13 @@ import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useSignIn } from "@clerk/clerk-expo";
 import {useNavigation} from '@react-navigation/native';
 import { useClerk } from "@clerk/clerk-react"
+import ReusableButton from "./UI/ReusableButton.js";
+import { SafeAreaView } from "react-native-safe-area-context";
+import ReusableTextFiled from "./UI/ReusableTextField.js";
+import { styles } from "./Style.js";
+import EmailIcon from "./assets/textfieldIcons/Message.png";
+import PasswordIcon from "./assets/textfieldIcons/Lock.png";
+import LogInIcon from "./assets/buttonIcons/Login.png";
 import * as Linking from 'expo-linking';
 
 export default function SignInScreen() {
@@ -49,41 +56,52 @@ export default function SignInScreen() {
       // This is an important step,
       // This indicates the user is signed in
       await setActive({ session: completeSignIn.createdSessionId })
-      navigation.navigate("Home")
+      navigation.navigate("Tab")
      
       } catch (err) {
         console.error(JSON.stringify(err, null, 2));
     }
   };
   const clerk = useClerk();
+  const handleEmailChange = (text) => {
+    setEmailAddress(text);
+  };
+  const handlePasswordChange = (text) => {
+    setPassword(text);
+  };
   return (
-    <View>
-      <View>
-        <TextInput
-          autoCapitalize="none"
-          value={emailAddress}
-          placeholder="Email..."
-          placeholderTextColor="#000"
-          onChangeText={(emailAddress) => setEmailAddress(emailAddress)}
+    <SafeAreaView style={styles.newcontainer}>
+      <View style={styles.containerClass}>
+        <Text style={styles.header}>Login</Text>
+        <View style={styles.textBoxesContainer}>
+          <View style={styles.textBoxes}>
+            <ReusableTextFiled
+              onChangeText={handleEmailChange}
+              value={emailAddress}
+              placeholder="Email"
+              imageSource={EmailIcon}
+              secure={false}
+            />
+          </View>
+          <View style={styles.textBoxes}>
+            <ReusableTextFiled
+              onChangeText={handlePasswordChange}
+              value={password}
+              placeholder="Password"
+              imageSource={PasswordIcon}
+              secure={true}
+            />
+          </View>
+        </View>
+        <ReusableButton
+          function={onSignInPress}
+          name="Login"
+          icon={LogInIcon}
         />
+        <TouchableOpacity onPress={onNewUserPress}>
+          <Text>Don't have an account? Sign up</Text>
+        </TouchableOpacity>
       </View>
- 
-      <View>
-        <TextInput
-          value={password}
-          placeholder="Password..."
-          placeholderTextColor="#000"
-          secureTextEntry={true}
-          onChangeText={(password) => setPassword(password)}
-        />
-      </View>
- 
-      <TouchableOpacity onPress={onSignInPress}>
-        <Text>Sign in</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={onNewUserPress}>
-        <Text>New user? Sign up here!</Text>
-      </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 }

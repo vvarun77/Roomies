@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Text, TextInput, TouchableOpacity, View } from "react-native";
+import {Text, TextInput, TouchableOpacity, View} from "react-native";
 import { useSignUp } from "@clerk/clerk-expo";
 import { StyleSheet } from "react-native";
 import {useNavigation} from '@react-navigation/native';
@@ -7,14 +7,14 @@ import axios from "axios";
 import * as Linking from 'expo-linking';
 import { useEffect, useState } from "react";
 import queryString from 'query-string';
-
-const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      justifyContent: "center", // Center vertically
-      alignItems: "center",     // Center horizontally
-    },
-  });
+import ReusableButton from "./UI/ReusableButton.js";
+import { SafeAreaView } from "react-native-safe-area-context";
+import ReusableTextFiled from "./UI/ReusableTextField.js";
+import { styles } from "./Style.js";
+import EmailIcon from "./assets/textfieldIcons/Message.png";
+import ProfileIcon from "./assets/textfieldIcons/Profile.png";
+import PasswordIcon from "./assets/textfieldIcons/Lock.png";
+import LogInIcon from "./assets/buttonIcons/Login.png";
 
 export default function SignUpScreen() {
 
@@ -130,49 +130,65 @@ export default function SignUpScreen() {
   }
   
 
+  const handleFirstChange = (text) => {
+    setFirstName(text);
+  };
+  const handleLastChange = (text) => {
+    setLastName(text);
+  };
+  const handleEmailChange = (text) => {
+    setEmailAddress(text);
+  };
+  const handlePasswordChange = (text) => {
+    setPassword(text);
+  };
+
   return (
-    //the first view checks is autojoin is set, and then conditionally renders join name
-    <View style={styles.container}>
-        <View>
-          {autoJoin ? <Text>You've been Invited to join {groupName} !</Text> : <Text></Text>}
-        </View>
+    <SafeAreaView style={styles.newcontainer}>
       {!pendingVerification && (
-        <View>
-          <View>
-          <TextInput
-              value={firstName}
-              placeholder="First Name"
-              placeholderTextColor="#000"
-              onChangeText={(firstName) => setFirstName(firstName)}
-            />
-          <TextInput
-              value={lastName}
-              placeholder="Last Name"
-              placeholderTextColor="#000"
-              onChangeText={(lastName) => setLastName(lastName)}
-            />
-            <TextInput
-              autoCapitalize="none"
+        <View style={styles.containerClass}>
+          <Text style={styles.header}>Sign Up</Text>
+          <View style={styles.textBoxesContainer}>
+            <View style={styles.textBoxes}>
+              <ReusableTextFiled
+                onChangeText={handleFirstChange}
+                value={firstName}
+                placeholder="First Name"
+                imageSource={ProfileIcon}
+                secure={false}
+              />
+            </View>
+            <View style={styles.textBoxes}>
+              <ReusableTextFiled
+                onChangeText={handleLastChange}
+                value={lastName}
+                placeholder="Last Name"
+                imageSource={ProfileIcon}
+                secure={false}
+              />
+            </View>
+            <ReusableTextFiled
+              onChangeText={handleEmailChange}
               value={emailAddress}
-              placeholder="Email..."
-              placeholderTextColor="#000"
-              onChangeText={(email) => setEmailAddress(email)}
+              placeholder="Email"
+              imageSource={EmailIcon}
+              secure={false}
             />
+            <View style={styles.textBoxes}>
+              <ReusableTextFiled
+                onChangeText={handlePasswordChange}
+                value={password}
+                placeholder="Password"
+                imageSource={PasswordIcon}
+                secure={true}
+              />
+            </View>
           </View>
- 
-          <View>
-            <TextInput
-              value={password}
-              placeholder="Password..."
-              placeholderTextColor="#000"
-              secureTextEntry={true}
-              onChangeText={(password) => setPassword(password)}
-            />
-          </View>
- 
-          <TouchableOpacity onPress={onSignUpPress}>
-            <Text>Sign up</Text>
-          </TouchableOpacity>
+          <ReusableButton
+            function={onSignUpPress}
+            name="Create"
+            icon={LogInIcon}
+          />
         </View>
       )}
       {pendingVerification && (
@@ -190,6 +206,6 @@ export default function SignUpScreen() {
           </TouchableOpacity>
         </View>
       )}
-    </View>
+    </SafeAreaView>
   );
 }

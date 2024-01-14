@@ -1,6 +1,33 @@
 import {StyleSheet} from 'react-native';
+import { Poppins } from "@expo-google-fonts/poppins";
 
 export const styles = StyleSheet.create({ 
+	newcontainer: {
+		alignItems: "center",
+		justifyContent: "center", 
+		width: "100%",
+		backgroundColor:"#E0E0E0",
+		height:"100%",
+		textAlign:"center",
+	},
+	header: {
+		paddingTop: "20%",
+		fontFamily: Poppins,
+		fontSize: 30,
+		textAlign: "center",
+		fontWeight: "bold",
+		color:'#1D1617',
+		
+	},
+	textBoxesContainer: {
+		paddingTop: "20%",
+		flex:1,
+		flexDirection: 'column',
+	},
+	buttonContainer: {
+		alignItems: "center",
+		justifyContent: "center", 
+	},
 	container: { 
 		flex: 1, 
 		padding: 40, 
@@ -9,6 +36,7 @@ export const styles = StyleSheet.create({
 		justifyContent: "center", 
 	}, 
 	title: { 
+		paddingTop: "20%",
 		fontSize: 24, 
 		fontWeight: "bold", 
 		marginBottom: 20, 
