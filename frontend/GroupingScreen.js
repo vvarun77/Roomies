@@ -65,6 +65,9 @@ const GroupingScreen = () => {
           }
         )
         .then(response => {
+          
+        })
+        .then(response => {
           signOut();
           navigation.navigate('SignIn');
         }); 
