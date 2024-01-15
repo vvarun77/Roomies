@@ -36,6 +36,11 @@ export default function HomeScreen () {
         // navigate user to new page where axios post is made (page still needs to be made)
         navigation.navigate('Invite') 
     }
+
+    const handleGrocery = async () => {
+        // navigate user to new page where axios post is made (page still needs to be made)
+        navigation.navigate('Groceries') 
+    }
 	return ( 
 		<View style={styles.container}> 
 		<Text style={styles.heading}>Roomie</Text> 
@@ -43,6 +48,8 @@ export default function HomeScreen () {
         <Button onPress={handlePayClick} title="pay"> Payments </Button>
         <Button onPress={handleInvite} title="invite"> Invite Friends </Button>
         <Button onPress={handleLogOut} title="logout"> Logout </Button>
+        <Button onPress={handleGrocery} title="grocery"> Grocery </Button>
+
 		</View> 
 	); 
 }; 

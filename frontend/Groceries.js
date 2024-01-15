@@ -112,7 +112,7 @@ export function GroceryScreen({route}, components) {
 	); 
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        			<Text style={styles.title}>ToDo</Text> 
+        			<Text style={styles.title}>Grocery</Text> 
 			<TextInput 
 				style={styles.input} 
 				placeholder="Enter task"
