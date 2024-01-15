@@ -25,6 +25,7 @@ export function TodoScreen({route}, components) {
 	const isMounted = useRef(false);
 	const groupid = user.unsafeMetadata.groupid;
 	
+
 	const { data , loading , error } = useQuery(getTodo, 
 		{
 			variables: {id: groupid}, 
@@ -34,7 +35,9 @@ export function TodoScreen({route}, components) {
 	useEffect(() => {
 		if(!loading && error){
 			async function addEmpty() {
-				await addTodoHook({ variables: { input: {id: user.unsafeMetadata.groupid, todos: []} } })
+				if(user.unsafeMetadata.groupid != null) {
+					await addTodoHook({ variables: { input: {id: user.unsafeMetadata.groupid, todos: []} } })
+				}
 			}
 			addEmpty().then()
 			console.log(error)
@@ -91,7 +94,7 @@ export function TodoScreen({route}, components) {
 		setTasks(updatedTasks); 
 	}; 
 
-	const renderItem = ({ item, index }) => ( 
+	const renderItem = ({ item, index }) => (
 		<View style={styles.task}> 
 			<Text 
 				style={styles.itemList}>{item}</Text> 

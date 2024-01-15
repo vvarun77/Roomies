@@ -22,6 +22,7 @@ const InviteScreen = () =>  {
     
     const { isLoaded, userId, sessionId, getToken, User } = useAuth()
     const { user } = useUser();
+
     const groupId = user.unsafeMetadata.groupid;
     const groupName = user.unsafeMetadata.groupname;
     const [emailAddress, setEmailAddress] = useState("");
