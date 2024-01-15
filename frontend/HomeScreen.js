@@ -9,14 +9,17 @@ import {
 	StyleSheet, 
 } from "react-native"; 
 import {styles} from "./Style.js";
-import React, { useState } from "react"; 
+import React, { useState, useEffect } from "react"; 
 import {useNavigation} from '@react-navigation/native';
 import { Button } from "react-native";
-import { useClerk } from "@clerk/clerk-react";
+
+import {useUser, useClerk} from "@clerk/clerk-react";
+import {useAuth } from "@clerk/clerk-expo"
 
 export default function HomeScreen () { 
     const navigation = useNavigation();
     const { signOut } = useClerk();
+    
     React.useLayoutEffect(() => {
         navigation.setOptions({
           headerLeft: null,
