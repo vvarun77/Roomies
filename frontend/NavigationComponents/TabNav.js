@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { TodoScreen } from "../TodoTab.js";
 import { PayScreen } from "../PayTab.js";
+import { ActivityScreen } from "../Activities.js";
 import InviteScreen from "../Invite.js";
 import HomeScreen from "../HomeScreen.js";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -94,7 +95,7 @@ export const TabNavigation = ({ navigation }) => {
         />
         <Tab.Screen
           name="Status"
-          component={InviteScreen}
+          component={ActivityScreen}
           screenOptions={{headerShown:false}}
           options={{
             tabBarIcon: ({ focused, tintColor }) => (
