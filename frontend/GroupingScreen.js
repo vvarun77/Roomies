@@ -27,7 +27,6 @@ const GroupingScreen = () => {
 
 
   const { data , loading , error, refetch } = useQuery(getTodo, 
-    
     {
       variables: { id: groupCodeText !== '' || null || undefined ? groupCodeText : 'default' },
       pollInterval: 500
