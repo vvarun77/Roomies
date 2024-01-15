@@ -65,7 +65,7 @@ const GroupingScreen = () => {
           }
         )
         .then(response => {
-          
+
         })
         .then(response => {
           signOut();
@@ -103,7 +103,7 @@ const GroupingScreen = () => {
         }
     )
     .then(response => {
-        addTodoHook({ variables: { input: {id: response.data, todos: [], payments: [], groupMembers: [{id: userId, status: "happy"}]} } }) 
+        addTodoHook({ variables: { input: {id: response.data, todos: [], payments: [], groupMembers: [{id: userId, status: "happy"}], groceries: []} } }) 
       })
     .then(response => {
       signOut();
