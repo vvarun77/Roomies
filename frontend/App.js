@@ -18,6 +18,7 @@ import { ClerkProvider, SignedIn, SignedOut } from "@clerk/clerk-expo";
 import Constants from "expo-constants"
 import HomeScreen from "./HomeScreen.js";
 import SignInScreen from "./SignInScreen.js";
+import { GroceryScreen } from "./Groceries.js";
 import { createStackNavigator } from '@react-navigation/stack';
 import { SignUpButton } from "@clerk/clerk-react";
 import { SignInWithMetamaskButton } from "@clerk/clerk-react";
@@ -85,6 +86,7 @@ const App = () => {
 			 <Stack.Screen name="Tab" component={TabNavigation} options={{headerShown: false }} />
             <Stack.Screen name="Home" component={HomeScreen} options={{ gestureEnabled: false, headerShown: false  }} />
 			<Stack.Screen name="Groups" component={GroupingScreen} />
+			<Stack.Screen name="Groceries" component={GroceryScreen} />
             </Stack.Navigator>
                  </NavigationContainer>
         </ClerkProvider>

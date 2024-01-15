@@ -12,6 +12,7 @@ export const getTodo =  gql`
         id
         status
       }
+      groceries
       createdAt
       updatedAt
       __typename
@@ -29,7 +30,11 @@ export const listTodos = gql`
         id
         todos
         payments
-        groupMembers
+        groupMembers{
+          id
+          status
+        }
+        groceries
         createdAt
         updatedAt
         __typename
