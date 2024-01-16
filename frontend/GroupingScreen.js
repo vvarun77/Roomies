@@ -25,19 +25,22 @@ const GroupingScreen = () => {
   var groupCodeText = "";
   // const [result, setResult] = useState(undefined);
 
-
+  /*
   const { data , loading , error, refetch } = useQuery(getTodo, 
     {
       variables: { id: groupCodeText !== '' || null || undefined ? groupCodeText : 'default' },
       pollInterval: 500
-    });
-    
+    })
+    */
+   /*
     useEffect(() => {
       if (groupCodeText !== "" || null || undefined ) {
         refetch();
         console.log(groupCodeText);
       }
-    }, [groupCodeText, refetch]);
+    },//[groupCodeText, refetch]);
+    [groupCodeText]);
+    */
     /*
     const { loading, error, data } = useQuery(getTodo, {
       variables: { id: groupCodeText},
@@ -82,20 +85,8 @@ const GroupingScreen = () => {
               }   
           }
         ).then(response => {
-          console.log('attempt to add status')
-          var newData = data.getTodo.groupMembers
-          newData.push({id: userId, status: "happy"})
-          updateTodoHook({
-      variables: { input: { id: groupCodeText, groupMembers: newData } },
-      });
+          navigation.navigate('Loading')
         })
-        .then(response => {
-          
-        })
-        .then(response => {
-          signOut();
-          navigation.navigate('SignIn');
-        }); 
     };
       if (url) {
         handleURL(url);
