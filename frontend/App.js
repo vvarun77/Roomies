@@ -41,7 +41,7 @@ const App = () => {
 		return {
 		  headers: {
 			...headers,
-			'x-api-key': "da2-yiptmxwrnva2jk3xi6dwdg7p4m"
+			'x-api-key': "da2-lgafyveuwbac7hwocqqbtrprqq"
 		  }
 		};
 	  });
@@ -52,7 +52,7 @@ const App = () => {
 		auth: {
 		  type: awsmobile.aws_appsync_authenticationType,
 		  apiKey: awsmobile.aws_appsync_apiKey
-		}
+		},
 	  });
 	  
 	  //this would be used to pass parameters to the log in screen?

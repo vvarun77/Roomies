@@ -32,14 +32,13 @@ export function LoadingScreen({ route }, components) {
   const navigation = useNavigation();
   var url = Linking.useURL();
   const { signOut } = useClerk();
-  /*
-              console.log('attempt to add status')
-          var newData = data.getTodo.groupMembers
-          newData.push({id: userId, status: "happy"})
-          updateTodoHook({
-      variables: { input: { id: groupCodeText, groupMembers: newData } },
-      });
-      */
+  const { groupid } = route.params;
+
+  const { data, loading, error } = useQuery(getTodo, {
+    variables: { id: groupid },
+    pollInterval: 500,
+    fetchPolicy: "network-only"
+  });
 
   useEffect(() => {
     const handleURL = async (url) => {
@@ -56,19 +55,22 @@ export function LoadingScreen({ route }, components) {
     handleURL(url);
   }, [url]);
 
-  const { data, loading, error } = useQuery(getTodo, {
-    variables: { id: groupCode },
-    pollInterval: 500,
-  });
   useEffect(() => {
     async function addMemberStatus() {
-      console.log("The group code is " + groupCode);
-      var newData = [...data.getTodo.groupMembers]
-      newData.push({id: userId, status: "happy"})
-      console.log(newData)
-      await updateTodoHook({
-        variables: { input: { id: groupCode, groupMembers: newData } },
-    });
+      signOut();
+
+      console.log("The group code is " + groupid);
+      const groupMembers = JSON.parse(JSON.stringify(data.getTodo.groupMembers));
+      var newData = groupMembers.map(member => ({ id: member.id, status: member.status }));
+      if(newData[newData.length - 1].id !== userId ){
+        newData.push({id: userId, status: "happy"})
+        console.log(newData)
+  
+        await updateTodoHook({
+          variables: { input: { id: groupid, groupMembers: newData } },
+      });
+      }
+
     if(loading) console.log("loading!");
     if(error) console.log("error in api");
     }

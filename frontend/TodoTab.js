@@ -13,6 +13,7 @@ import { createTodo, updateTodo, deleteTodo } from "./mutations.js";
 import { getTodo } from "./queries.js";
 import {useMutation, useQuery, gql, selectHttpOptionsAndBody} from '@apollo/client';
 import {useUser} from "@clerk/clerk-react";
+import axios from "axios";
 
 export function TodoScreen({route}, components) {
 	const [task, setTask] = useState(""); 
@@ -24,12 +25,13 @@ export function TodoScreen({route}, components) {
 	const { user } = useUser();
 	const isMounted = useRef(false);
 	const groupid = user.unsafeMetadata.groupid;
-	
+
 
 	const { data , loading , error } = useQuery(getTodo, 
 		{
 			variables: {id: groupid}, 
-			pollInterval: 500
+			pollInterval: 500,
+			fetchPolicy: "network-only"
 		});
 	
 	useEffect(() => {
@@ -52,19 +54,28 @@ export function TodoScreen({route}, components) {
 
 		useEffect(() => {
 			async function updateTodo() {
-			  await updateTodoHook({
-				variables: { input: { id: user.unsafeMetadata.groupid, todos: tasks } },
-			  });
-			  if(loading) console.log("loading!");
-			  if(error) console.log("error in api");
+		  
+			  // fix at some point
+			  const tasksChanged = JSON.stringify(tasks) !== JSON.stringify(data.getTodo.todos);
+			  
+			  if (tasksChanged) {
+				await updateTodoHook({
+				  variables: { input: { id: user.unsafeMetadata.groupid, todos: tasks } },
+				});
+				
+				if(loading) console.log("loading!");
+				if(error) console.log("error in api");
+			  }
 			}
+		  
 			if(isMounted.current){
-				updateTodo();
+			  updateTodo();
 			}
 			else{
-				isMounted.current = true;
+			  isMounted.current = true;
 			}
-		  }, [tasks]);
+		  }, [tasks, data]);
+		  
 
 	const handleAddTask = async () => { 
 		if (task) { 
@@ -114,6 +125,7 @@ export function TodoScreen({route}, components) {
 		</View> 
 	); 
     return (
+		<React.StrictMode> 
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         			<Text style={styles.title}>ToDo</Text> 
 			<TextInput 
@@ -135,5 +147,6 @@ export function TodoScreen({route}, components) {
 				keyExtractor={(item, index) => index.toString()} 
 			/> 
       </View>
+	  </React.StrictMode> 
     );
   }

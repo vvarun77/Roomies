@@ -85,7 +85,9 @@ const GroupingScreen = () => {
               }   
           }
         ).then(response => {
-          navigation.navigate('Loading')
+          navigation.navigate('Loading', {
+            groupid: groupCodeText
+          })
         })
     };
       if (url) {
