@@ -58,12 +58,12 @@ export function LoadingScreen({ route }, components) {
   useEffect(() => {
     async function addMemberStatus() {
       signOut();
-
-      console.log("The group code is " + groupid);
+      // change graphql schema to use "name" instead of "id"
+      console.log("users first name is " + user.firstName + " " + user.lastName);
       const groupMembers = JSON.parse(JSON.stringify(data.getTodo.groupMembers));
       var newData = groupMembers.map(member => ({ id: member.id, status: member.status }));
       if(newData[newData.length - 1].id !== userId ){
-        newData.push({id: userId, status: "happy"})
+        newData.push({id: user.firstName + " " + user.lastName, status: "happy"})
         console.log(newData)
   
         await updateTodoHook({
