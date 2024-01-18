@@ -74,9 +74,14 @@ export function LoadingScreen({ route }, components) {
     if(loading) console.log("loading!");
     if(error) console.log("error in api");
     }
-    addMemberStatus();
+    addMemberStatus().then(response => {
+      signOut();
+      navigation.navigate('SignIn')
+    })
 
   }, [data]);
+
+  //adding loading shit circle here
 
   return <Text>loading</Text>;
 }
