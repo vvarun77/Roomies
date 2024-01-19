@@ -121,7 +121,7 @@ const GroupingScreen = () => {
         }
     )
     .then(response => {
-        addTodoHook({ variables: { input: {id: response.data, todos: [], payments: [], groupMembers: [{id: userId, status: "happy"}], groceries: []} } }) 
+        addTodoHook({ variables: { input: {id: response.data, todos: [], payments: [], groupMembers: [{id: user.firstName + " " + user.lastName, status: "happy"}], groceries: []} } }) 
       })
     .then(response => {
       signOut();

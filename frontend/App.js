@@ -47,7 +47,17 @@ const App = () => {
 	  });
 	  const client = new ApolloClient({
 		link: authLink.concat(httpLink),
-		cache: new InMemoryCache(),
+		cache: new InMemoryCache({
+			typePolicies: {
+			  Query: {
+				fields: {
+				  project: {
+					merge: true,
+				  }
+				}
+			  }
+			}
+		  }),
 		region: awsmobile.aws_appsync_region,
 		auth: {
 		  type: awsmobile.aws_appsync_authenticationType,

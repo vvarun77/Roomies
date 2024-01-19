@@ -1,3 +1,4 @@
+// widget for status one day
 import React, { useState, useEffect, useRef } from "react";
 import { 
 	View, 
@@ -15,17 +16,17 @@ import {useMutation, useQuery, gql, selectHttpOptionsAndBody} from '@apollo/clie
 import { Button } from "react-native";
 import { createTodo, updateTodo, deleteTodo } from "./mutations.js";
 import { getTodo } from "./queries.js";
-
+import _ from 'lodash';
+import ReusableButton from "./UI/ReusableButton.js";
+import { handleError } from "@apollo/client/link/http/parseAndCheckHttpResponse.js";
 
 export function ActivityScreen({route}, components) {
     const [addStatusHook, { data: createData, loading: createLoading, error: createError }] = useMutation(createTodo);
 	const [updateStatusHook, { data: updateData, loading: updateLoading, error: updateError }] = useMutation(updateTodo);
 	const [deleteStatusHook, { data: deleteData, loading: deleteLoading, error: deleteError }] = useMutation(deleteTodo);
-    const [groupMembers, setGroupMembers] = useState([]); 
     const [status, setStatus] = useState(""); 
 	const [statuses, setStatuses] = useState([]); 
 	const [editIndex, setEditIndex] = useState(-1);
-	const [currentUser, setCurrentUser] = useState([]); 
     const { user } = useUser();
 	const isMounted = useRef(false);
 	const { isLoaded, userId, sessionId, getToken } = useAuth();
@@ -35,94 +36,70 @@ export function ActivityScreen({route}, components) {
 		{
 			variables: {id: groupid}, 
 			pollInterval: 500,
-			fetchPolicy: "network-only",
 		});
-		// example of gettign status (adding)
-		/*
-		      var newData = groupMembers.map(member => ({ id: member.id, status: member.status }));
-      if(newData[newData.length - 1].id !== userId ){
-        newData.push({id: user.firstName + " " + user.lastName, status: "happy"})
-        console.log(newData)
-  
-        await updateTodoHook({
-          variables: { input: { id: groupid, groupMembers: newData } },
-      });
-      }
-		
-		*/	
-		// yoink the Todo page code. From there, repurpose it such that
-		// the code takes in the list of groupmembers and statuses, 
+
+	const [currentUser, setCurrentUser] = useState({id: user.firstName + " " + user.lastName, status: []}); 
+	const [groupMembers, setGroupMembers] = useState([]); 
+
         useEffect(() => {
-			if(!loading && error){
+			if(!loading && error) {
 				async function addEmpty() {
 					if(user.unsafeMetadata.groupid != null) {
-					await addStatusHook({ variables: { input: {id: user.unsafeMetadata.groupid, groupMembers: []} } })
+						await addStatusHook({ variables: { input: {id: user.unsafeMetadata.groupid, groupMembers: []} } })
 					}
 				}
 				addEmpty().then()
 				console.log(error)
 			}
-	
 			if (!loading && data.getTodo.groupMembers.length != 0){
-				setGroupMembers(JSON.parse(JSON.stringify(data.getTodo.groupMembers)))
-				console.log(groupMembers)
-				//var userName = groupMembers.find(e => e.id === "one");
-				//console.log("current user is " + );
-                console.log(data.getTodo.groupMembers.length)
+				setGroupMembers(JSON.parse(JSON.stringify(data.getTodo.groupMembers)));
 			}
-			
 		}, [data]);
+
+
 		useEffect(() => {
 			async function updateMemberStatus() {
-			  var newData = groupMembers.map(member => ({ id: member.id, status: member.status }));
-			  var statusChanged = JSON.stringify(groupMembers) !== JSON.stringify(data.getTodo.groupMembers);
-			  console.log(statusChanged)
-			if(statusChanged) {
+			var newData = groupMembers.map(member => ({ id: member.id, status: member.status }));
+			//const statusChanged = !_.isEqual(groupMembers, JSON.parse(JSON.stringify(data.getTodo.groupMembers)));
+			//if(statusChanged) {
+				console.log("I've changed!")
+				let result = _.find(groupMembers, el => el?.id === user.firstName + " " + user.lastName);
+				if(result.id) {
+					setCurrentUser(result); 
+					setStatuses(result.status);
+					//setEditIndex(index);
+				}
+				console.log("Current user is: " + currentUser.id + " " + currentUser.status);		
 				await updateStatusHook({
 				  variables: { input: { id: groupid, groupMembers: newData } },});
-			  }
+			//}
 			if(loading) console.log("loading!");
 			if(error) console.log("error in api");
-		}
+			}
 			if(isMounted.current) {
 				updateMemberStatus();
 			} else {
 				isMounted.current = true;
 			}
-		  }, [groupMembers, data]);
+		  }, [groupMembers]);
 		
 
-		const handleAddTask = async () => { 
+		const handleAddStatus = async () => { 
+			const groupMembers2 = JSON.parse(JSON.stringify(data.getTodo.groupMembers));
+			var newData = groupMembers2.map(member => ({ id: member.id, status: member.status}));
+			let index = _.findIndex(groupMembers2, el => el?.id === user.firstName + " " + user.lastName);
+			console.log(index);
+			console.log("the group is " + groupMembers);
+			setEditIndex(index);
 			//this needs to be changed
 			if (status) { 
-				if (editIndex !== -1) { 
-					const updatedStatuses = [groupMembers[editIndex].status]; 
-					updatedStatuses[0] = status ; 
-					var arr = [];
-					arr = updatedStatuses[0];
-					setStatuses(groupMembers[editIndex].status = arr); 
-					console.log("Updated tasks:", groupMembers);
-					setStatus(""); 
-				} else { 
-					await setStatuses(groupMembers => [...groupMembers[editIndex].status, status]); 
-					setStatus("");  	
-				} 
+				newData[index].status[0] = status;
+				setGroupMembers(newData);
+				setStatus(""); 
 			} 
 		}; 
 	
 		//edit adn delete status
-		const handleEditTask = (index) => { 
-			const statusToEdit = groupMembers[index].status[0]; 
-			setStatus(statusToEdit); 
-			setEditIndex(index); 
-			console.log("editing status " + statusToEdit)
-		}; 
-	
-		const handleDeleteTask = async (index) => { 
-			const updatedStatuses = [...groupMembers]; 
-			updatedStatuses.splice(index, 1); 
-			setStatuses(updatedStatuses); 
-		}; 
 	
 
 		//last step
@@ -131,35 +108,24 @@ export function ActivityScreen({route}, components) {
 			<View style={styles.task}> 
 				<Text 
 					style={styles.itemList}>{ item.id + " " + item.status}</Text> 
-				<View 
-					style={styles.taskButtons}> 
-					<TouchableOpacity 
-						onPress={() => handleEditTask(index)}> 
-						<Text 
-							style={styles.editButton}> Edit</Text> 
-					</TouchableOpacity> 
-					<TouchableOpacity 
-						onPress={() => handleDeleteTask(index)}> 
-						<Text 
-							style={styles.deleteButton}>Delete</Text> 
-					</TouchableOpacity> 
-				</View> 
 			</View> 
 		); 
 		return (
 		  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
 						<Text style={styles.title}>Activities</Text> 
+						<Text style={styles.header2}>Welcome {currentUser.id}</Text>
+						<Text style={styles.header2}>What are you up to?</Text>
 				<TextInput 
 					style={styles.input} 
-					placeholder="Add status"
+					placeholder="Edit your current status"
 					value={status} 
-					onChangeText={(text) => setStatus(text)} 
+					onChangeText={(text) => setStatus(text)}  
 				/> 
 				<TouchableOpacity 
 					style={styles.addButton} 
-					onPress={handleAddTask}> 
+					onPress={handleAddStatus}> 
 					<Text style={styles.addButtonText}> 
-						{editIndex !== -1 ? "Update Task" : "Add Task"} 
+						Edit Status
 					</Text> 
 				</TouchableOpacity> 
 				<FlatList 
