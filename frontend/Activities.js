@@ -58,10 +58,10 @@ export function ActivityScreen({route}, components) {
 
 
 		useEffect(() => {
-			async function updateMemberStatus() {
+			function updateMemberStatus() {
 			var newData = groupMembers.map(member => ({ id: member.id, status: member.status }));
-			//const statusChanged = !_.isEqual(groupMembers, JSON.parse(JSON.stringify(data.getTodo.groupMembers)));
-			//if(statusChanged) {
+			const statusChanged = !_.isEqual(groupMembers, JSON.parse(JSON.stringify(data.getTodo.groupMembers)));
+			if(statusChanged) {
 				console.log("I've changed!")
 				let result = _.find(groupMembers, el => el?.id === user.firstName + " " + user.lastName);
 				if(result.id) {
@@ -70,9 +70,9 @@ export function ActivityScreen({route}, components) {
 					//setEditIndex(index);
 				}
 				console.log("Current user is: " + currentUser.id + " " + currentUser.status);		
-				await updateStatusHook({
+				updateStatusHook({
 				  variables: { input: { id: groupid, groupMembers: newData } },});
-			//}
+			}
 			if(loading) console.log("loading!");
 			if(error) console.log("error in api");
 			}

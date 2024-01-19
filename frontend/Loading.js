@@ -29,10 +29,12 @@ export function LoadingScreen({ route }, components) {
   const [groupCode, setGroupCode] = useState("");
   const { isLoaded, userId, sessionId, getToken } = useAuth();
   const isMounted = useRef(false);
+  const isRan = useRef(false);
   const navigation = useNavigation();
   var url = Linking.useURL();
   const { signOut } = useClerk();
   const { groupid } = route.params;
+  let count = 0;
 
   const { data, loading, error } = useQuery(getTodo, {
     variables: { id: groupid },
@@ -56,8 +58,9 @@ export function LoadingScreen({ route }, components) {
   }, [url]);
 
   useEffect(() => {
-    async function addMemberStatus() {
-      signOut();
+    console.log(count)
+    function addMemberStatus() {
+      //signOut();
       // change graphql schema to use "name" instead of "id"
       console.log("users first name is " + user.firstName + " " + user.lastName);
       const groupMembers = JSON.parse(JSON.stringify(data.getTodo.groupMembers));
@@ -66,7 +69,7 @@ export function LoadingScreen({ route }, components) {
         newData.push({id: user.firstName + " " + user.lastName, status: "happy"})
         console.log(newData)
   
-        await updateTodoHook({
+        updateTodoHook({
           variables: { input: { id: groupid, groupMembers: newData } },
       });
       }
@@ -74,10 +77,18 @@ export function LoadingScreen({ route }, components) {
     if(loading) console.log("loading!");
     if(error) console.log("error in api");
     }
-    addMemberStatus().then(response => {
-      signOut();
-      navigation.navigate('SignIn')
-    })
+
+
+      if(isMounted.current && !isRan.current) {
+        if(data && data.getTodo){
+          addMemberStatus()
+            signOut();
+            navigation.navigate('SignIn')
+            isRan.current = true;
+        }
+			} else {
+				isMounted.current = true;
+			}
 
   }, [data]);
 
