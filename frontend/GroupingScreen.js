@@ -84,16 +84,10 @@ const GroupingScreen = () => {
                   'Accept': "application/json",
               }   
           }
-<<<<<<< HEAD
         ).then(response => {
           navigation.navigate('Loading', {
             groupid: groupCodeText
           })
-=======
-        )
-        .then(response => {
-
->>>>>>> origin/master
         })
     };
       if (url) {
@@ -127,11 +121,7 @@ const GroupingScreen = () => {
         }
     )
     .then(response => {
-<<<<<<< HEAD
         addTodoHook({ variables: { input: {id: response.data, todos: [], payments: [], groupMembers: [{id: user.firstName + " " + user.lastName, status: "happy"}], groceries: []} } }) 
-=======
-        addTodoHook({ variables: { input: {id: response.data, todos: [], payments: [], groupMembers: [{id: userId, status: "happy"}], groceries: []} } }) 
->>>>>>> origin/master
       })
     .then(response => {
       signOut();
