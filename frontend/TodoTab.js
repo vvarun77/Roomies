@@ -76,6 +76,7 @@ export function TodoScreen({route}, components) {
 				setTasks(tasks => updatedTasks); 
 				console.log("Updated tasks:", updatedTasks);
 				setTask(""); 
+				setEditIndex(-1);
 			} else { 
 				await setTasks(tasks => [...tasks, task]); 
 				setTask("");  	

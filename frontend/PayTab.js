@@ -72,6 +72,7 @@ export function PayScreen({route}, components) {
 				setPurchases(purchases => updatedPurchases); 
 				console.log("Updated Purchases:", updatedPurchases);
 				setPurchase(""); 
+				setEditIndex(-1);
 			} else { 
 				await setPurchases(purchases => [...purchases, purchase]); 
 				setPurchase("");  	
