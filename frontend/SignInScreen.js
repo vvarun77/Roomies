@@ -72,7 +72,7 @@ export default function SignInScreen() {
   return (
     <SafeAreaView style={styles.newcontainer}>
       <View style={styles.containerClass}>
-        <Text style={styles.header}>Login</Text>
+        <Text style={styles.header}>login</Text>
         <View style={styles.textBoxesContainer}>
           <View style={styles.textBoxes}>
             <ReusableTextFiled
@@ -99,7 +99,7 @@ export default function SignInScreen() {
           icon={LogInIcon}
         />
         <TouchableOpacity onPress={onNewUserPress}>
-          <Text>Don't have an account? Sign up</Text>
+          <Text>Don't have an account? Sign 🆙</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

@@ -97,7 +97,7 @@ export function TodoScreen({route}, components) {
 	}; 
     return (
 		<SafeAreaView style={styles.newcontainer}>
-        			<Text style={styles.title}>ToDo</Text> 
+        			<Text style={styles.title}>todo ✅</Text> 
 			<TextInput 
 				style={styles.input} 
 				placeholder="Enter task"

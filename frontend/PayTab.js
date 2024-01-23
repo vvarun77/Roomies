@@ -93,7 +93,7 @@ export function PayScreen({route}, components) {
 	}; 
     return (
 		<SafeAreaView style={styles.newcontainer}>
-        			<Text style={styles.title}>Pay Tracker</Text> 
+        			<Text style={styles.title}>pay tracker 💸</Text> 
 			<TextInput 
 				style={styles.input} 
 				placeholder="Enter purchase"
