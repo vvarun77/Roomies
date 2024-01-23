@@ -13,6 +13,8 @@ import { createTodo, updateTodo, deleteTodo } from "./mutations.js";
 import { getTodo } from "./queries.js";
 import {useMutation, useQuery, gql, selectHttpOptionsAndBody} from '@apollo/client';
 import {useUser} from "@clerk/clerk-react";
+import { SafeAreaView } from "react-native-safe-area-context";
+import ReusableFlatList from "./UI/FlatlistStyled.js";
 
 export function TodoScreen({route}, components) {
 	const [task, setTask] = useState(""); 
@@ -93,28 +95,8 @@ export function TodoScreen({route}, components) {
 		updatedTasks.splice(index, 1); 
 		setTasks(updatedTasks); 
 	}; 
-
-	const renderItem = ({ item, index }) => (
-		<View style={styles.task}> 
-			<Text 
-				style={styles.itemList}>{item}</Text> 
-			<View 
-				style={styles.taskButtons}> 
-				<TouchableOpacity 
-					onPress={() => handleEditTask(index)}> 
-					<Text 
-						style={styles.editButton}> Edit</Text> 
-				</TouchableOpacity> 
-				<TouchableOpacity 
-					onPress={() => handleDeleteTask(index)}> 
-					<Text 
-						style={styles.deleteButton}>Delete</Text> 
-				</TouchableOpacity> 
-			</View> 
-		</View> 
-	); 
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+		<SafeAreaView style={styles.newcontainer}>
         			<Text style={styles.title}>ToDo</Text> 
 			<TextInput 
 				style={styles.input} 
@@ -129,11 +111,9 @@ export function TodoScreen({route}, components) {
 					{editIndex !== -1 ? "Update Task" : "Add Task"} 
 				</Text> 
 			</TouchableOpacity> 
-			<FlatList 
-				data={tasks} 
-				renderItem={renderItem} 
-				keyExtractor={(item, index) => index.toString()} 
-			/> 
-      </View>
+			<ReusableFlatList dataList={tasks} functionEdit={handleEditTask} functionDelete={handleDeleteTask}/>
+			
+	  </SafeAreaView>
     );
   }
+

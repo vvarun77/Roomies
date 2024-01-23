@@ -13,6 +13,8 @@ import { createTodo, updateTodo, deleteTodo } from "./mutations.js";
 import { getTodo } from "./queries.js";
 import {useMutation, useQuery, gql, selectHttpOptionsAndBody} from '@apollo/client';
 import {useUser} from "@clerk/clerk-react";
+import ReusableFlatList from "./UI/FlatlistStyled.js";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export function PayScreen({route}, components) {
 	const [purchase, setPurchase] = useState(""); 
@@ -89,28 +91,8 @@ export function PayScreen({route}, components) {
 		updatedPurchases.splice(index, 1); 
 		setPurchases(updatedPurchases); 
 	}; 
-
-	const renderItem = ({ item, index }) => ( 
-		<View style={styles.task}> 
-			<Text 
-				style={styles.itemList}>{item}</Text> 
-			<View 
-				style={styles.taskButtons}> 
-				<TouchableOpacity 
-					onPress={() => handleEditPurchase(index)}> 
-					<Text 
-						style={styles.editButton}> Edit</Text> 
-				</TouchableOpacity> 
-				<TouchableOpacity 
-					onPress={() => handleDeletePurchase(index)}> 
-					<Text 
-						style={styles.deleteButton}>Delete</Text> 
-				</TouchableOpacity> 
-			</View> 
-		</View> 
-	); 
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+		<SafeAreaView style={styles.newcontainer}>
         			<Text style={styles.title}>Pay Tracker</Text> 
 			<TextInput 
 				style={styles.input} 
@@ -125,11 +107,7 @@ export function PayScreen({route}, components) {
 					{editIndex !== -1 ? "Update Purchase" : "Add Purchase"} 
 				</Text> 
 			</TouchableOpacity> 
-			<FlatList 
-				data={purchases} 
-				renderItem={renderItem} 
-				keyExtractor={(item, index) => index.toString()} 
-			/> 
-      </View>
+			<ReusableFlatList dataList={purchases} functionEdit={handleEditPurchase} functionDelete={handleDeletePurchase}/>
+      </SafeAreaView>
     );
   }
