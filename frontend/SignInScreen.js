@@ -72,7 +72,7 @@ export default function SignInScreen() {
   return (
     <SafeAreaView style={styles.newcontainer}>
       <View style={styles.containerClass}>
-        <Text style={styles.header}>login</Text>
+        <Text style={styles.header}>login 🔮</Text>
         <View style={styles.textBoxesContainer}>
           <View style={styles.textBoxes}>
             <ReusableTextFiled
