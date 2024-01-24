@@ -36,15 +36,17 @@ export default function SignUpScreen() {
   const [groupName, setGroupName] = useState(""); 
   //ticket can be used later for users who accept invites to not verify email, but it will take some rewriting
   //const [ticket, setTicket] = useState(""); 
+  const [groupCode, setGroupCode] = useState("");
   const [autoJoin, setAutoJoin] = useState(); 
   
-  const url = Linking.useURL();
-
+  var url = Linking.useURL(url);
+  
 	const handleURL = (url) => {
 		const { hostname, path, queryParams } = Linking.parse(url);
 		if (path === 'signup') {
       const parsed = queryString.parseUrl(url);
       setGroupName(parsed.query.groupName);
+      setGroupCode(parsed.query.groupId);
       setAutoJoin(true);
     } else {
       setAutoJoin(false);

@@ -25,7 +25,28 @@ const GroupingScreen = () => {
   var groupCodeText = "";
   // const [result, setResult] = useState(undefined);
 
-
+  /*
+  const { data , loading , error, refetch } = useQuery(getTodo, 
+    {
+      variables: { id: groupCodeText !== '' || null || undefined ? groupCodeText : 'default' },
+      pollInterval: 500
+    })
+    */
+   /*
+    useEffect(() => {
+      if (groupCodeText !== "" || null || undefined ) {
+        refetch();
+        console.log(groupCodeText);
+      }
+    },//[groupCodeText, refetch]);
+    [groupCodeText]);
+    */
+    /*
+    const { loading, error, data } = useQuery(getTodo, {
+      variables: { id: groupCodeText},
+      pollInterval: 500
+    });
+    */
   //const url = Linking.useURL();
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -33,15 +54,13 @@ const GroupingScreen = () => {
     });
   }, [navigation]);
 
-
-
 	useEffect(() => {
     const handleURL = async (url) => {
       //parse URL for parameter
       const { hostname, path, queryParams } = Linking.parse(url);
       if (path === 'signup') {
         const parsed = queryString.parseUrl(url);
-        // setGroupCode(parsed.query.groupId);
+        setGroupCode(parsed.query.groupId);
         // setGroupName(parsed.query.groupName);
         // setAutoJoin(true);
         groupCodeText = parsed.query.groupId;
@@ -50,6 +69,8 @@ const GroupingScreen = () => {
       }
     }
     const autoJoinGroup = async () => {
+      //const groupid = user.unsafeMetadata.groupid;
+        console.log('Joining group:', groupCodeText);
       //automatically send join from url parameters 
         await axios.post('https://etex9zchp4.execute-api.us-east-1.amazonaws.com/default/groupClerk-roomie', 
           {
@@ -61,26 +82,23 @@ const GroupingScreen = () => {
               headers: {
                   'Content-Type': "application/json",
                   'Accept': "application/json",
-              }  
+              }   
           }
-        )
-        .then(response => {
-
+        ).then(response => {
+          navigation.navigate('Loading', {
+            groupid: groupCodeText
+          })
         })
-        .then(response => {
-          signOut();
-          navigation.navigate('SignIn');
-        }); 
     };
       if (url) {
         handleURL(url);
-        console.log("handled url", autoJoin);
       } else {
         console.log('No URL');
       }
       console.log("autoJoin is set to", autoJoin);
       if(autoJoin) {
         console.log("calling function");
+        
         autoJoinGroup();
       }
   }, [url]);
@@ -103,7 +121,7 @@ const GroupingScreen = () => {
         }
     )
     .then(response => {
-        addTodoHook({ variables: { input: {id: response.data, todos: [], payments: [], groupMembers: [{id: userId, status: "happy"}], groceries: []} } }) 
+        addTodoHook({ variables: { input: {id: response.data, todos: [], payments: [], groupMembers: [{id: user.firstName + " " + user.lastName, status: "happy"}], groceries: []} } }) 
       })
     .then(response => {
       signOut();
@@ -117,12 +135,7 @@ const GroupingScreen = () => {
 
   const handleJoinGroup = async () => {
     // Handle joining a group
-    console.log('Joining group:', groupCode);
-    const { data , loading , error } = useQuery(getTodo, 
-      {
-        variables: {id: groupid}, 
-        pollInterval: 500
-      });
+
     const groupid = user.unsafeMetadata.groupid;
     await axios.post('https://etex9zchp4.execute-api.us-east-1.amazonaws.com/default/groupClerk-roomie', 
     {
@@ -150,6 +163,7 @@ const GroupingScreen = () => {
   }) 
   };
 
+
   const handleSignInClick = async () =>{
     navigation.navigate('SignIn')
   };
@@ -167,8 +181,12 @@ const GroupingScreen = () => {
           onChangeText={(text) => setGroupName(text)}
         />
         <Button title="Create Group" onPress={handleCreateGroup} />
+        <Button onPress={handleSignInClick} title="SignIn"> Back to Sign In </Button>
       </View>
-
+    </View>
+  );
+};
+/*
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Room Code:</Text>
         <TextInput
@@ -179,10 +197,8 @@ const GroupingScreen = () => {
         />
         <Button title="Join Group" onPress={handleJoinGroup} />
       </View>
-      <Button onPress={handleSignInClick} title="SignIn"> Back to Sign In </Button>
-    </View>
-  );
-};
+      
+      */
 
 const styles = StyleSheet.create({
   container: {
