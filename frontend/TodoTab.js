@@ -13,6 +13,8 @@ import { createTodo, updateTodo, deleteTodo } from "./mutations.js";
 import { getTodo } from "./queries.js";
 import {useMutation, useQuery, gql, selectHttpOptionsAndBody} from '@apollo/client';
 import {useUser} from "@clerk/clerk-react";
+import { SafeAreaView } from "react-native-safe-area-context";
+import ReusableFlatList from "./UI/FlatlistStyled.js";
 
 export function TodoScreen({route}, components) {
 	const [task, setTask] = useState(""); 
@@ -74,6 +76,7 @@ export function TodoScreen({route}, components) {
 				setTasks(tasks => updatedTasks); 
 				console.log("Updated tasks:", updatedTasks);
 				setTask(""); 
+				setEditIndex(-1);
 			} else { 
 				await setTasks(tasks => [...tasks, task]); 
 				setTask("");  	
@@ -93,29 +96,9 @@ export function TodoScreen({route}, components) {
 		updatedTasks.splice(index, 1); 
 		setTasks(updatedTasks); 
 	}; 
-
-	const renderItem = ({ item, index }) => (
-		<View style={styles.task}> 
-			<Text 
-				style={styles.itemList}>{item}</Text> 
-			<View 
-				style={styles.taskButtons}> 
-				<TouchableOpacity 
-					onPress={() => handleEditTask(index)}> 
-					<Text 
-						style={styles.editButton}> Edit</Text> 
-				</TouchableOpacity> 
-				<TouchableOpacity 
-					onPress={() => handleDeleteTask(index)}> 
-					<Text 
-						style={styles.deleteButton}>Delete</Text> 
-				</TouchableOpacity> 
-			</View> 
-		</View> 
-	); 
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        			<Text style={styles.title}>ToDo</Text> 
+		<SafeAreaView style={styles.newcontainer}>
+        			<Text style={styles.title}>todo ✅</Text> 
 			<TextInput 
 				style={styles.input} 
 				placeholder="Enter task"
@@ -129,11 +112,9 @@ export function TodoScreen({route}, components) {
 					{editIndex !== -1 ? "Update Task" : "Add Task"} 
 				</Text> 
 			</TouchableOpacity> 
-			<FlatList 
-				data={tasks} 
-				renderItem={renderItem} 
-				keyExtractor={(item, index) => index.toString()} 
-			/> 
-      </View>
+			<ReusableFlatList dataList={tasks} functionEdit={handleEditTask} functionDelete={handleDeleteTask}/>
+			
+	  </SafeAreaView>
     );
   }
+

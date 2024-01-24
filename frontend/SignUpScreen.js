@@ -146,7 +146,7 @@ export default function SignUpScreen() {
     <SafeAreaView style={styles.newcontainer}>
       {!pendingVerification && (
         <View style={styles.containerClass}>
-          {autoJoin ? <Text style={styles.header2} >You've been Invited to join {groupName} !</Text> : <Text style={styles.header}>Sign Up</Text>}
+          {autoJoin ? <Text style={styles.header} >You've been Invited to join {groupName} !</Text> : <Text style={styles.header}>sign 🆙</Text>}
           <View style={styles.textBoxesContainer}>
             <View style={styles.textBoxes}>
               <ReusableTextFiled
