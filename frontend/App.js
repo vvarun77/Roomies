@@ -27,6 +27,7 @@ import { setContext } from "apollo-link-context";
 import awsmobile from "./aws-exports.js";
 
 import {TabNavigation } from "./NavigationComponents/TabNav.js";
+import { LoadingScreen } from "./Loading.js";
 
 const App = () => { 
 	
@@ -40,18 +41,28 @@ const App = () => {
 		return {
 		  headers: {
 			...headers,
-			'x-api-key': "da2-yiptmxwrnva2jk3xi6dwdg7p4m"
+			'x-api-key': "da2-lgafyveuwbac7hwocqqbtrprqq"
 		  }
 		};
 	  });
 	  const client = new ApolloClient({
 		link: authLink.concat(httpLink),
-		cache: new InMemoryCache(),
+		cache: new InMemoryCache({
+			typePolicies: {
+			  Query: {
+				fields: {
+				  project: {
+					merge: true,
+				  }
+				}
+			  }
+			}
+		  }),
 		region: awsmobile.aws_appsync_region,
 		auth: {
 		  type: awsmobile.aws_appsync_authenticationType,
 		  apiKey: awsmobile.aws_appsync_apiKey
-		}
+		},
 	  });
 	  
 	  //this would be used to pass parameters to the log in screen?
@@ -85,6 +96,7 @@ const App = () => {
              <Stack.Screen name="SignUp" component={SignUpScreen} options={{headerShown: false }}  />
 			 <Stack.Screen name="Tab" component={TabNavigation} options={{headerShown: false }} />
             <Stack.Screen name="Home" component={HomeScreen} options={{ gestureEnabled: false, headerShown: false  }} />
+			<Stack.Screen name="Loading" component={LoadingScreen} options={{ gestureEnabled: false, headerShown: false  }} />
 			<Stack.Screen name="Groups" component={GroupingScreen} />
 			<Stack.Screen name="Groceries" component={GroceryScreen} />
             </Stack.Navigator>

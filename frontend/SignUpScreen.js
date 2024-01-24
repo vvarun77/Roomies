@@ -36,15 +36,17 @@ export default function SignUpScreen() {
   const [groupName, setGroupName] = useState(""); 
   //ticket can be used later for users who accept invites to not verify email, but it will take some rewriting
   //const [ticket, setTicket] = useState(""); 
+  const [groupCode, setGroupCode] = useState("");
   const [autoJoin, setAutoJoin] = useState(); 
   
-  const url = Linking.useURL();
-
+  var url = Linking.useURL(url);
+  
 	const handleURL = (url) => {
 		const { hostname, path, queryParams } = Linking.parse(url);
 		if (path === 'signup') {
       const parsed = queryString.parseUrl(url);
       setGroupName(parsed.query.groupName);
+      setGroupCode(parsed.query.groupId);
       setAutoJoin(true);
     } else {
       setAutoJoin(false);
@@ -144,7 +146,7 @@ export default function SignUpScreen() {
     <SafeAreaView style={styles.newcontainer}>
       {!pendingVerification && (
         <View style={styles.containerClass}>
-          {autoJoin ? <Text style={styles.header} >You've been Invited to join {groupName} !</Text> : <Text style={styles.header}>Sign Up</Text>}
+          {autoJoin ? <Text style={styles.header2} >You've been Invited to join {groupName} !</Text> : <Text style={styles.header}>Sign Up</Text>}
           <View style={styles.textBoxesContainer}>
             <View style={styles.textBoxes}>
               <ReusableTextFiled

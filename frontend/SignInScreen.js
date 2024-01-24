@@ -38,7 +38,6 @@ export default function SignInScreen() {
  
   const [emailAddress, setEmailAddress] = React.useState("");
   const [password, setPassword] = React.useState("");
-
   const onNewUserPress = async () => {
     navigation.navigate('SignUp')
   }
