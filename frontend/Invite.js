@@ -80,7 +80,7 @@ const InviteScreen = () =>  {
     };
 	return ( 
 		<SafeAreaView style={styles.newcontainer}>
-        <Text style={styles.header}>invite roomies 📩</Text>
+        <Text style={styles.title}>invite roomies 📩</Text>
         <View style={styles.textBoxesContainer}>
             <ReusableTextField
               onChangeText={handleEmailChange}

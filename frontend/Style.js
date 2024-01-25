@@ -103,4 +103,7 @@ export const styles = StyleSheet.create({
 		fontWeight: "bold", 
 		fontSize: 18, 
 	}, 
+	avoid: {
+		flex:1, 
+	}
 }); 

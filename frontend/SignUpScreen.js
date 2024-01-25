@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Text, TextInput, TouchableOpacity, View} from "react-native";
+import {Text, TextInput, TouchableOpacity, View, } from "react-native";
 import { useSignUp } from "@clerk/clerk-expo";
 import { StyleSheet } from "react-native";
 import {useNavigation} from '@react-navigation/native';
@@ -15,7 +15,7 @@ import EmailIcon from "./assets/textfieldIcons/Message.png";
 import ProfileIcon from "./assets/textfieldIcons/Profile.png";
 import PasswordIcon from "./assets/textfieldIcons/Lock.png";
 import LogInIcon from "./assets/buttonIcons/Login.png";
-import CheckIcon from "./assets/buttonIcons/check.png";
+import CheckIcon from "./assets/buttonIcons/check3.png";
 import BackButton from "./UI/BackButton.js";
 
 export default function SignUpScreen() {
@@ -150,13 +150,13 @@ export default function SignUpScreen() {
   return (
     <SafeAreaView style={styles.newcontainer}>
       {!pendingVerification && (
-        
         <View style={styles.containerClass}>            
           <BackButton
             back={'SignIn'}
           />
           {autoJoin ? <Text style={styles.header} >You've been Invited to join {groupName} !</Text> : <Text style={styles.header}>sign 🆙</Text>}
           <View style={styles.textBoxesContainer}>
+ 
             <View style={styles.textBoxes}>
               <ReusableTextFiled
                 onChangeText={handleFirstChange}
@@ -198,7 +198,6 @@ export default function SignUpScreen() {
             width={"70%"}
           />
           </View>
-
         </View>
       )}
       {pendingVerification && (
