@@ -94,10 +94,10 @@ const App = () => {
         	<Stack.Navigator>
             <Stack.Screen name="SignIn" component={SignInScreen} options={{headerShown: false }} />
              <Stack.Screen name="SignUp" component={SignUpScreen} options={{headerShown: false }}  />
-			 <Stack.Screen name="Tab" component={TabNavigation} options={{headerShown: false }} />
+			 <Stack.Screen name="Tab" component={TabNavigation} options={{headerShown: false,  gestureEnabled: false }} />
             <Stack.Screen name="Home" component={HomeScreen} options={{ gestureEnabled: false, headerShown: false  }} />
 			<Stack.Screen name="Loading" component={LoadingScreen} options={{ gestureEnabled: false, headerShown: false  }} />
-			<Stack.Screen name="Groups" component={GroupingScreen} />
+			<Stack.Screen name="Groups" component={GroupingScreen} options={{headerShown: false,  gestureEnabled: false }}/>
 			<Stack.Screen name="Groceries" component={GroceryScreen} />
             </Stack.Navigator>
                  </NavigationContainer>

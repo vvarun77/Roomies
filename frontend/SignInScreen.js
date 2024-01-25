@@ -96,10 +96,9 @@ export default function SignInScreen() {
           function={onSignInPress}
           name="Login"
           icon={LogInIcon}
+          width={"70%"}
         />
-        <TouchableOpacity onPress={onNewUserPress}>
-          <Text>Don't have an account? Sign 🆙</Text>
-        </TouchableOpacity>
+          <Text style={{textAlign: "center", marginBottom: 10,}}>Don't have an account?  <TouchableOpacity onPress={onNewUserPress}><Text style={{color: '#92a3fd', textDecorationLine: 'underline',  textDecorationColor: "#92a3fd",}}>Sign 🆙</Text></TouchableOpacity> </Text>
       </View>
     </SafeAreaView>
   );

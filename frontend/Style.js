@@ -18,7 +18,6 @@ export const styles = StyleSheet.create({
 		textAlign: "center",
 		fontWeight: "bold",
 		color:'#1D1617',
-		
 	},
 	header2: {
 		paddingTop: "15%",
@@ -27,7 +26,6 @@ export const styles = StyleSheet.create({
 		textAlign: "center",
 		fontWeight: "bold",
 		color:'#1D1617',
-		
 	},
 	textBoxesContainer: {
 		paddingTop: "20%",

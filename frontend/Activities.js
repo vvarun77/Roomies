@@ -106,8 +106,8 @@ export function ActivityScreen({route}, components) {
 		const renderItem = ({ item, index }) => 
 		(	
 			<View style={styles.task}> 
-				<Text 
-					style={styles.itemList}>{ item.id + " " + item.status}</Text> 
+				<Text style={styles.itemList}>{ item.id}</Text> 
+				<Text style={styles.itemList}>{ item.status}</Text> 
 			</View> 
 		); 
 		return (
@@ -132,6 +132,7 @@ export function ActivityScreen({route}, components) {
 					data={groupMembers} 
 					renderItem={renderItem} 
 					keyExtractor={(item, index) => index.toString()} 
+					horizontal={false}
 				/> 
 		  </View>
 		);

@@ -15,6 +15,8 @@ import EmailIcon from "./assets/textfieldIcons/Message.png";
 import ProfileIcon from "./assets/textfieldIcons/Profile.png";
 import PasswordIcon from "./assets/textfieldIcons/Lock.png";
 import LogInIcon from "./assets/buttonIcons/Login.png";
+import CheckIcon from "./assets/buttonIcons/check.png";
+import BackButton from "./UI/BackButton.js";
 
 export default function SignUpScreen() {
 
@@ -141,11 +143,18 @@ export default function SignUpScreen() {
   const handlePasswordChange = (text) => {
     setPassword(text);
   };
+  const handleCodeChange = (text) => {
+    setCode(text);
+  };
 
   return (
     <SafeAreaView style={styles.newcontainer}>
       {!pendingVerification && (
-        <View style={styles.containerClass}>
+        
+        <View style={styles.containerClass}>            
+          <BackButton
+            back={'SignIn'}
+          />
           {autoJoin ? <Text style={styles.header} >You've been Invited to join {groupName} !</Text> : <Text style={styles.header}>sign 🆙</Text>}
           <View style={styles.textBoxesContainer}>
             <View style={styles.textBoxes}>
@@ -182,27 +191,37 @@ export default function SignUpScreen() {
                 secure={true}
               />
             </View>
-          </View>
-          <ReusableButton
+            <ReusableButton
             function={onSignUpPress}
             name="Create"
             icon={LogInIcon}
+            width={"70%"}
           />
+          </View>
+
         </View>
       )}
       {pendingVerification && (
-        <View>
-          <View>
+          <View style={styles.containerClass}>
+            <Text style={styles.header} >verify email 📧</Text>
             <TextInput
-              value={code}
-              placeholder="Code..."
-              placeholderTextColor="#000"
-              onChangeText={(code) => setCode(code)}
-            />
-          </View>
-          <TouchableOpacity onPress={onPressVerify}>
-            <Text>Verify Email</Text>
-          </TouchableOpacity>
+        style={{
+          width: "70",
+          borderBottomWidth: 4,
+          textAlign: "center",
+          fontSize: 24,
+          marginTop: "20%",
+        }}
+        placeholder="Code"
+        value={code}
+        onChangeText={(text) => setCode(text)}
+        />
+          <ReusableButton
+            function={onPressVerify}
+            name="Verify"
+            icon={CheckIcon}
+            width={"100%"}
+          />
         </View>
       )}
     </SafeAreaView>
