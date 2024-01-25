@@ -12,6 +12,10 @@ import {useAuth} from "@clerk/clerk-expo"
 import {useUser, useClerk} from "@clerk/clerk-react";
 import {useNavigation} from '@react-navigation/native';
 import { Button } from "react-native";
+import ReusableButton from "./UI/ReusableButton.js";
+import ReusableTextField from "./UI/ReusableTextField.js";
+import EmailIcon from "./assets/textfieldIcons/Message.png";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import axios from "axios";
 import queryString from 'query-string';
@@ -71,21 +75,27 @@ const InviteScreen = () =>  {
         console.error('Axios request error:', error);
       });
     };
-
+    const handleEmailChange = (text) => {
+      setEmailAddress(text);
+    };
 	return ( 
-		<View style={styles.container}> 
-		    <Text style={styles.heading}> Invite Roomies </Text> 
-            <View>
-                <TextInput
-                autoCapitalize="none"
-                value={emailAddress}
-                placeholder="Email"
-                placeholderTextColor="#000"
-                onChangeText={(emailAddress) => setEmailAddress(emailAddress)}
+		<SafeAreaView style={styles.newcontainer}>
+        <Text style={styles.header}>invite roomies 📩</Text>
+        <View style={styles.textBoxesContainer}>
+            <ReusableTextField
+              onChangeText={handleEmailChange}
+              value={emailAddress}
+              placeholder="Email"
+              imageSource={EmailIcon}
+              secure={false}
+            />
+          </View>
+             <ReusableButton
+          function={handleInvite}
+          name="Invite"
+          width={"80%"}
         />
-      </View>
-            <Button onPress={handleInvite} title="Invite"> Invite </Button>
-		</View> 
+    </SafeAreaView>
 	); 
 }; 
 

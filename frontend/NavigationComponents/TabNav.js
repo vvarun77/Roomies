@@ -44,10 +44,11 @@ export const TabNavigation = ({ navigation }) => {
           name="ToDo"
           component={TodoScreen}
           options={{
-            tabBarIcon: ({}) => (
+            tabBarLabel:({ focused,color })=>(<Text style={{color:focused?"#ccc0ef":"#ADA4A5", fontSize:10}}>ToDo</Text>),
+            tabBarIcon: ({focused}) => (
               <Image
                 source={require("../assets/tabbarIcons/Users.png")}
-                style={{ width: 24, height: 24, tintColor: "#ADA4A5" }}
+                style={{ width: 24, height: 24, tintColor: focused?"#ccc0ef":"#ADA4A5" }}
               />
             ),
           }}
@@ -56,10 +57,11 @@ export const TabNavigation = ({ navigation }) => {
           name="Payments"
           component={PayScreen}
           options={{
-            tabBarIcon: ({}) => (
+            tabBarLabel:({ focused,color })=>(<Text style={{color:focused?"#ccc0ef":"#ADA4A5", fontSize:10}}>Payments</Text>),
+            tabBarIcon: ({focused,color}) => (
               <Image
                 source={require("../assets/tabbarIcons/Buy.png")}
-                style={{ width: 24, height: 24, tintColor: "#ADA4A5" }}
+                style={{ width: 24, height: 24, tintColor: focused?"#ccc0ef":"#ADA4A5" }}
               />
             ),
           }}
@@ -81,27 +83,29 @@ export const TabNavigation = ({ navigation }) => {
           }}
         />
         <Tab.Screen
-          name="Invite"
-          component={InviteScreen}
+          name="Status"
+          component={ActivityScreen}
           screenOptions={{headerShown:false}}
           options={{
+            tabBarLabel:({ focused,color })=>(<Text style={{color:focused?"#ccc0ef":"#ADA4A5", fontSize:10}}>Status</Text>),
             tabBarIcon: ({ focused, tintColor }) => (
               <Image
-                source={require("../assets/tabbarIcons/Profile.png")}
-                style={{ width: 24, height: 24, tintColor: "#ADA4A5" }}
+                source={require("../assets/tabbarIcons/Activity.png")}
+                style={{ width: 24, height: 24, tintColor: focused?"#ccc0ef":"#ADA4A5" }}
               />
             ),
           }}
         />
         <Tab.Screen
-          name="Status"
-          component={ActivityScreen}
+          name="Invite"
+          component={InviteScreen}
           screenOptions={{headerShown:false}}
           options={{
+            tabBarLabel:({ focused,color })=>(<Text style={{color:focused?"#ccc0ef":"#ADA4A5", fontSize:10}}>Invite</Text>),
             tabBarIcon: ({ focused, tintColor }) => (
               <Image
-                source={require("../assets/tabbarIcons/Activity.png")}
-                style={{ width: 24, height: 24, tintColor: "#ADA4A5" }}
+                source={require("../assets/tabbarIcons/Profile.png")}
+                style={{ width: 24, height: 24, tintColor: focused?"#ccc0ef":"#ADA4A5" }}
               />
             ),
           }}

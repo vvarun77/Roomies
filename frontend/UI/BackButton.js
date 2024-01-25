@@ -44,6 +44,7 @@ const styles = StyleSheet.create({
   },
   shape: {
     alignSelf:'flex-start',
+    zIndex:1,
     position: "absolute",
     justifyContent: "center",
     alignItems: "center",
