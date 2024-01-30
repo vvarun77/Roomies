@@ -123,6 +123,13 @@ export const styles = StyleSheet.create({
 		paddingBottom:"10%",
 		alignSelf:"flex-start",
 		left: 50,
+		position: 'absolute',
+		alignSelf:'flex-end',
+		top:20, 
+		height: 30,
+		width:"100%",
+		zIndex:1,
+		
 	},
 	card: {
 		backgroundColor: 'white',

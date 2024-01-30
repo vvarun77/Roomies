@@ -111,6 +111,7 @@ export default function HomeScreen () {
         <SafeAreaView style={styles.homeContainer}>
             <ProfileButton/>
             <Text style={styles.homeTitle}>{currentUser + "!"}</Text>
+            <View style={{height:"15%"}}></View>
             <ScrollView style={{width:"100%"}} contentContainerStyle={{alignItems:"center", }}>
             <TouchableOpacity style={styles.groupButton} > 
 				<Text style={{fontFamily: Poppins, fontSize: 32,fontWeight: "bold", color:"white"}}>{groupName}</Text>
