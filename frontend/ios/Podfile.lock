@@ -478,6 +478,8 @@ PODS:
   - RNScreens (3.29.0):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
+  - RNSVG (14.1.0):
+    - React-Core
   - SocketRocket (0.6.1)
   - TcpSockets (3.3.2):
     - React
@@ -545,6 +547,7 @@ DEPENDENCIES:
   - RNOS (from `../node_modules/react-native-os`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
+  - RNSVG (from `../node_modules/react-native-svg`)
   - TcpSockets (from `../node_modules/react-native-tcp`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -674,6 +677,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  RNSVG:
+    :path: "../node_modules/react-native-svg"
   TcpSockets:
     :path: "../node_modules/react-native-tcp"
   Yoga:
@@ -741,10 +746,11 @@ SPEC CHECKSUMS:
   RNOS: 6f2f9a70895bbbfbdad7196abd952e7b01d45027
   RNReanimated: fdbaa9c964bbab7fac50c90862b6cc5f041679b9
   RNScreens: 3c5b9f4a9dcde752466854b6109b79c0e205dad3
+  RNSVG: ba3e7232f45e34b7b47e74472386cf4e1a676d0a
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   TcpSockets: 14306fb79f9750ea7d2ddd02d8bed182abb01797
   Yoga: 11d7931afb89721f39cf553a78767b81c7fbea1f
 
 PODFILE CHECKSUM: 7eb6ca31d96148bc05a266e9e10a7cb2e7af9f07
 
-COCOAPODS: 1.14.3
+COCOAPODS: 1.12.0
