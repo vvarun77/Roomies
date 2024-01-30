@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
   },
   shape: {
     alignSelf:'flex-end',
-    zIndex:1,
+    zIndex:2,
     position: "absolute",
     justifyContent: "center",
     alignItems: "center",

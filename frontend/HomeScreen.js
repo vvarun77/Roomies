@@ -136,7 +136,7 @@ export default function HomeScreen () {
                 <View style={{backgroundColor:"#ccc0ef", borderTopLeftRadius:25, borderTopRightRadius:25, height:60}}>
                 <Text style={{fontFamily: Poppins, color: "white", fontSize: 24, fontWeight: "bold",left: 10,top: 15, }}>to-do ✏️</Text>
                 </View>
-                <View style={{justifyContent:'center', paddingHorizontal: 10, paddingBottom: 15}}>
+                <View style={{justifyContent:'center', paddingHorizontal: 10, paddingBottom: 20}}>
                 <FlatList 
                 nestedScrollEnabled={true}
                 scrollEnabled={false}
