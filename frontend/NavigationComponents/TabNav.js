@@ -61,7 +61,7 @@ export const TabNavigation = ({ navigation }) => {
             tabBarIcon: ({focused,color}) => (
               <Image
                 source={require("../assets/tabbarIcons/Buy.png")}
-                style={{ width: 24, height: 24, tintColor: focused?"#ccc0ef":"#ADA4A5" }}
+                style={{ width: 24, height: 24, tintColor: focused?"#ccc0ef":"#ADA4A5"}}
               />
             ),
           }}
@@ -72,11 +72,11 @@ export const TabNavigation = ({ navigation }) => {
           options={{
            tabBarLabel:"",
             tabBarIcon: ({}) => (
-              <View style={{backgroundColor:"#ccc0ef", bottom: 15, width:70, height: 70, 
-              justifyContent:"center", alignItems:"center", borderRadius: 50 }}> 
+              <View style={{backgroundColor:"#ccc0ef", bottom: 0, width:60, height: 60, 
+              justifyContent:"center", alignItems:"center", borderRadius: 50, borderColor: "white", borderWidth:1 }}> 
               <Image
                 source={require("../assets/tabbarIcons/Home.png")}
-                style={{ width:30, height: 30, tintColor: "#FFFFFF", }}
+                style={{ width:30, height: 30, tintColor: "#FFFFFF"}}
               />
               </View>
             ),
@@ -91,7 +91,7 @@ export const TabNavigation = ({ navigation }) => {
             tabBarIcon: ({ focused, tintColor }) => (
               <Image
                 source={require("../assets/tabbarIcons/Activity.png")}
-                style={{ width: 24, height: 24, tintColor: focused?"#ccc0ef":"#ADA4A5" }}
+                style={{ width: 24, height: 24,  tintColor: focused?"#ccc0ef":"#ADA4A5" }}
               />
             ),
           }}

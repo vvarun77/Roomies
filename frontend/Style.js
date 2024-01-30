@@ -6,15 +6,13 @@ export const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center", 
 		width: "100%",
-		//backgroundColor:"#E0E0E0",
-		height:"100%",
+		backgroundColor:'transparent',
 		textAlign:"center",
 		fontFamily: Poppins,
 	},
 	homeContainer: {
 		width: "100%",
-		//backgroundColor:"#E0E0E0",
-		height:"100%",
+		backgroundColor:'transparent',
 		textAlign:"center",
 		fontFamily: Poppins,
 		alignItems:"center"
@@ -134,9 +132,9 @@ export const styles = StyleSheet.create({
 	card: {
 		backgroundColor: 'white',
 		width: 350,
-		borderRadius: 25,
+		borderRadius: 12,
 		height:"auto",
-		marginBottom:"15%",
+		marginBottom:"12%",
 	},
 	cardTitle: {
 		fontFamily: Poppins, 
@@ -152,8 +150,8 @@ export const styles = StyleSheet.create({
 		justifyContent:"space-between",
 		backgroundColor: "#ccc0ef", 
 		height:100,
-		marginBottom:"15%",
-		borderRadius:25,
+		marginBottom:"12%",
+		borderRadius:12,
 		alignItems:"center",
 		paddingHorizontal: 20,
 	}
