@@ -11,6 +11,14 @@ export const styles = StyleSheet.create({
 		textAlign:"center",
 		fontFamily: Poppins,
 	},
+	homeContainer: {
+		width: "100%",
+		//backgroundColor:"#E0E0E0",
+		height:"100%",
+		textAlign:"center",
+		fontFamily: Poppins,
+		alignItems:"center"
+	},
 	header: {
 		paddingTop: "20%",
 		fontFamily: Poppins,
@@ -105,5 +113,42 @@ export const styles = StyleSheet.create({
 	}, 
 	avoid: {
 		flex:1, 
+	},
+	homeTitle: {
+		fontSize: 32,
+		fontFamily: Poppins, 
+		fontWeight: "bold",
+		textAlign:"left",
+		paddingTop:"15%",
+		paddingBottom:"10%",
+		alignSelf:"flex-start",
+		left: 50,
+	},
+	card: {
+		backgroundColor: 'white',
+		width: 350,
+		borderRadius: 25,
+		height:"auto",
+		marginBottom:"15%",
+	},
+	cardTitle: {
+		fontFamily: Poppins, 
+		color: "#ccc0ef",
+		fontSize: 24,
+		fontWeight: "bold",
+		left: 10,
+		top: 15,
+	},
+	groupButton: {
+		flexDirection:"row",
+		width: 350,
+		justifyContent:"space-between",
+		backgroundColor: "#ccc0ef", 
+		height:100,
+		marginBottom:"15%",
+		borderRadius:25,
+		alignItems:"center",
+		paddingHorizontal: 20,
 	}
+	
 }); 
