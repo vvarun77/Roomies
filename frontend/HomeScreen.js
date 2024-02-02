@@ -32,6 +32,7 @@ import Profile from "./assets/tabbarIcons/Profile.png";
 import Group from "./assets/buttonIcons/usersmultiple.png";
 import ReusableFlatList from "./UI/FlatlistStyled.js";
 
+
 export default function HomeScreen() {
   const navigation = useNavigation();
   const { signOut } = useClerk();
@@ -109,6 +110,10 @@ export default function HomeScreen() {
     // navigate user to new page where axios post is made (page still needs to be made)
     navigation.navigate("Groceries");
   };
+  const handleCalendar = async () => {
+    // navigate user to new page where axios post is made (page still needs to be made)
+    navigation.navigate("Calendar");
+  };
   const renderItemGroup = ({ item, index }) => (
     <View
       style={{ justifyContent: "center", alignItems: "center", width: 150 }}
@@ -158,7 +163,7 @@ export default function HomeScreen() {
         style={{ width: "100%" }}
         contentContainerStyle={{ alignItems: "center" }}
       >
-        <TouchableOpacity style={styles.groupButton}>
+        <TouchableOpacity onPress={handleCalendar} style={styles.groupButton}>
           <Text
             style={{
               fontFamily: Poppins,
