@@ -6,6 +6,7 @@ import {
   FlatList,
   StyleSheet,
   Image,
+  Keyboard,
 } from "react-native";
 import {
   BottomSheetModal,
@@ -27,6 +28,13 @@ import { useAuth } from "@clerk/clerk-expo";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ProfileButton from "./UI/ProfileButton.js";
 import { ScrollView } from "react-native-gesture-handler";
+import DateTimePicker from "react-native-ui-datepicker";
+import dayjs from "dayjs";
+import Collapsible from "react-native-collapsible";
+import RNDateTimePicker, {
+  DateTimePickerAndroid,
+} from "@react-native-community/datetimepicker";
+
 import {
   useMutation,
   useQuery,
@@ -35,30 +43,41 @@ import {
 } from "@apollo/client";
 import { createTodo, updateTodo, deleteTodo } from "./mutations.js";
 import { Agenda } from "react-native-calendars";
-import CalendarPicker from "react-native-calendar-picker";
 
 export function CalendarScreen({ route }, components) {
   const bottomSheetModalRef = useRef(null);
-
+  const [date, setDate] = useState(dayjs());
   // variables
-  const snapPoints = useMemo(() => ["80%"], []);
+  const snapPoints = useMemo(() => ["85%"], []);
+  const { user } = useUser();
+  const [event, setEvent] = useState("");
+  const [selectedDay, setSelectedDay] = useState("");
+  const [time, setTime] = useState(new Date());
+  const [selectedStartDate, setSelectedStartDate] = useState(null);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [showMode, setShowMode] = useState("");
 
   // callbacks
   const handlePresentModalPress = useCallback(() => {
     bottomSheetModalRef.current?.present();
   }, []);
+  const completeEvent = useCallback(() => {
+    bottomSheetModalRef.current?.dismiss();
+    Keyboard.dismiss();
+    setEvent("");
+    setTime(new Date());
+    setDate(dayjs());
+  }, []);
   const handleSheetChanges = useCallback((index) => {
-    //console.log("handleSheetChanges", index);
+    console.log("handleSheetChanges", index);
+    Keyboard.dismiss();
+    setIsExpanded(true);
   }, []);
 
   // const [showCal, setShowCal] = useState(true);
-  const { user } = useUser();
-  const [event, setEvent] = useState({});
-  const [selectedDay, setSelectedDay] = useState("");
+
   const [events, setEvents] = useState({
-    "2024-02-16": [
-      { name: "bozo", time: "12:00", createdBy: "user.firstName" },
-    ],
+    "2024-02-16": [{ name: "bozo", time: "12:00", createdBy: user.firstName }],
     "2024-02-22": [{ name: "item 1 - any js object" }],
     "2024-02-23": [{ name: "item 2 - any js object", height: 80 }],
     "2024-02-24": [],
@@ -67,21 +86,70 @@ export function CalendarScreen({ route }, components) {
       { name: "any js object" },
     ],
   });
+  const handleExpand = (picker2) => {
+    Keyboard.dismiss();
+    if (isExpanded) {
+      setIsExpanded(false);
+    } else if(showMode == picker2){
+      setIsExpanded(true);
+    }
+    setShowMode(picker2);
+    console.log(showMode);
+    console.log(isExpanded);
+  };
 
   const handleAddEvent = async () => {
     const updatedEvents = { ...events };
-    var createdEvent = { name: "bozo" };
-    console.log("selected day is: " + selectedDay);
-    if (updatedEvents[selectedDay]) {
-      updatedEvents[selectedDay].push(createdEvent);
-    } else {
-      updatedEvents[selectedDay] = [createdEvent];
+    const timestamp = date;
+    const date2 = new Date(timestamp);
+    const formattedDate = date2.toISOString().slice(0, 10); // Extracting YYYY-MM-DD
+    // Output: 2024-02-07
+    const newTime = `${time.toLocaleString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    })} ${new Date(time).toISOString().slice(11,11)}`
+    var createdEvent = { name: event, date: formattedDate, time: newTime, user: user.firstName };
+    console.log("selected day is: " + formattedDate);
+    if (updatedEvents[formattedDate] && event) {
+      updatedEvents[formattedDate].push(createdEvent);
+    } else if (!updatedEvents[formattedDate] && event) {
+      updatedEvents[formattedDate] = [createdEvent];
     }
+    completeEvent();
 
-    //setEvent([day.dateString].push(createdEvent));
-    //"2012-05-16"
     setEvents(updatedEvents);
   };
+
+  function handleTimePickerChange(event, time) {
+    setTime(time);
+  }
+
+  const returnPicker = () => {
+    switch (showMode) {
+      case 'time':
+        return (
+          <RNDateTimePicker
+            value={time}
+            display="spinner"
+            mode="time"
+            onChange={handleTimePickerChange}
+          />
+        );
+      case 'date':
+      default:
+        return (
+          <DateTimePicker
+            mode="single"
+            date={date}
+            onChange={(params) => setDate(params.date)}
+            selectedItemColor="#ccc0ef"
+          />
+        );
+    }
+  };
+  
+
   return (
     <SafeAreaView style={styles.newcontainer}>
       <BottomSheetModalProvider>
@@ -138,7 +206,7 @@ export function CalendarScreen({ route }, components) {
                 }}
               >
                 <Text style={{ color: "black", fontSize: 16 }}>
-                  {item.name + " " + item.time + " " + item.createdBy}
+                  {item.name + " " + item.date + " " + item.time + " " + item.user}
                 </Text>
               </TouchableOpacity>
             )}
@@ -218,11 +286,114 @@ export function CalendarScreen({ route }, components) {
             ref={bottomSheetModalRef}
             index={0}
             snapPoints={snapPoints}
-            
             onChange={handleSheetChanges}
           >
             <View style={styles.buttonContainer}>
-              <Text>Awesome 🎉</Text>
+              <Text
+                style={{
+                  fontSize: 30,
+                  textAlign: "center",
+                  fontWeight: "bold",
+                  marginBottom: "2%",
+                }}
+              >
+                new event 🏞️
+              </Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: "20%",
+                }}
+              >
+                <TextInput
+                  placeholder="Event Name"
+                  value={event}
+                  onChangeText={(text) => setEvent(text)}
+                  style={{
+                    width: "70",
+                    borderBottomWidth: 4,
+                    textAlign: "center",
+                    fontSize: 24,
+                    marginTop: "10%",
+                    marginBottom: "5%",
+                  }}
+                />
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: "20%",
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 24,
+                    fontFamily: Poppins,
+                    fontWeight: "bold",
+                  }}
+                >
+                  Date:{" "}
+                </Text>
+                <TouchableOpacity
+                  style={{
+                    borderColor: "#ccc0ef",
+                    borderWidth: 2,
+                    padding: 10,
+                    borderRadius: 5,
+                    marginBottom: 10,
+                  }}
+                  onPress={() => handleExpand('date')}
+                >
+                  <Text
+                    style={{
+                      color: "black",
+                      fontWeight: "bold",
+                      textAlign: "center",
+                      fontSize: 18,
+                    }}
+                  >
+                    {new Date(date).toISOString().slice(0, 10)}
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    borderColor: "#ccc0ef",
+                    borderWidth: 2,
+                    padding: 10,
+                    borderRadius: 5,
+                    marginBottom: 10,
+                  }}
+                  onPress={() => handleExpand('time')}
+                >
+                  <Text
+                    style={{
+                      color: "black",
+                      fontWeight: "bold",
+                      textAlign: "center",
+                      fontSize: 18,
+                    }}
+                  >
+                    {`${time.toLocaleString("en-US", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      hour12: true,
+                    })} ${new Date(time).toISOString().slice(11,11)}`}
+
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              <Collapsible collapsed={isExpanded}>
+                  {returnPicker()}
+              </Collapsible>
+
+              <TouchableOpacity
+                style={styles.addButton}
+                onPress={handleAddEvent}
+              >
+                <Text style={styles.addButtonText}>Add event</Text>
+              </TouchableOpacity>
             </View>
           </BottomSheetModal>
         </View>
