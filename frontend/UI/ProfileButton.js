@@ -14,7 +14,9 @@ import { Poppins } from "@expo-google-fonts/poppins";
 import Profile from "../assets/tabbarIcons/Profile.png"
 import {useNavigation} from '@react-navigation/native';
 
-
+class MyTreeDataProvider {
+  // Implement your tree data provider methods here
+}
 // import styles too
 // make size able to change based on props base in big small
 // https://stackoverflow.com/questions/71917026/how-to-pass-in-props-to-an-element-that-changes-in-size-depending-on-prop

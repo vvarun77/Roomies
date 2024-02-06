@@ -74,8 +74,6 @@ export function CalendarScreen({ route }, components) {
     setIsExpanded(true);
   }, []);
 
-  // const [showCal, setShowCal] = useState(true);
-
   const [events, setEvents] = useState({
     "2024-02-16": [{ name: "bozo", time: "12:00", createdBy: user.firstName }],
     "2024-02-22": [{ name: "item 1 - any js object" }],
@@ -90,7 +88,7 @@ export function CalendarScreen({ route }, components) {
     Keyboard.dismiss();
     if (isExpanded) {
       setIsExpanded(false);
-    } else if(showMode == picker2){
+    } else if (showMode == picker2) {
       setIsExpanded(true);
     }
     setShowMode(picker2);
@@ -108,8 +106,13 @@ export function CalendarScreen({ route }, components) {
       hour: "2-digit",
       minute: "2-digit",
       hour12: true,
-    })} ${new Date(time).toISOString().slice(11,11)}`
-    var createdEvent = { name: event, date: formattedDate, time: newTime, user: user.firstName };
+    })} ${new Date(time).toISOString().slice(11, 11)}`;
+    var createdEvent = {
+      name: event,
+      date: formattedDate,
+      time: newTime,
+      user: user.firstName,
+    };
     console.log("selected day is: " + formattedDate);
     if (updatedEvents[formattedDate] && event) {
       updatedEvents[formattedDate].push(createdEvent);
@@ -127,7 +130,7 @@ export function CalendarScreen({ route }, components) {
 
   const returnPicker = () => {
     switch (showMode) {
-      case 'time':
+      case "time":
         return (
           <RNDateTimePicker
             value={time}
@@ -136,7 +139,7 @@ export function CalendarScreen({ route }, components) {
             onChange={handleTimePickerChange}
           />
         );
-      case 'date':
+      case "date":
       default:
         return (
           <DateTimePicker
@@ -148,7 +151,6 @@ export function CalendarScreen({ route }, components) {
         );
     }
   };
-  
 
   return (
     <SafeAreaView style={styles.newcontainer}>
@@ -206,7 +208,13 @@ export function CalendarScreen({ route }, components) {
                 }}
               >
                 <Text style={{ color: "black", fontSize: 16 }}>
-                  {item.name + " " + item.date + " " + item.time + " " + item.user}
+                  {item.name +
+                    " " +
+                    item.date +
+                    " " +
+                    item.time +
+                    " " +
+                    item.user}
                 </Text>
               </TouchableOpacity>
             )}
@@ -344,7 +352,7 @@ export function CalendarScreen({ route }, components) {
                     borderRadius: 5,
                     marginBottom: 10,
                   }}
-                  onPress={() => handleExpand('date')}
+                  onPress={() => handleExpand("date")}
                 >
                   <Text
                     style={{
@@ -365,7 +373,7 @@ export function CalendarScreen({ route }, components) {
                     borderRadius: 5,
                     marginBottom: 10,
                   }}
-                  onPress={() => handleExpand('time')}
+                  onPress={() => handleExpand("time")}
                 >
                   <Text
                     style={{
@@ -379,14 +387,11 @@ export function CalendarScreen({ route }, components) {
                       hour: "2-digit",
                       minute: "2-digit",
                       hour12: true,
-                    })} ${new Date(time).toISOString().slice(11,11)}`}
-
+                    })} ${new Date(time).toISOString().slice(11, 11)}`}
                   </Text>
                 </TouchableOpacity>
               </View>
-              <Collapsible collapsed={isExpanded}>
-                  {returnPicker()}
-              </Collapsible>
+              <Collapsible collapsed={isExpanded}>{returnPicker()}</Collapsible>
 
               <TouchableOpacity
                 style={styles.addButton}
