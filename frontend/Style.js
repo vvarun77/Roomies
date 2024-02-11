@@ -33,6 +33,14 @@ export const styles = StyleSheet.create({
 		fontWeight: "bold",
 		color:'#1D1617',
 	},
+	header3: {
+		paddingTop: "40%",
+		fontFamily: Poppins,
+		fontSize: 30,
+		textAlign: "center",
+		fontWeight: "bold",
+		color:'#1D1617',
+	},
 	textBoxesContainer: {
 		paddingTop: "20%",
 		flex:1,
