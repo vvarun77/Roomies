@@ -61,6 +61,7 @@ export function CalendarScreen({ route }, components) {
   // variables
   const snapPoints = useMemo(() => ["85%"], []);
   const { user } = useUser();
+  const groupid = user.unsafeMetadata.groupid;
   const [event, setEvent] = useState("");
   const [selectedDay, setSelectedDay] = useState("2024-02-08");
   const [isExpanded, setIsExpanded] = useState(false);
@@ -88,13 +89,20 @@ export function CalendarScreen({ route }, components) {
         end: `${getDate()} 12:00:00`,
         title: 'Merge Request to React Native Calendars',
         summary: 'Merge Timeline Calendar to React Native Calendars',
-        color: EVENT_COLOR
+        color: EVENT_COLOR,
+        createdBy: "far"
       },
   ], 
   );
   const[eventsByDate, setEventsByDate] = useState(groupBy(timelineEvents, e => CalendarUtils.getCalendarDateString(e.start)));
   
-  
+  const { data , loading , error } = useQuery(getTodo, 
+		{
+			variables: {id: groupid}, 
+			pollInterval: 500
+		});
+
+
   // when u levae the page it closes the is exapnded need to fic
   // callbacks
   const handlePresentModalPress = useCallback(() => {
@@ -159,11 +167,11 @@ export function CalendarScreen({ route }, components) {
     const timez = (new Date(end).toISOString().slice(0, 10));
     const finalEnd = timez + " " + timeEnd.slice(0, -3);
     const newEvent = {
-      id: 'draft',
       start: finalStart,
       end: finalEnd,
       title: event,
-      color: 'red'
+      color: 'purple',
+      createdBy: user.firstName
     };
 
     if (eventsByDate[timex]) {
