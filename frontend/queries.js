@@ -12,6 +12,14 @@ export const getTodo =  gql`
         id
         status
       }
+      events {
+        color
+        createdBy
+        end
+        start
+        summary
+        title
+      }
       groceries
       createdAt
       updatedAt
@@ -33,6 +41,14 @@ export const listTodos = gql`
         groupMembers{
           id
           status
+        }
+        events {
+          color
+          createdBy
+          end
+          start
+          summary
+          title
         }
         groceries
         createdAt
