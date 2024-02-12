@@ -34,7 +34,7 @@ import Accordian from "react-native-collapsible";
 import RNDateTimePicker, {
   DateTimePickerAndroid,
 } from "@react-native-community/datetimepicker";
-
+import groupBy from 'lodash/groupBy';
 import {
   useMutation,
   useQuery,
@@ -43,50 +43,58 @@ import {
 } from "@apollo/client";
 import { createTodo, updateTodo, deleteTodo } from "./mutations.js";
 import {
-  Agenda,
-  CalendarList,
-  WeekCalendar,
   CalendarProvider,
-  AgendaList,
+  ExpandableCalendar,
+  TimelineList,
+  TimelineProps,
+  TimelineEventProps,
+  CalendarUtils
+  
 } from "react-native-calendars";
 import AgendaItem from "./calendarComponents/AgendaItem.js"
 import { FlatList } from "react-native-gesture-handler";
 
 export function CalendarScreen({ route }, components) {
   const bottomSheetModalRef = useRef(null);
-  const [date, setDate] = useState(dayjs());
+  const [start, setStart] = useState(dayjs());
+  const [end, setEnd] = useState(dayjs());
   // variables
   const snapPoints = useMemo(() => ["85%"], []);
   const { user } = useUser();
   const [event, setEvent] = useState("");
   const [selectedDay, setSelectedDay] = useState("2024-02-08");
-  const [time, setTime] = useState(new Date());
   const [isExpanded, setIsExpanded] = useState(false);
-  const [isCalendarExpanded, setCalendarExpanded] = useState(false);
-  const [isWeekExpanded, setWeekExpanded] = useState(true);
+  const [isExpanded2, setIsExpanded2] = useState(false);
+  const [startTime, setStartTime] = useState(new Date());
+  const [endTime, setEndTime] = useState(new Date());
   const [showMode, setShowMode] = useState("");
+  const [showMode2, setShowMode2] = useState("");
   const [dayDate, setDayDate] = useState({
     "2024-02-20": { selected: true, user: "far" },
     "2024-02-20": { marked: true, user: "far" },
   });
-  const itemArr = [
-    {
-      title: "2024-02-03",
-      data: [{ hour: "12am", duration: "1h", title: "First sYoga" }],
-    },
-    {
-      title: "2024-02-04",
-      data: [{ hour: "12am", duration: "1h", title: "First dYoga" }],
-    },
-    {
-      title: "2024-02-05",
-      data: [{ hour: "12am", duration: "1h", title: "First dYoga" }],
-    },
-    {
-      title: "2024-02-06",
-      data: [{ hour: "12am", duration: "1h", title: "First xYoga" }],
-    },
-  ];
+
+  const EVENT_COLOR = '#e6add8';
+  const INITIAL_TIME = {hour: 9, minutes: 0};
+  const today = new Date();
+  const getDate = (offset = 0) => {
+    return CalendarUtils.getCalendarDateString(new Date().setDate(today.getDate() + offset));
+  };
+
+  const [timelineEvents, setTimelineEvents] = useState( 
+    [
+      {
+        start: `${new Date(start).toISOString().slice(0, 10)} 09:20:00`,
+        end: `${getDate()} 12:00:00`,
+        title: 'Merge Request to React Native Calendars',
+        summary: 'Merge Timeline Calendar to React Native Calendars',
+        color: EVENT_COLOR
+      },
+  ], 
+  );
+  const[eventsByDate, setEventsByDate] = useState(groupBy(timelineEvents, e => CalendarUtils.getCalendarDateString(e.start)));
+  
+  
   // when u levae the page it closes the is exapnded need to fic
   // callbacks
   const handlePresentModalPress = useCallback(() => {
@@ -96,9 +104,12 @@ export function CalendarScreen({ route }, components) {
     bottomSheetModalRef.current?.dismiss();
     Keyboard.dismiss();
     setEvent("");
-    setTime(new Date());
-    setDate(dayjs());
+    setStartTime(new Date());
+    setStart(dayjs());
+    setEnd(dayjs())
+    setEndTime(new Date());
   }, []);
+  
   const handleSheetChanges = useCallback((index) => {
     console.log("handleSheetChanges", index);
     Keyboard.dismiss();
@@ -117,34 +128,67 @@ export function CalendarScreen({ route }, components) {
     console.log(showMode);
     console.log(isExpanded);
   };
-
-  const handleCalendarExpand = () => {
-    if (isCalendarExpanded) {
-      setCalendarExpanded(false);
-    } else {
-      setCalendarExpanded(true);
+  const handleExpand2 = (picker2) => {
+    Keyboard.dismiss();
+    if (isExpanded) {
+      setIsExpanded2(false);
+    } else if (showMode2 == picker2) {
+      setIsExpanded2(true);
     }
-    handleWeekExpand();
-  };
-  const handleWeekExpand = () => {
-    if (isCalendarExpanded) {
-      setWeekExpanded(true);
-    } else {
-      setWeekExpanded(false);
-    }
+    setShowMode2(picker2);
+    console.log(showMode2);
+    console.log(isExpanded);
   };
 
-  const handleAddEvent = async () => {
-    const updatedEvents = { ...events };
-    const timestamp = date;
-    const date2 = new Date(timestamp);
-    const formattedDate = date2.toISOString().slice(0, 10); // Extracting YYYY-MM-DD
-    // Output: 2024-02-07
-    const newTime = `${time.toLocaleString("en-US", {
+
+  createNewEvent = () => {
+   // const hourString = `${(timeObject.hour + 1).toString().padStart(2, '0')}`;
+    //const minutesString = `${timeObject.minutes.toString().padStart(2, '0')}`;
+    const timeStart = startTime.toLocaleString("en-US", {
       hour: "2-digit",
       minute: "2-digit",
       hour12: true,
-    })} ${new Date(time).toISOString().slice(11, 11)}`;
+    })
+    const timex = (new Date(start).toISOString().slice(0, 10));
+    const finalStart = timex + " " + timeStart.slice(0, -3);
+    const timeEnd = endTime.toLocaleString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    })
+    const timez = (new Date(end).toISOString().slice(0, 10));
+    const finalEnd = timez + " " + timeEnd.slice(0, -3);
+    const newEvent = {
+      id: 'draft',
+      start: finalStart,
+      end: finalEnd,
+      title: event,
+      color: 'red'
+    };
+
+    if (eventsByDate[timex]) {
+      console.log(timex)
+      console.log(eventsByDate)
+      console.log(...eventsByDate[timex])
+      eventsByDate[timex] = [...eventsByDate[timex], newEvent];
+      console.log(eventsByDate)
+    } else {
+      eventsByDate[timex] = [newEvent];
+    }
+    completeEvent();
+    setEventsByDate(eventsByDate);
+  };
+  const handleAddEvent = async () => {
+    const updatedEvents = { ...events };
+    const timestamp = start;
+    const date2 = new Date(timestamp);
+    const formattedDate = date2.toISOString().slice(0, 10); // Extracting YYYY-MM-DD
+    // Output: 2024-02-07
+    const newTime = `${startTime.toLocaleString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    })} ${new Date(startTime).toISOString().slice(11, 11)}`;
     var createdEvent = {
       name: event,
       date: formattedDate,
@@ -163,7 +207,11 @@ export function CalendarScreen({ route }, components) {
   };
 
   function handleTimePickerChange(event, time) {
-    setTime(time);
+    console.log(time)
+    setStartTime(time);
+  }
+  function handleTimePickerChange2(event, time) {
+    setEndTime(time);
   }
 
   const returnPicker = () => {
@@ -171,7 +219,7 @@ export function CalendarScreen({ route }, components) {
       case "time":
         return (
           <RNDateTimePicker
-            value={time}
+            value={startTime}
             display="spinner"
             mode="time"
             onChange={handleTimePickerChange}
@@ -182,18 +230,42 @@ export function CalendarScreen({ route }, components) {
         return (
           <DateTimePicker
             mode="single"
-            date={date}
-            onChange={(params) => setDate(params.date)}
+            date={start}
+            onChange={(params) => {setStart(params.date); console.log(start)}}
+            selectedItemColor="#ccc0ef"
+          />
+        );
+    }
+  };
+  const returnPicker2 = () => {
+    switch (showMode2) {
+      case "time":
+        return (
+          <RNDateTimePicker
+            value={endTime}
+            display="spinner"
+            mode="time"
+            onChange={handleTimePickerChange2}
+          />
+        );
+      case "date":
+      default:
+        return (
+          <DateTimePicker
+            mode="single"
+            date={end}
+            onChange={(params) => {setEnd(params.date); console.log(start)}}
             selectedItemColor="#ccc0ef"
           />
         );
     }
   };
 
+
   return (
     <SafeAreaView style={styles.newcontainer}>
       <BottomSheetModalProvider>
-        <Text style={styles.header3}>Calendar 🗓️</Text>
+        <Text style={styles.header2}>Calendar 🗓️</Text>
         <TouchableOpacity
           style={styles.addButton}
           onPress={handlePresentModalPress}
@@ -202,123 +274,27 @@ export function CalendarScreen({ route }, components) {
         </TouchableOpacity>
         <View style={{ height: "100%", width: "100%" }}>
           <CalendarProvider date={selectedDay}>
-            <Collapsible collapsed={isWeekExpanded}>
-              <View style={{ minHeight: 1, minWidth: 1 }}>
-                <WeekCalendar
-                  minDate={"2024-01-01"}
-                  // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
-                  maxDate={"2024-12-31"}
-                  markedDates={dayDate}
-                  renderScrollComponent={FlatList}
-                  //current={selectedDay}
+            <ExpandableCalendar
+             firstDay={1}
+            disablePan={false}
+            animateScroll={true}
+            theme={{
+              selectedDayBackgroundColor: "#ccc0ef"
+            }}
 
-                  onDayPress={(day) => {
-                    setSelectedDay(day.dateString);
-                    let day2 = day.dateString;
-                    setDayDate({
-                      [day2]: { selected: true, selectedColor: "#ccc0ef" },
-                    });
-                  }}
-                  duration={500}
-                  calendarStyle={{
-                    todayBackgroundColor: "red",
-                    todayTextColor: "white",
-                    selectedItemColor: "#ccc0ef",
-                    selectedDayBackgroundColor: "#ccc0ef",
-                    selectedDotColor: "orange",
-                  }}
-                />
-                <View
-                  style={{
-                    backgroundColor: "white",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    alignContent: "center",
-                  }}
-                >
-                  <TouchableOpacity
-                    style={{
-                      height: 10,
-                      width: 30,
-                      backgroundColor: "#ccc0ef",
-                      borderRadius: 25,
-                    }}
-                    onPress={handleCalendarExpand}
-                    duration={400}
-                  />
-                </View>
-                <AgendaList
-                  sections={itemArr}
-                  renderItem={(item) => (
-                   <AgendaItem item={item}/>
-                  )}
-                  // scrollToNextEvent
-
-                  // dayFormat={'yyyy-MM-d'}
-                />
-              </View>
-            </Collapsible>
-          </CalendarProvider>
-
-          <Collapsible
-            collapsed={isCalendarExpanded}
-            style={{ height: 1000 }}
-            duration={500}
-          >
-            <CalendarList
-              // collapsible height fixed so scrolling doesn't lock up, this is the shittiest solution possible.
-              // collapsible will eventually need ot be written by us I believe
-              onDayChange={(day) => {
-                console.log("day changed");
-              }}
-              // Callback which gets executed when visible months change in scroll view. Default = undefined
-              onVisibleMonthsChange={(months) => {
-                console.log("now these months are visible", months);
-              }}
-              onDayPress={(day) => {
-                setSelectedDay(day.dateString);
-                let day2 = day.dateString;
-                setDayDate({
-                  [day2]: { selected: true, selectedColor: "#ccc0ef" },
-                });
-                handleCalendarExpand();
-                //console.log(dayDate);
-              }}
-              minDate={"2024-01-01"}
-              // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
-              maxDate={"2024-12-31"}
-              markedDates={dayDate}
-              rowHasChanged={(r1, r2) => {
-                return r1.text !== r2.text;
-              }}
-              // Max amount of months allowed to scroll to the past. Default = 50
-              pastScrollRange={1}
-              // Max amount of months allowed to scroll to the future. Default = 50
-              futureScrollRange={12}
-              // Enable or disable scrolling of calendar list
-              scrollEnabled={true}
-              //renderScrollComponent={FlatList}
-              nestedScrollEnabled={true}
-              theme={{
-                todayBackgroundColor: "red",
-                todayTextColor: "white",
-                selectedItemColor: "#ccc0ef",
-                selectedDayBackgroundColor: "#ccc0ef",
-                selectedDotColor: "orange",
-              }}
             />
-          </Collapsible>
-        </View>
-        <TouchableOpacity
-          style={{
-            height: 100,
-            width: 30,
-            backgroundColor: "#ccc0ef",
-            borderRadius: 25,
-          }}
-          onPress={handleCalendarExpand}
-        />
-
+            <TimelineList
+           events={eventsByDate}
+           timelineProps={{format24h:false}}
+           //timelineProps={}
+           showNowIndicator
+           scrollToNow
+           scrollToFirst
+           initialTime={INITIAL_TIME}
+          />
+          
+                    </CalendarProvider>
+          </View>
         <BottomSheetModal
           ref={bottomSheetModalRef}
           index={0}
@@ -362,6 +338,7 @@ export function CalendarScreen({ route }, components) {
                 flexDirection: "row",
                 alignItems: "center",
                 gap: "20%",
+                flexWrap:'wrap'
               }}
             >
               <Text
@@ -391,7 +368,7 @@ export function CalendarScreen({ route }, components) {
                     fontSize: 18,
                   }}
                 >
-                  {new Date(date).toISOString().slice(0, 10)}
+                  {new Date(start).toISOString().slice(0, 10)}
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -404,6 +381,7 @@ export function CalendarScreen({ route }, components) {
                 }}
                 onPress={() => handleExpand("time")}
               >
+                
                 <Text
                   style={{
                     color: "black",
@@ -412,17 +390,67 @@ export function CalendarScreen({ route }, components) {
                     fontSize: 18,
                   }}
                 >
-                  {`${time.toLocaleString("en-US", {
+                  {`${startTime.toLocaleString("en-US", {
                     hour: "2-digit",
                     minute: "2-digit",
                     hour12: true,
-                  })} ${new Date(time).toISOString().slice(11, 11)}`}
+                  })} ${new Date(startTime).toISOString().slice(11, 11)}`}
+                </Text>
+                
+              </TouchableOpacity>
+              <Collapsible collapsed={isExpanded}>{returnPicker()}</Collapsible>
+              <TouchableOpacity
+                style={{
+                  borderColor: "#ccc0ef",
+                  borderWidth: 2,
+                  padding: 10,
+                  borderRadius: 5,
+                  marginBottom: 10,
+                }}
+                onPress={() => handleExpand2("date")}
+              >
+                <Text
+                  style={{
+                    color: "black",
+                    fontWeight: "bold",
+                    textAlign: "center",
+                    fontSize: 18,
+                  }}
+                >
+                  {new Date(end).toISOString().slice(0, 10)}
                 </Text>
               </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  borderColor: "#ccc0ef",
+                  borderWidth: 2,
+                  padding: 10,
+                  borderRadius: 5,
+                  marginBottom: 10,
+                }}
+                onPress={() => handleExpand2("time")}
+              >
+                <Text
+                  style={{
+                    color: "black",
+                    fontWeight: "bold",
+                    textAlign: "center",
+                    fontSize: 18,
+                  }}
+                >
+                  {`${endTime.toLocaleString("en-US", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: true,
+                  })} ${new Date(endTime).toISOString().slice(11, 11)}`}
+                </Text>
+              </TouchableOpacity>
+              
+              
             </View>
-            <Collapsible collapsed={isExpanded}>{returnPicker()}</Collapsible>
+            <Collapsible collapsed={isExpanded2}>{returnPicker2()}</Collapsible>
 
-            <TouchableOpacity style={styles.addButton} onPress={handleAddEvent}>
+            <TouchableOpacity style={styles.addButton} onPress={createNewEvent}>
               <Text style={styles.addButtonText}>Add event</Text>
             </TouchableOpacity>
           </View>
