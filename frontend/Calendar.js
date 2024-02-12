@@ -74,25 +74,19 @@ export function CalendarScreen({ route }, components) {
     "2024-02-20": { selected: true, user: "far" },
     "2024-02-20": { marked: true, user: "far" },
   });
-
+  const [addTodoHook, { data: createData, loading: createLoading, error: createError }] = useMutation(createTodo);
+	const [updateTodoHook, { data: updateData, loading: updateLoading, error: updateError }] = useMutation(updateTodo);
+	const [deleteTodoHook, { data: deleteData, loading: deleteLoading, error: deleteError }] = useMutation(deleteTodo);
   const EVENT_COLOR = '#e6add8';
   const INITIAL_TIME = {hour: 9, minutes: 0};
   const today = new Date();
   const getDate = (offset = 0) => {
     return CalendarUtils.getCalendarDateString(new Date().setDate(today.getDate() + offset));
   };
+  const isMounted = useRef(false);
 
   const [timelineEvents, setTimelineEvents] = useState( 
-    [
-      {
-        start: `${new Date(start).toISOString().slice(0, 10)} 09:20:00`,
-        end: `${getDate()} 12:00:00`,
-        title: 'Merge Request to React Native Calendars',
-        summary: 'Merge Timeline Calendar to React Native Calendars',
-        color: EVENT_COLOR,
-        createdBy: "far"
-      },
-  ], 
+[]
   );
   const[eventsByDate, setEventsByDate] = useState(groupBy(timelineEvents, e => CalendarUtils.getCalendarDateString(e.start)));
   
@@ -101,7 +95,43 @@ export function CalendarScreen({ route }, components) {
 			variables: {id: groupid}, 
 			pollInterval: 500
 		});
+    useEffect(() => {
+      if(!loading && error){
+        async function addEmpty() {
+          if(user.unsafeMetadata.groupid != null) {
+            await addTodoHook({ variables: { input: {id: user.unsafeMetadata.groupid, events: []} } })
+          }
+        }
+        addEmpty().then()
+        console.log(error)
+      }
+  
+      if (!loading && data.getTodo.events.length != 0){
+        var temp = JSON.parse(data.getTodo.events)
+        setEventsByDate(temp)
+        console.log("eventsByDate: " + eventsByDate["2024-02-12"])
+        console.log("server:" + data.getTodo.events)
+      }
+      
+      }, [data]);
 
+      useEffect(() => {
+        async function updateTodo() {
+         //var list = eventsByDate.map(member => {key: member.index, events: member[index]})
+         //console.log(eventsByDate.array)
+         const jsonArray = Object.entries(eventsByDate).map(([key, events]) => ({ key, events }));
+         console.log("updating! ")
+         console.log(eventsByDate)
+          await updateTodoHook({
+          variables: { input: { id: user.unsafeMetadata.groupid, events: JSON.stringify(eventsByDate) } },
+          });
+          if(loading) console.log("loading!");
+          if(error) console.log("error in api");
+        }
+        updateTodo();
+        
+     
+        }, [eventsByDate]);
 
   // when u levae the page it closes the is exapnded need to fic
   // callbacks
@@ -149,7 +179,7 @@ export function CalendarScreen({ route }, components) {
   };
 
 
-  createNewEvent = () => {
+  createNewEvent = async () => {
    // const hourString = `${(timeObject.hour + 1).toString().padStart(2, '0')}`;
     //const minutesString = `${timeObject.minutes.toString().padStart(2, '0')}`;
     const timeStart = startTime.toLocaleString("en-US", {
@@ -157,20 +187,21 @@ export function CalendarScreen({ route }, components) {
       minute: "2-digit",
       hour12: true,
     })
-    const timex = (new Date(start).toISOString().slice(0, 10));
-    const finalStart = timex + " " + timeStart.slice(0, -3);
+    const timex = (new Date(start).toISOString().slice(0, 10)); // timex = date
+    const finalStart = timex + " " + timeStart.slice(0, -3); // hour minute shit
     const timeEnd = endTime.toLocaleString("en-US", {
       hour: "2-digit",
       minute: "2-digit",
       hour12: true,
     })
-    const timez = (new Date(end).toISOString().slice(0, 10));
-    const finalEnd = timez + " " + timeEnd.slice(0, -3);
+    const timez = (new Date(end).toISOString().slice(0, 10)); // timez = date
+    const finalEnd = timez + " " + timeEnd.slice(0, -3); // hour minute shit
     const newEvent = {
       start: finalStart,
       end: finalEnd,
       title: event,
       color: 'purple',
+      summary: 'i love men',
       createdBy: user.firstName
     };
 
@@ -181,37 +212,20 @@ export function CalendarScreen({ route }, components) {
       eventsByDate[timex] = [...eventsByDate[timex], newEvent];
       console.log(eventsByDate)
     } else {
+      console.log("else")
+      console.log(eventsByDate)
       eventsByDate[timex] = [newEvent];
+      console.log(eventsByDate)
     }
     completeEvent();
     setEventsByDate(eventsByDate);
-  };
-  const handleAddEvent = async () => {
-    const updatedEvents = { ...events };
-    const timestamp = start;
-    const date2 = new Date(timestamp);
-    const formattedDate = date2.toISOString().slice(0, 10); // Extracting YYYY-MM-DD
-    // Output: 2024-02-07
-    const newTime = `${startTime.toLocaleString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
-    })} ${new Date(startTime).toISOString().slice(11, 11)}`;
-    var createdEvent = {
-      name: event,
-      date: formattedDate,
-      time: newTime,
-      user: user.firstName,
-    };
-    console.log("selected day is: " + formattedDate);
-    if (updatedEvents[formattedDate] && event) {
-      updatedEvents[formattedDate].push(createdEvent);
-    } else if (!updatedEvents[formattedDate] && event) {
-      updatedEvents[formattedDate] = [createdEvent];
-    }
-    completeEvent();
-    console.log(updatedEvents);
-    setEvents(updatedEvents);
+    const jsonArray = Object.entries(eventsByDate).map(([key, events]) => ({events , key }));
+    console.log("updating! ")
+    console.log(eventsByDate)
+    console.log(jsonArray)
+     await updateTodoHook({
+     variables: { input: { id: user.unsafeMetadata.groupid, events: jsonArray } },
+     });
   };
 
   function handleTimePickerChange(event, time) {
