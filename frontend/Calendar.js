@@ -7,6 +7,7 @@ import {
   Image,
   Keyboard,
 } from "react-native";
+import _, { times } from 'lodash';
 import {
   BottomSheetModal,
   BottomSheetModalProvider,
@@ -85,9 +86,7 @@ export function CalendarScreen({ route }, components) {
   };
   const isMounted = useRef(false);
 
-  const [timelineEvents, setTimelineEvents] = useState( 
-[]
-  );
+  const [timelineEvents, setTimelineEvents] = useState();
   const[eventsByDate, setEventsByDate] = useState(groupBy(timelineEvents, e => CalendarUtils.getCalendarDateString(e.start)));
   
   const { data , loading , error } = useQuery(getTodo, 
@@ -95,44 +94,35 @@ export function CalendarScreen({ route }, components) {
 			variables: {id: groupid}, 
 			pollInterval: 500
 		});
+
     useEffect(() => {
-      if(!loading && error){
-        async function addEmpty() {
-          if(user.unsafeMetadata.groupid != null) {
-            await addTodoHook({ variables: { input: {id: user.unsafeMetadata.groupid, events: []} } })
-          }
-        }
-        addEmpty().then()
-        console.log(error)
-      }
   
-      if (!loading && data.getTodo.events.length != 0){
+      if (!loading && data){
         var temp = JSON.parse(data.getTodo.events)
+        console.log(temp)
         setEventsByDate(temp)
-        console.log("eventsByDate: " + eventsByDate["2024-02-12"])
-        console.log("server:" + data.getTodo.events)
       }
       
       }, [data]);
 
+      /*
       useEffect(() => {
-        async function updateTodo() {
-         //var list = eventsByDate.map(member => {key: member.index, events: member[index]})
-         //console.log(eventsByDate.array)
-         const jsonArray = Object.entries(eventsByDate).map(([key, events]) => ({ key, events }));
+        function updateTodo() {
          console.log("updating! ")
-         console.log(eventsByDate)
-          await updateTodoHook({
+         console.log(JSON.stringify(eventsByDate))
+          updateTodoHook({
           variables: { input: { id: user.unsafeMetadata.groupid, events: JSON.stringify(eventsByDate) } },
           });
           if(loading) console.log("loading!");
           if(error) console.log("error in api");
         }
-        updateTodo();
-        
-     
+      	const statusChanged = !_.isEqual(eventsByDate, JSON.parse(JSON.stringify(data.getTodo.events)));
+        if(statusChanged){
+          updateTodo();
+        }
+      
         }, [eventsByDate]);
-
+        */
   // when u levae the page it closes the is exapnded need to fic
   // callbacks
   const handlePresentModalPress = useCallback(() => {
@@ -187,15 +177,24 @@ export function CalendarScreen({ route }, components) {
       minute: "2-digit",
       hour12: true,
     })
+    timePM = timeStart.slice(timeStart.length - 2, timeStart.length);
+    //console.log("The time in 12hr: " + timePM)
+
+    let hour = parseInt(timeStart.slice(0, -6));
+    hour = (hour + 12) % 24;
+    let formattedTimeStart = hour.toString().padStart(2, '0') + timeStart.slice(-6, -3);
     const timex = (new Date(start).toISOString().slice(0, 10)); // timex = date
-    const finalStart = timex + " " + timeStart.slice(0, -3); // hour minute shit
+    const finalStart = timex + " " + formattedTimeStart; // hour minute shit
     const timeEnd = endTime.toLocaleString("en-US", {
       hour: "2-digit",
       minute: "2-digit",
       hour12: true,
     })
+    let hour2 = parseInt(timeEnd.slice(0, -6));
+    hour2 = (hour2 + 12) % 24;
+    let formattedTimeStart2 = hour2.toString().padStart(2, '0') + timeEnd.slice(-6, -3);
     const timez = (new Date(end).toISOString().slice(0, 10)); // timez = date
-    const finalEnd = timez + " " + timeEnd.slice(0, -3); // hour minute shit
+    const finalEnd = timez + " " + formattedTimeStart2; // hour minute shit
     const newEvent = {
       start: finalStart,
       end: finalEnd,
@@ -206,30 +205,22 @@ export function CalendarScreen({ route }, components) {
     };
 
     if (eventsByDate[timex]) {
-      console.log(timex)
-      console.log(eventsByDate)
-      console.log(...eventsByDate[timex])
       eventsByDate[timex] = [...eventsByDate[timex], newEvent];
-      console.log(eventsByDate)
     } else {
-      console.log("else")
-      console.log(eventsByDate)
       eventsByDate[timex] = [newEvent];
-      console.log(eventsByDate)
     }
     completeEvent();
     setEventsByDate(eventsByDate);
-    const jsonArray = Object.entries(eventsByDate).map(([key, events]) => ({events , key }));
+    
     console.log("updating! ")
-    console.log(eventsByDate)
-    console.log(jsonArray)
+   
      await updateTodoHook({
-     variables: { input: { id: user.unsafeMetadata.groupid, events: jsonArray } },
+     variables: { input: { id: user.unsafeMetadata.groupid, events: JSON.stringify(eventsByDate) } },
      });
+     
   };
 
   function handleTimePickerChange(event, time) {
-    console.log(time)
     setStartTime(time);
   }
   function handleTimePickerChange2(event, time) {
