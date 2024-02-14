@@ -64,7 +64,7 @@ export function CalendarScreen({ route }, components) {
   const { user } = useUser();
   const groupid = user.unsafeMetadata.groupid;
   const [event, setEvent] = useState("");
-  const [selectedDay, setSelectedDay] = useState("2024-02-08");
+  const [selectedDay, setSelectedDay] = useState(new Date());
   const [isExpanded, setIsExpanded] = useState(false);
   const [isExpanded2, setIsExpanded2] = useState(false);
   const [startTime, setStartTime] = useState(new Date());
@@ -181,7 +181,13 @@ export function CalendarScreen({ route }, components) {
     //console.log("The time in 12hr: " + timePM)
 
     let hour = parseInt(timeStart.slice(0, -6));
-    hour = (hour + 12) % 24;
+    if (hour !== 12 && timePM === 'PM') {
+      // If it's PM and not already in 24-hour format, add 12 to convert
+      hour = (hour + 12) % 24;
+  } else if (hour === 12 && timePM === 'AM') {
+      // If it's 12 AM (midnight), convert it to 0 in 24-hour format
+      hour = 0;
+  }
     let formattedTimeStart = hour.toString().padStart(2, '0') + timeStart.slice(-6, -3);
     const timex = (new Date(start).toISOString().slice(0, 10)); // timex = date
     const finalStart = timex + " " + formattedTimeStart; // hour minute shit
@@ -286,25 +292,36 @@ export function CalendarScreen({ route }, components) {
           <Text style={styles.addButtonText}>Add event</Text>
         </TouchableOpacity>
         <View style={{ height: "100%", width: "100%" }}>
-          <CalendarProvider date={selectedDay}>
+          <CalendarProvider date={selectedDay} >
             <ExpandableCalendar
-             firstDay={1}
-            disablePan={false}
-            animateScroll={true}
+            firstDay={1} 
+            onDayPress={(day) => {
+              setSelectedDay(day.dateString);
+              console.log(day.dateString)
+            }}
+            maxToRenderPerBatch={10}
             theme={{
               selectedDayBackgroundColor: "#ccc0ef"
             }}
-
             />
+            <View style={{height:"100%"}}>
             <TimelineList
+          
+            onDayPress={(day) => {
+              setSelectedDay(day.dateString);
+              console.log(day.dateString)
+            }}
            events={eventsByDate}
            timelineProps={{format24h:false}}
            //timelineProps={}
-           showNowIndicator
+           //showNowIndicator
+           firstDay={1}
+           //selected={selectedDay}
            scrollToNow
-           scrollToFirst
            initialTime={INITIAL_TIME}
+ 
           />
+          </View>
           
                     </CalendarProvider>
           </View>
