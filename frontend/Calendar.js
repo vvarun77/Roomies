@@ -315,7 +315,7 @@ export function CalendarScreen({ route }, components) {
            events={eventsByDate}
            timelineProps={{format24h:false}}
            //timelineProps={}
-           //showNowIndicator
+           showNowIndicator
            firstDay={1}
            //selected={selectedDay}
            scrollToNow
