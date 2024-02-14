@@ -300,6 +300,7 @@ export function CalendarScreen({ route }, components) {
               console.log(day.dateString)
             }}
             maxToRenderPerBatch={10}
+            animateScroll={true}
             theme={{
               selectedDayBackgroundColor: "#ccc0ef"
             }}
