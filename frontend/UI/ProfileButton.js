@@ -11,49 +11,45 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Poppins } from "@expo-google-fonts/poppins";
-import BackArrow from "../assets/buttonIcons/backarrow.png"
+import Profile from "../assets/tabbarIcons/Profile.png"
 import {useNavigation} from '@react-navigation/native';
 
-
+class MyTreeDataProvider {
+  // Implement your tree data provider methods here
+}
 // import styles too
 // make size able to change based on props base in big small
 // https://stackoverflow.com/questions/71917026/how-to-pass-in-props-to-an-element-that-changes-in-size-depending-on-prop
-const BackButton = (props) => {
+// onPress={() => navigation.navigate(props.back)}
+const ProfileButton = (props) => {
 const navigation = useNavigation();
   return (
-    <TouchableOpacity style={styles.shape} onPress={() => navigation.navigate(props.back)}>
-        <Image style={styles.iconStyle} source={BackArrow} />
+    <TouchableOpacity style={styles.shape}>
+        <Image style={styles.iconStyle} source={Profile} />
     </TouchableOpacity>
   );
 };
 
-const styles = StyleSheet.create({
-  textStyling: {
-    fontFamily: Poppins,
-    color: "#fff",
-    //textAlign: "center",
-    fontWeight: "bold",
-    fontSize: 24,
-    alignSelf: "center",
-    marginRight: 40,
-  },
+const styles = StyleSheet.create({ 
   iconStyle: {
-    height: 20,
-    width: 20,
+    tintColor:'white',
+    height: 25,
+    width: 25,
     resizeMode: "contain",
   },
   shape: {
-    alignSelf:'flex-start',
-    zIndex:1,
+    alignSelf:'flex-end',
+    zIndex:2,
     position: "absolute",
     justifyContent: "center",
     alignItems: "center",
-    width: 30,
-    height: 30, 
+    width: 35,
+    height: 35, 
     borderRadius: 60,
     backgroundColor: "#ccc0ef",
-    left: 20,
+    right: 20,
+    top:75,
   }
 });
 
-export default BackButton;
+export default ProfileButton;

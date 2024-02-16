@@ -28,6 +28,7 @@ import awsmobile from "./aws-exports.js";
 
 import {TabNavigation } from "./NavigationComponents/TabNav.js";
 import { LoadingScreen } from "./Loading.js";
+import { CalendarScreen } from "./Calendar.js";
 
 const App = () => { 
 	
@@ -94,10 +95,11 @@ const App = () => {
         	<Stack.Navigator>
             <Stack.Screen name="SignIn" component={SignInScreen} options={{headerShown: false }} />
              <Stack.Screen name="SignUp" component={SignUpScreen} options={{headerShown: false }}  />
-			 <Stack.Screen name="Tab" component={TabNavigation} options={{headerShown: false }} />
+			 <Stack.Screen name="Tab" component={TabNavigation} options={{headerShown: false,  gestureEnabled: false }} />
             <Stack.Screen name="Home" component={HomeScreen} options={{ gestureEnabled: false, headerShown: false  }} />
 			<Stack.Screen name="Loading" component={LoadingScreen} options={{ gestureEnabled: false, headerShown: false  }} />
-			<Stack.Screen name="Groups" component={GroupingScreen} />
+			<Stack.Screen name="Groups" component={GroupingScreen} options={{headerShown: false,  gestureEnabled: false }}/>
+			<Stack.Screen name="Calendar" component={CalendarScreen} options={{headerShown:false}}/>
 			<Stack.Screen name="Groceries" component={GroceryScreen} />
             </Stack.Navigator>
                  </NavigationContainer>

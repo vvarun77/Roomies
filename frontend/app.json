@@ -24,7 +24,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.vvarun77.roomie"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -32,7 +33,7 @@
     "extra": {
       "clerkPublishableKey": "pk_test_Zmlyc3QtZG9scGhpbi05OS5jbGVyay5hY2NvdW50cy5kZXYk",
       "eas": {
-        "projectId": ""
+        "projectId": "184341e9-ddb0-4315-bd8a-dab05e4381f8"
       }
     }
   }

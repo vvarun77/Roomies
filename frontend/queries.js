@@ -12,6 +12,7 @@ export const getTodo =  gql`
         id
         status
       }
+      events
       groceries
       createdAt
       updatedAt
@@ -34,6 +35,7 @@ export const listTodos = gql`
           id
           status
         }
+        events
         groceries
         createdAt
         updatedAt

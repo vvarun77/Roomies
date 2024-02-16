@@ -12,6 +12,10 @@ import {useAuth} from "@clerk/clerk-expo"
 import {useUser, useClerk} from "@clerk/clerk-react";
 import {useNavigation} from '@react-navigation/native';
 import { Button } from "react-native";
+import ReusableButton from "./UI/ReusableButton.js";
+import ReusableTextField from "./UI/ReusableTextField.js";
+import EmailIcon from "./assets/textfieldIcons/Message.png";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import axios from "axios";
 import queryString from 'query-string';
@@ -39,7 +43,7 @@ const InviteScreen = () =>  {
       // will need to be changed later to scheme roomies:// somethiing like that
       // string should be changed to what you see when you run yarn start
       //exp://10.19.168.70:8081 - varun
-      const redirect_url = "exp://10.22.32.48:8081/--/signup?" + queryStringified;
+      const redirect_url = "roomies://" + queryStringified;
       return redirect_url;
     }
 
@@ -71,21 +75,27 @@ const InviteScreen = () =>  {
         console.error('Axios request error:', error);
       });
     };
-
+    const handleEmailChange = (text) => {
+      setEmailAddress(text);
+    };
 	return ( 
-		<View style={styles.container}> 
-		    <Text style={styles.heading}> Invite Roomies </Text> 
-            <View>
-                <TextInput
-                autoCapitalize="none"
-                value={emailAddress}
-                placeholder="Email"
-                placeholderTextColor="#000"
-                onChangeText={(emailAddress) => setEmailAddress(emailAddress)}
+		<SafeAreaView style={styles.newcontainer}>
+        <Text style={styles.title}>invite roomies 📩</Text>
+        <View style={styles.textBoxesContainer}>
+            <ReusableTextField
+              onChangeText={handleEmailChange}
+              value={emailAddress}
+              placeholder="Email"
+              imageSource={EmailIcon}
+              secure={false}
+            />
+          </View>
+             <ReusableButton
+          function={handleInvite}
+          name="Invite"
+          width={"80%"}
         />
-      </View>
-            <Button onPress={handleInvite} title="Invite"> Invite </Button>
-		</View> 
+    </SafeAreaView>
 	); 
 }; 
 

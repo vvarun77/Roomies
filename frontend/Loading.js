@@ -15,6 +15,9 @@ import { useUser, useClerk } from "@clerk/clerk-react";
 import { getTodo } from "./queries.js";
 import * as Linking from "expo-linking";
 import queryString from "query-string";
+import { SafeAreaView } from "react-native-safe-area-context";
+import * as Progress from 'react-native-progress';
+import { styles } from "./Style.js";
 
 export function LoadingScreen({ route }, components) {
   const [
@@ -94,5 +97,11 @@ export function LoadingScreen({ route }, components) {
 
   //adding loading shit circle here
 
-  return <Text>loading</Text>;
+  return (
+    <SafeAreaView style={styles.newContainer}>
+        <View style={{marginTop: "60%", justifyContent: "center", alignContent:"center", alignSelf:"center"}}>
+        <Progress.Circle animated={true} color={"#CCC0EF"} indeterminate={true} size={250} borderWidth={10}/>
+        </View>
+    </SafeAreaView>
+  );
 }

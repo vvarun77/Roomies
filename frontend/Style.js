@@ -6,10 +6,16 @@ export const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center", 
 		width: "100%",
-		//backgroundColor:"#E0E0E0",
-		height:"100%",
+		backgroundColor:'transparent',
 		textAlign:"center",
 		fontFamily: Poppins,
+	},
+	homeContainer: {
+		width: "100%",
+		backgroundColor:'transparent',
+		textAlign:"center",
+		fontFamily: Poppins,
+		alignItems:"center"
 	},
 	header: {
 		paddingTop: "20%",
@@ -18,7 +24,6 @@ export const styles = StyleSheet.create({
 		textAlign: "center",
 		fontWeight: "bold",
 		color:'#1D1617',
-		
 	},
 	header2: {
 		paddingTop: "15%",
@@ -27,7 +32,14 @@ export const styles = StyleSheet.create({
 		textAlign: "center",
 		fontWeight: "bold",
 		color:'#1D1617',
-		
+	},
+	header3: {
+		paddingTop: "40%",
+		fontFamily: Poppins,
+		fontSize: 30,
+		textAlign: "center",
+		fontWeight: "bold",
+		color:'#1D1617',
 	},
 	textBoxesContainer: {
 		paddingTop: "20%",
@@ -105,4 +117,51 @@ export const styles = StyleSheet.create({
 		fontWeight: "bold", 
 		fontSize: 18, 
 	}, 
+	avoid: {
+		flex:1, 
+	},
+	homeTitle: {
+		fontSize: 32,
+		fontFamily: Poppins, 
+		fontWeight: "bold",
+		textAlign:"left",
+		paddingTop:"15%",
+		paddingBottom:"10%",
+		alignSelf:"flex-start",
+		left: 50,
+		position: 'absolute',
+		alignSelf:'flex-end',
+		top:20, 
+		height: 30,
+		width:"100%",
+		zIndex:1,
+		
+	},
+	card: {
+		backgroundColor: 'white',
+		width: 350,
+		borderRadius: 12,
+		height:"auto",
+		marginBottom:"12%",
+	},
+	cardTitle: {
+		fontFamily: Poppins, 
+		color: "#ccc0ef",
+		fontSize: 24,
+		fontWeight: "bold",
+		left: 10,
+		top: 15,
+	},
+	groupButton: {
+		flexDirection:"row",
+		width: 350,
+		justifyContent:"space-between",
+		backgroundColor: "#ccc0ef", 
+		height:100,
+		marginBottom:"12%",
+		borderRadius:12,
+		alignItems:"center",
+		paddingHorizontal: 20,
+	}
+	
 }); 
