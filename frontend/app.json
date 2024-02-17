@@ -33,8 +33,9 @@
     "extra": {
       "clerkPublishableKey": "pk_test_Zmlyc3QtZG9scGhpbi05OS5jbGVyay5hY2NvdW50cy5kZXYk",
       "eas": {
-        "projectId": "184341e9-ddb0-4315-bd8a-dab05e4381f8"
+        "projectId": "13572f25-5a69-4f93-95f5-4882e390ab14"
       }
-    }
+    },
+    "owner": "vvarun77"
   }
 }
