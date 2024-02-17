@@ -183,7 +183,7 @@ export function CalendarScreen({ route }, components) {
       end: finalEnd,
       title: event,
       color: 'purple',
-      summary: 'i love men',
+      summary: 'Event by' + user.firstName,
       createdBy: user.firstName
     };
 
