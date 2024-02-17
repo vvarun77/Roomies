@@ -168,11 +168,6 @@ export const styles = StyleSheet.create({
 		height: 1,
 		width: "80%",
 	  },
-	  input: {
-		paddingTop: 10,
-		borderColor: "grey",
-		borderBottomWidth: 2,
-	  },
 	  button: {
 		flexDirection: "row",
 		flex: 1,

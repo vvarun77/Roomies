@@ -27,6 +27,7 @@
       <dict>
         <key>CFBundleURLSchemes</key>
         <array>
+          <string>roomies</string>
           <string>com.vvarun77.roomie</string>
         </array>
       </dict>
