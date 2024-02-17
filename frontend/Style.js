@@ -162,6 +162,27 @@ export const styles = StyleSheet.create({
 		borderRadius:12,
 		alignItems:"center",
 		paddingHorizontal: 20,
-	}
+	},
+	separator: {
+		marginVertical: 30,
+		height: 1,
+		width: "80%",
+	  },
+	  input: {
+		paddingTop: 10,
+		borderColor: "grey",
+		borderBottomWidth: 2,
+	  },
+	  button: {
+		flexDirection: "row",
+		flex: 1,
+		justifyContent: "center",
+	  },
+	  modal: {
+		width: "100%",
+		height: "90%",
+		alignItems: "center",
+		justifyContent: "center",
+	  },
 	
 }); 

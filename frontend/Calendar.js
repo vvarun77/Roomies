@@ -64,7 +64,7 @@ export function CalendarScreen({ route }, components) {
   const { user } = useUser();
   const groupid = user.unsafeMetadata.groupid;
   const [event, setEvent] = useState("");
-  const [selectedDay, setSelectedDay] = useState(new Date());
+  const [selectedDay, setSelectedDay] = useState("2024-02-08");
   const [isExpanded, setIsExpanded] = useState(false);
   const [isExpanded2, setIsExpanded2] = useState(false);
   const [startTime, setStartTime] = useState(new Date());
@@ -105,24 +105,7 @@ export function CalendarScreen({ route }, components) {
       
       }, [data]);
 
-      /*
-      useEffect(() => {
-        function updateTodo() {
-         console.log("updating! ")
-         console.log(JSON.stringify(eventsByDate))
-          updateTodoHook({
-          variables: { input: { id: user.unsafeMetadata.groupid, events: JSON.stringify(eventsByDate) } },
-          });
-          if(loading) console.log("loading!");
-          if(error) console.log("error in api");
-        }
-      	const statusChanged = !_.isEqual(eventsByDate, JSON.parse(JSON.stringify(data.getTodo.events)));
-        if(statusChanged){
-          updateTodo();
-        }
-      
-        }, [eventsByDate]);
-        */
+
   // when u levae the page it closes the is exapnded need to fic
   // callbacks
   const handlePresentModalPress = useCallback(() => {
@@ -181,13 +164,7 @@ export function CalendarScreen({ route }, components) {
     //console.log("The time in 12hr: " + timePM)
 
     let hour = parseInt(timeStart.slice(0, -6));
-    if (hour !== 12 && timePM === 'PM') {
-      // If it's PM and not already in 24-hour format, add 12 to convert
-      hour = (hour + 12) % 24;
-  } else if (hour === 12 && timePM === 'AM') {
-      // If it's 12 AM (midnight), convert it to 0 in 24-hour format
-      hour = 0;
-  }
+    hour = (hour + 12) % 24;
     let formattedTimeStart = hour.toString().padStart(2, '0') + timeStart.slice(-6, -3);
     const timex = (new Date(start).toISOString().slice(0, 10)); // timex = date
     const finalStart = timex + " " + formattedTimeStart; // hour minute shit
@@ -292,37 +269,25 @@ export function CalendarScreen({ route }, components) {
           <Text style={styles.addButtonText}>Add event</Text>
         </TouchableOpacity>
         <View style={{ height: "100%", width: "100%" }}>
-          <CalendarProvider date={selectedDay} >
+          <CalendarProvider date={selectedDay}>
             <ExpandableCalendar
-            firstDay={1} 
-            onDayPress={(day) => {
-              setSelectedDay(day.dateString);
-              console.log(day.dateString)
-            }}
-            maxToRenderPerBatch={10}
+             firstDay={1}
+            disablePan={false}
             animateScroll={true}
             theme={{
               selectedDayBackgroundColor: "#ccc0ef"
             }}
+
             />
-            <View style={{height:"100%"}}>
             <TimelineList
-          
-            onDayPress={(day) => {
-              setSelectedDay(day.dateString);
-              console.log(day.dateString)
-            }}
            events={eventsByDate}
            timelineProps={{format24h:false}}
            //timelineProps={}
            showNowIndicator
-           firstDay={1}
-           //selected={selectedDay}
            scrollToNow
+           scrollToFirst
            initialTime={INITIAL_TIME}
- 
           />
-          </View>
           
                     </CalendarProvider>
           </View>

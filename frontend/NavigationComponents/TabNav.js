@@ -17,7 +17,7 @@ import {
   Image,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
+import { CalendarScreen } from "../Calendar.js";
 
 /*
 */
@@ -83,11 +83,11 @@ export const TabNavigation = ({ navigation }) => {
           }}
         />
         <Tab.Screen
-          name="Status"
-          component={ActivityScreen}
+          name="Calendar"
+          component={CalendarScreen}
           screenOptions={{headerShown:false}}
           options={{
-            tabBarLabel:({ focused,color })=>(<Text style={{color:focused?"#ccc0ef":"#ADA4A5", fontSize:10}}>Status</Text>),
+            tabBarLabel:({ focused,color })=>(<Text style={{color:focused?"#ccc0ef":"#ADA4A5", fontSize:10}}>Calendar</Text>),
             tabBarIcon: ({ focused, tintColor }) => (
               <Image
                 source={require("../assets/tabbarIcons/Activity.png")}
