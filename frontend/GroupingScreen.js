@@ -145,7 +145,7 @@ const GroupingScreen = () => {
                 { id: user.firstName + " " + user.lastName, status: "happy" },
               ],
               groceries: [],
-              events: {},
+              events: "{}",
             },
           },
         });
