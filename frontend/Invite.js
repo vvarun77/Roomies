@@ -43,7 +43,7 @@ const InviteScreen = () =>  {
       // will need to be changed later to scheme roomies:// somethiing like that
       // string should be changed to what you see when you run yarn start
       //exp://10.19.168.70:8081 - varun
-      const redirect_url = "roomies://" + queryStringified;
+      const redirect_url = "Roomies://--/signup?" + queryStringified;
       return redirect_url;
     }
 

@@ -31,16 +31,22 @@ import { createTodo, updateTodo, deleteTodo } from "./mutations.js";
 import Profile from "./assets/tabbarIcons/Profile.png";
 import Group from "./assets/buttonIcons/usersmultiple.png";
 import ReusableFlatList from "./UI/FlatlistStyled.js";
+import TouchableWithoutFeedback from "react-native";
+import ReusableButton from "./UI/ReusableButton";
+import { Modal } from "./UI/Modal";
+import ReusableTextField from "./UI/ReusableTextField.js";
+import _ from 'lodash';
 
 
 export default function HomeScreen() {
   const navigation = useNavigation();
   const { signOut } = useClerk();
   const { user } = useUser();
-
+  const [isModalVisible, setIsModalVisible] = React.useState(false);
   const [currentUser, setCurrentUser] = useState(user.firstName);
   const [groupMembers, setGroupMembers] = useState([]);
   const [tasks, setTasks] = useState([]);
+  const [inputValue, setInputValue] = useState("");
   const [
     addStatusHook,
     { data: createData, loading: createLoading, error: createError },
@@ -114,6 +120,29 @@ export default function HomeScreen() {
     // navigate user to new page where axios post is made (page still needs to be made)
     navigation.navigate("Calendar");
   };
+  const handlePressStatus = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleSubmit = async (ns) => {
+    setIsModalVisible(false);
+    await handleAddStatus(ns);
+  };
+
+  const handleInputChange = (text) => {
+    setInputValue(text);
+  };
+
+  const handleAddStatus = async (newStatus) => { 
+    const groupMembers2 = JSON.parse(JSON.stringify(data.getTodo.groupMembers));
+    var newData = groupMembers2.map(member => ({ id: member.id, status: member.status}));
+    let index = _.findIndex(groupMembers2, el => el?.id === user.firstName + " " + user.lastName);
+    newData[index].status[0] = newStatus;
+   await updateStatusHook({
+      variables: { input: { id: groupid, groupMembers: newData } },});
+    console.log("aaa")
+  }; 
+
   const renderItemGroup = ({ item, index }) => (
     <View
       style={{ justifyContent: "center", alignItems: "center", width: 150 }}
@@ -146,7 +175,7 @@ export default function HomeScreen() {
       </Text>
       <Text style={{ fontFamily: Poppins, fontSize: 16, fontWeight: "bold" }}>
         {item.status}
-      </Text>
+      </Text> 
     </View>
   );
   const renderItemTask = ({ item, index }) => (
@@ -163,7 +192,7 @@ export default function HomeScreen() {
         style={{ width: "100%" }}
         contentContainerStyle={{ alignItems: "center" }}
       >
-        <TouchableOpacity onPress={handleCalendar} style={styles.groupButton}>
+        <TouchableOpacity style={styles.groupButton}>
           <Text
             style={{
               fontFamily: Poppins,
@@ -176,6 +205,27 @@ export default function HomeScreen() {
           </Text>
           <Image style={{ height: 45, width: 45 }} source={Group} />
         </TouchableOpacity>
+
+        <TouchableOpacity onPress={handlePressStatus} style={styles.card}>
+          {isModalVisible ? (
+         
+      <Modal isVisible={isModalVisible}>
+        <Modal.Container>
+            <Modal.Header title="update status" />
+            <Modal.Body>
+              <Text style={styles.text}>what are you up to? 👀</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="enter your status"
+                onChangeText={handleInputChange}
+                value={inputValue}
+              />
+              <ReusableButton name="send it" function={() =>handleSubmit(inputValue)} width={"80%"}/>
+            </Modal.Body>
+        </Modal.Container>
+      </Modal>
+    ) : null}
+    
         <View style={styles.card}>
           <Text style={styles.cardTitle}>status 🪩</Text>
           <View
@@ -201,6 +251,8 @@ export default function HomeScreen() {
             />
           </View>
         </View>
+        </TouchableOpacity>
+
         <View style={styles.card}>
           <View
             style={{
@@ -244,15 +296,3 @@ export default function HomeScreen() {
     </SafeAreaView>
   );
 }
-
-/*
-<View style={styles.container}> 
-		<Text style={styles.heading}>Roomie</Text> 
-        <Button onPress={handleTodoClick} title="todo"> Todo List </Button>
-        <Button onPress={handlePayClick} title="pay"> Payments </Button>
-        <Button onPress={handleInvite} title="invite"> Invite Friends </Button>
-        <Button onPress={handleLogOut} title="logout"> Logout </Button>
-        <Button onPress={handleGrocery} title="grocery"> Grocery </Button>
-
-		</View> 
-*/
