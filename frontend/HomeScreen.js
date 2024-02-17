@@ -192,7 +192,7 @@ export default function HomeScreen() {
         style={{ width: "100%" }}
         contentContainerStyle={{ alignItems: "center" }}
       >
-        <TouchableOpacity onPress={handleCalendar} style={styles.groupButton}>
+        <TouchableOpacity style={styles.groupButton}>
           <Text
             style={{
               fontFamily: Poppins,

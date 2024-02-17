@@ -344,7 +344,7 @@ export function CalendarScreen({ route }, components) {
                   fontWeight: "bold",
                 }}
               >
-                Date:{" "}
+                Start:{" "}
               </Text>
               <TouchableOpacity
                 style={{
@@ -395,6 +395,16 @@ export function CalendarScreen({ route }, components) {
                 
               </TouchableOpacity>
               <Collapsible collapsed={isExpanded}>{returnPicker()}</Collapsible>
+
+              <Text
+                style={{
+                  fontSize: 24,
+                  fontFamily: Poppins,
+                  fontWeight: "bold",
+                }}
+              >
+                End:  {" "}
+              </Text>
               <TouchableOpacity
                 style={{
                   borderColor: "#ccc0ef",
