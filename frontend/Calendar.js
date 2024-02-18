@@ -168,10 +168,14 @@ export function CalendarScreen({ route }, components) {
       hour12: true,
     })
     timePM = timeStart.slice(timeStart.length - 2, timeStart.length);
-    //console.log("The time in 12hr: " + timePM)
+    console.log("The time in 12hr: " + timePM)
 
     let hour = parseInt(timeStart.slice(0, -6));
-    hour = (hour + 12) % 24;
+    if (timePM === "PM") {
+      hour = (hour + 12) % 24;
+  } else {
+      hour %= 12; // Convert 0 to 12 for AM
+  }
     let formattedTimeStart = hour.toString().padStart(2, '0') + timeStart.slice(-6, -3);
     const timex = (new Date(start).toISOString().slice(0, 10)); // timex = date
     const finalStart = timex + " " + formattedTimeStart; // hour minute shit
@@ -180,8 +184,13 @@ export function CalendarScreen({ route }, components) {
       minute: "2-digit",
       hour12: true,
     })
+    timePM2 = timeEnd.slice(timeEnd.length - 2, timeEnd.length);
     let hour2 = parseInt(timeEnd.slice(0, -6));
-    hour2 = (hour2 + 12) % 24;
+    if (timePM2 === "PM") {
+      hour2 = (hour2 + 12) % 24;
+  } else {
+      hour2%= 12; // Convert 0 to 12 for AM
+  }
     let formattedTimeStart2 = hour2.toString().padStart(2, '0') + timeEnd.slice(-6, -3);
     const timez = (new Date(end).toISOString().slice(0, 10)); // timez = date
     const finalEnd = timez + " " + formattedTimeStart2; // hour minute shit

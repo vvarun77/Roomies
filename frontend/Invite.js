@@ -11,12 +11,12 @@ import {
 import {styles} from "./Style.js"; 
 import {useAuth} from "@clerk/clerk-expo"
 import {useUser, useClerk} from "@clerk/clerk-react";
-import {useNavigation} from '@react-navigation/native';
 import { Button } from "react-native";
 import ReusableButton from "./UI/ReusableButton.js";
 import ReusableTextField from "./UI/ReusableTextField.js";
 import EmailIcon from "./assets/textfieldIcons/Message.png";
 import { SafeAreaView } from "react-native-safe-area-context";
+import {useNavigation} from '@react-navigation/native';
 
 import axios from "axios";
 import queryString from 'query-string';
@@ -27,7 +27,7 @@ const InviteScreen = () =>  {
     
     const { isLoaded, userId, sessionId, getToken, User } = useAuth()
     const { user } = useUser();
-
+    const navigation = useNavigation();
     const groupId = user.unsafeMetadata.groupid;
     const groupName = user.unsafeMetadata.groupname;
     const [emailAddress, setEmailAddress] = useState("");
@@ -73,6 +73,10 @@ const InviteScreen = () =>  {
         },
     
     );
+    const alreadyHaveAccount = () => {
+      navigation.navigate("GroupInfo")
+    }
+
 
     const handleInvite = async () => {
         //only one invite can be sent per email
@@ -125,6 +129,7 @@ const InviteScreen = () =>  {
           width={"80%"}
           height={"40%"}
         />
+         <Text style={{textAlign: "center", marginBottom: 10,}}>Does your roommate already have an account?<TouchableOpacity onPress={alreadyHaveAccount}><Text style={{color: '#92a3fd', textDecorationLine: 'underline',  textDecorationColor: "#92a3fd",}}>Join here instead!</Text></TouchableOpacity> </Text>
     </SafeAreaView>
 	); 
 }; 

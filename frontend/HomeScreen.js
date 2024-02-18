@@ -120,9 +120,9 @@ export default function HomeScreen() {
     // navigate user to new page where axios post is made (page still needs to be made)
     navigation.navigate("Groceries");
   };
-  const handleCalendar = async () => {
+  const handleInfo = async () => {
     // navigate user to new page where axios post is made (page still needs to be made)
-    navigation.navigate("Calendar");
+    navigation.navigate("GroupInfo")
   };
   const options = {
     enableVibrateFallback: true,
@@ -145,6 +145,7 @@ export default function HomeScreen() {
     setIsModalVisible(false);
     await handleAddStatus(ns);
     setIsUser(false);
+    setInputValue("");
   };
 
   const handleInputChange = (text) => {
@@ -293,7 +294,7 @@ const getRandomString = () => {
         style={{ width: "100%" }}
         contentContainerStyle={{ alignItems: "center" }}
       >
-        <TouchableOpacity style={styles.groupButton}>
+        <TouchableOpacity onPress={handleInfo} style={styles.groupButton}>
           <Text
             style={{
               fontFamily: Poppins,
