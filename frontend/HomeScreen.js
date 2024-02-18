@@ -132,7 +132,6 @@ export default function HomeScreen() {
     setTappedUser(item.id);
     setTappedStatus(item.status);
     if (item.id == user.firstName + " " + user.lastName) {
-      console.log("true");
       setIsUser(true);
     } else {
       setIsUser(false);

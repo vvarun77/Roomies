@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Text, TextInput, TouchableOpacity, View, KeyboardAvoidingView, TouchableWithoutFeedback } from "react-native";
+import { Text, TextInput, TouchableOpacity, View, KeyboardAvoidingView, TouchableWithoutFeedback, Alert} from "react-native";
 import { useSignIn } from "@clerk/clerk-expo";
 import {useNavigation} from '@react-navigation/native';
 import { useClerk } from "@clerk/clerk-react"
@@ -60,7 +60,8 @@ export default function SignInScreen() {
       navigation.navigate("Tab")
      
       } catch (err) {
-        console.error(JSON.stringify(err, null, 2));
+        showAlert(err);
+        //console.error(JSON.stringify(err, null, 2));
     }
   };
   const clerk = useClerk();
@@ -70,6 +71,21 @@ export default function SignInScreen() {
   const handlePasswordChange = (text) => {
     setPassword(text);
   };
+
+  const showAlert = (err) =>
+  Alert.alert(
+    
+    err.errors[0].message,
+    err.errors[0].longMessage,
+    
+      {
+        cancelable: true,
+        text: 'Cancel',
+        onPress: () => Alert.alert('Cancel Pressed'),
+        style: 'cancel',
+      },
+  
+  );
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
     <SafeAreaView style={styles.newcontainer}>

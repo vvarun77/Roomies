@@ -6,6 +6,7 @@ import {
 	TouchableOpacity, 
 	FlatList, 
 	StyleSheet, 
+  Alert,
 } from "react-native"; 
 import {styles} from "./Style.js"; 
 import {useAuth} from "@clerk/clerk-expo"
@@ -46,6 +47,32 @@ const InviteScreen = () =>  {
       const redirect_url = "Roomies://--/signup?" + queryStringified;
       return redirect_url;
     }
+    const showAlert = (err) =>
+    Alert.alert(
+      
+      err.errors[0].message,
+      err.errors[0].longMessage,
+      
+        {
+          cancelable: true,
+          text: 'Cancel',
+          onPress: () => Alert.alert('Cancel Pressed'),
+          style: 'cancel',
+        },
+    
+    );
+    const showAlertSuccess = (err) =>
+    Alert.alert(
+      'invite sent! ',
+      'they\'re otw 🏃💨',
+        {
+          cancelable: true,
+          text: 'Cancel',
+          onPress: () => Alert.alert('Cancel Pressed'),
+          style: 'cancel',
+        },
+    
+    );
 
     const handleInvite = async () => {
         //only one invite can be sent per email
@@ -69,10 +96,12 @@ const InviteScreen = () =>  {
         }
       )
       .then(response => {
-        console.log(JSON.stringify(response));
+        showAlertSuccess();
+       
       }).catch(error => {
         // Handle error
-        console.error('Axios request error:', error);
+        showAlert(error);
+       
       });
     };
     const handleEmailChange = (text) => {

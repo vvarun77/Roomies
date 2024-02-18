@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Text, TextInput, TouchableOpacity, View, KeyboardAvoidingView, TouchableWithoutFeedback } from "react-native";
+import {Text, TextInput, TouchableOpacity, View, KeyboardAvoidingView, TouchableWithoutFeedback, Alert } from "react-native";
 import { useSignUp } from "@clerk/clerk-expo";
 import { StyleSheet } from "react-native";
 import {useNavigation} from '@react-navigation/native';
@@ -62,7 +62,20 @@ export default function SignUpScreen({ route }, components) {
     if (!isLoaded) {
       return;
     }
-
+    const showAlert = (err) =>
+    Alert.alert(
+      
+      err.errors[0].message,
+      err.errors[0].longMessage,
+      
+        {
+          cancelable: true,
+          text: 'Cancel',
+          onPress: () => Alert.alert('Cancel Pressed'),
+          style: 'cancel',
+        },
+    
+    );
 
     //only if the user is has a group code, then execute new sign up, else sign up via ticket
     try {
@@ -115,7 +128,7 @@ export default function SignUpScreen({ route }, components) {
         console.log(response);
       })
       .catch(function (error) {
-        console.log(JSON.stringify(error));
+        showAlert(error);
       });
       navigation.navigate('Groups');
     } catch (err) {

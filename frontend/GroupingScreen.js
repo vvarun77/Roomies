@@ -93,7 +93,20 @@ const GroupingScreen = () => {
       autoJoinGroup();
     }
   }, [url]);
-
+  const showAlert = (err) =>
+  Alert.alert(
+    
+    err.errors[0].message,
+    err.errors[0].longMessage,
+    
+      {
+        cancelable: true,
+        text: 'Cancel',
+        onPress: () => Alert.alert('Cancel Pressed'),
+        style: 'cancel',
+      },
+  
+  );
   const handleCreateGroup = async () => {
     // Handle creating a group
     // add group id to meta data and create lambada function using AWS
@@ -134,7 +147,7 @@ const GroupingScreen = () => {
       })
       .catch((error) => {
         // Handle error
-        console.error("Axios request error:", error);
+        showAlert(error);
       });
   };
 
