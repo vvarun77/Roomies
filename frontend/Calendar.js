@@ -64,7 +64,7 @@ export function CalendarScreen({ route }, components) {
   const { user } = useUser();
   const groupid = user.unsafeMetadata.groupid;
   const [event, setEvent] = useState("");
-  const [selectedDay, setSelectedDay] = useState("2024-02-08");
+  const [selectedDay, setSelectedDay] = useState(new Date());
   const [isExpanded, setIsExpanded] = useState(false);
   const [isExpanded2, setIsExpanded2] = useState(false);
   const [startTime, setStartTime] = useState(new Date());

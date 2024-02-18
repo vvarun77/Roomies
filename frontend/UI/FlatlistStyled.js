@@ -18,6 +18,15 @@ import BouncyCheckbox from "react-native-bouncy-checkbox";
 
 const ReusableFlatList = (props) => {
 	const [checkboxState, setCheckboxState] = useState(false);
+	
+
+
+	function generateRandomString() {
+		const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+		return characters.charAt(Math.floor(Math.random() * characters.length)) +
+			   characters.charAt(Math.floor(Math.random() * characters.length)) +
+			   characters.charAt(Math.floor(Math.random() * characters.length));
+	}
 	//let checkboxState = false;
 	let bouncyCheckboxRef = null;
 	//pass in parameter for if edit delete
@@ -25,7 +34,7 @@ const ReusableFlatList = (props) => {
 		<View style={styles.task}> 
 		<BouncyCheckbox
   		size={25}
-  		ref={(ref) => (bouncyCheckboxRef = ref)}
+  		//ref={(ref) => (bouncyCheckboxRef = ref)}
 		//text={item}
 		isChecked={checkboxState}
 		fillColor="#ccc0ef"
@@ -34,15 +43,16 @@ const ReusableFlatList = (props) => {
 		textStyle={{fontSize: 19, color:"black",}}
   		innerIconStyle={{ borderWidth: 2 }}
 		// props.functionDelete(index) added below to actually remove task, talk to varun
-  		onPress={(checked) => {setCheckboxState(!checkboxState), setTimeout(() => {props.functionDelete(index)},
+  		onPress={(checked) => {setCheckboxState(checked), setCheckboxState(false), setTimeout(() => {props.functionDelete(index)},
 			300,
 		);
+		
 		}}
 	/>
 			<View 
 				style={styles.taskButtons}> 
 				<Text style={
-					//[
+					//=[
 			styles.itemList
 			//checkedValue ? { textDecorationLine: 'line-through' } : null
 		  	//]
@@ -60,7 +70,8 @@ const ReusableFlatList = (props) => {
 				//contentContainerStyle={{}}
 				data={props.dataList} 
 				renderItem={renderItem} 
-				keyExtractor={(item, index) => index.toString()} 
+				// keyExtractor={(item, index) => item + " " + index.toString() + " " + generateRandomString()}	
+				keyExtractor={(item, index) => generateRandomString()}
 				horizontal={false}
 			/> 
     );
