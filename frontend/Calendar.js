@@ -101,6 +101,8 @@ export function CalendarScreen({ route }, components) {
         var temp = JSON.parse(data.getTodo.events)
         console.log(temp)
         setEventsByDate(temp)
+        setIsExpanded(true);
+        setIsExpanded2(true);
       }
       
       }, [data]);
@@ -125,6 +127,7 @@ export function CalendarScreen({ route }, components) {
     console.log("handleSheetChanges", index);
     Keyboard.dismiss();
     setIsExpanded(true);
+    setIsExpanded2(true);
   }, []);
 
   const [events, setEvents] = useState();
@@ -132,8 +135,10 @@ export function CalendarScreen({ route }, components) {
     Keyboard.dismiss();
     if (isExpanded) {
       setIsExpanded(false);
+      setIsExpanded2(true);
     } else if (showMode == picker2) {
       setIsExpanded(true);
+      
     }
     setShowMode(picker2);
     console.log(showMode);
@@ -141,10 +146,12 @@ export function CalendarScreen({ route }, components) {
   };
   const handleExpand2 = (picker2) => {
     Keyboard.dismiss();
-    if (isExpanded) {
+    if (isExpanded2) {
       setIsExpanded2(false);
+      setIsExpanded(true);
     } else if (showMode2 == picker2) {
       setIsExpanded2(true);
+
     }
     setShowMode2(picker2);
     console.log(showMode2);
@@ -182,8 +189,8 @@ export function CalendarScreen({ route }, components) {
       start: finalStart,
       end: finalEnd,
       title: event,
-      color: 'purple',
-      summary: 'Event by' + user.firstName,
+      color: 'rgba(204, 192, 239, 0.8)',
+      summary: 'Event by: ' + user.firstName,
       createdBy: user.firstName
     };
 
@@ -297,6 +304,7 @@ export function CalendarScreen({ route }, components) {
           snapPoints={snapPoints}
           onChange={handleSheetChanges}
         >
+          <ScrollView>
           <View style={styles.buttonContainer}>
             <Text
               style={{
@@ -460,8 +468,10 @@ export function CalendarScreen({ route }, components) {
               <Text style={styles.addButtonText}>Add event</Text>
             </TouchableOpacity>
           </View>
+          </ScrollView>
         </BottomSheetModal>
       </BottomSheetModalProvider>
+
     </SafeAreaView>
   );
 }

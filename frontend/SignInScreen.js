@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Text, TextInput, TouchableOpacity, View, KeyboardAvoidingView, TouchableWithoutFeedback } from "react-native";
 import { useSignIn } from "@clerk/clerk-expo";
 import {useNavigation} from '@react-navigation/native';
 import { useClerk } from "@clerk/clerk-react"
@@ -11,6 +11,7 @@ import EmailIcon from "./assets/textfieldIcons/Message.png";
 import PasswordIcon from "./assets/textfieldIcons/Lock.png";
 import LogInIcon from "./assets/buttonIcons/Login.png";
 import * as Linking from 'expo-linking';
+import {Keyboard} from 'react-native';
 
 export default function SignInScreen() {
   // add logic to check for sign up token
@@ -21,7 +22,7 @@ export default function SignInScreen() {
 	const handleURL = (url) => {
 		const { hostname, path, queryParams } = Linking.parse(url);
 		if (path === 'signup') {      
-			navigation.navigate('SignUp')
+			navigation.navigate('Names')
 		} else {
 			console.log(path, queryParams);
 		}
@@ -39,7 +40,8 @@ export default function SignInScreen() {
   const [emailAddress, setEmailAddress] = React.useState("");
   const [password, setPassword] = React.useState("");
   const onNewUserPress = async () => {
-    navigation.navigate('SignUp')
+    console.log('linked')
+    navigation.navigate('Names');
   }
 
   const onSignInPress = async () => {
@@ -69,14 +71,18 @@ export default function SignInScreen() {
     setPassword(text);
   };
   return (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
     <SafeAreaView style={styles.newcontainer}>
       <View style={styles.containerClass}>
+     
+    
         <Text style={styles.header}>login 🔮</Text>
+  
         <View style={styles.textBoxesContainer}>
           <View style={styles.textBoxes}>
             <ReusableTextFiled
               onChangeText={handleEmailChange}
-              value={emailAddress}
+              //value={emailAddress}
               placeholder="Email"
               imageSource={EmailIcon}
               secure={false}
@@ -85,7 +91,7 @@ export default function SignInScreen() {
           <View style={styles.textBoxes}>
             <ReusableTextFiled
               onChangeText={handlePasswordChange}
-              value={password}
+              //value={password}
               placeholder="Password"
               imageSource={PasswordIcon}
               secure={true}
@@ -98,8 +104,10 @@ export default function SignInScreen() {
           icon={LogInIcon}
           width={"70%"}
         />
+        
           <Text style={{textAlign: "center", marginBottom: 10,}}>Don't have an account?  <TouchableOpacity onPress={onNewUserPress}><Text style={{color: '#92a3fd', textDecorationLine: 'underline',  textDecorationColor: "#92a3fd",}}>Sign 🆙</Text></TouchableOpacity> </Text>
       </View>
     </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 }

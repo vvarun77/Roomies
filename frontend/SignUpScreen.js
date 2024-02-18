@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Text, TextInput, TouchableOpacity, View, } from "react-native";
+import {Text, TextInput, TouchableOpacity, View, KeyboardAvoidingView, TouchableWithoutFeedback } from "react-native";
 import { useSignUp } from "@clerk/clerk-expo";
 import { StyleSheet } from "react-native";
 import {useNavigation} from '@react-navigation/native';
@@ -17,21 +17,19 @@ import PasswordIcon from "./assets/textfieldIcons/Lock.png";
 import LogInIcon from "./assets/buttonIcons/Login.png";
 import CheckIcon from "./assets/buttonIcons/check3.png";
 import BackButton from "./UI/BackButton.js";
+import {Keyboard} from 'react-native';
 
-export default function SignUpScreen() {
-
+export default function SignUpScreen({ route }, components) {
   // check if url contains clerk key, group id, and group name, if so set the text in ui to join the group
   // set clerk method to ticket
   const navigation = useNavigation();
   const { isLoaded, signUp, setActive } = useSignUp();
   var email;
   var userpassword;
-  var fName;
-  var lName;
   const [emailAddress, setEmailAddress] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [firstName, setFirstName] = React.useState("");
-  const [lastName, setLastName] = React.useState("");
+  const [password, setPassword] = React.useState(""); 
+ const [firstName, setFirstName] = React.useState(route.params.firstName);
+ const [lastName, setLastName] = React.useState(route.params.lastName);
   const [pendingVerification, setPendingVerification] = React.useState(false);
   const [code, setCode] = React.useState("");
 
@@ -148,56 +146,43 @@ export default function SignUpScreen() {
   };
 
   return (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
     <SafeAreaView style={styles.newcontainer}>
       {!pendingVerification && (
         <View style={styles.containerClass}>            
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{paddingTop:"20"}}>  
           <BackButton
             back={'SignIn'}
           />
-          {autoJoin ? <Text style={styles.header} >You've been Invited to join {groupName} !</Text> : <Text style={styles.header}>sign 🆙</Text>}
+          {autoJoin ? <Text style={styles.header} >You've been Invited to join {groupName} !</Text> : <Text style={styles.header}>complete sign 🆙</Text>}
           <View style={styles.textBoxesContainer}>
- 
-            <View style={styles.textBoxes}>
-              <ReusableTextFiled
-                onChangeText={handleFirstChange}
-                value={firstName}
-                placeholder="First Name"
-                imageSource={ProfileIcon}
-                secure={false}
-              />
-            </View>
-            <View style={styles.textBoxes}>
-              <ReusableTextFiled
-                onChangeText={handleLastChange}
-                value={lastName}
-                placeholder="Last Name"
-                imageSource={ProfileIcon}
-                secure={false}
-              />
-            </View>
+          <View style={styles.textBoxes}>
             <ReusableTextFiled
               onChangeText={handleEmailChange}
-              value={emailAddress}
+              //value={emailAddress}
               placeholder="Email"
               imageSource={EmailIcon}
               secure={false}
             />
+            </View>
             <View style={styles.textBoxes}>
               <ReusableTextFiled
                 onChangeText={handlePasswordChange}
-                value={password}
+                //value={password}
                 placeholder="Password"
                 imageSource={PasswordIcon}
                 secure={true}
               />
             </View>
-            <ReusableButton
+          </View>
+          <ReusableButton
             function={onSignUpPress}
             name="Create"
             icon={LogInIcon}
             width={"70%"}
           />
-          </View>
+          </KeyboardAvoidingView>
         </View>
       )}
       {pendingVerification && (
@@ -224,5 +209,6 @@ export default function SignUpScreen() {
         </View>
       )}
     </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 }
