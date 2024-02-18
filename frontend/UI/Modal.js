@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, View, Text, Button } from "react-native";
 import RNModal from "react-native-modal";
+import { Poppins } from "@expo-google-fonts/poppins";
 
 export const Modal = ({
   isVisible = false,
@@ -10,10 +11,13 @@ export const Modal = ({
   return (
     <RNModal
       isVisible={isVisible}
-      animationInTiming={1000}
-      animationOutTiming={1000}
-      backdropTransitionInTiming={800}
-      backdropTransitionOutTiming={800}
+      animationInTiming={300}
+      animationOutTiming={300}
+      backdropTransitionInTiming={300}
+      animationIn={"zoomIn"}
+      animationOut={"zoomOut"}
+
+      backdropTransitionOutTiming={300}
       {...props}>
       {children}
     </RNModal>
@@ -49,14 +53,19 @@ const styles = StyleSheet.create({
   header: {
     alignItems: "center",
     justifyContent: "center",
+    fontFamily: Poppins,
+    fontWeight:"bold",
+    fontSize: 20,
   },
   text: {
     paddingTop: 10,
     textAlign: "center",
-    fontSize: 24,
+    fontSize: 30,
+    fontFamily: Poppins,
+    fontWeight:"bold",
   },
   body: {
-    justifyContent: "center",
+    alignItems:"center",
     paddingHorizontal: 15,
     minHeight: 100,
   },

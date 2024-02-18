@@ -8,8 +8,10 @@ import {
   FlatList,
   StyleSheet,
   Image,
+  TouchableWithoutFeedback
 } from "react-native";
 import { styles } from "./Style.js";
+import ReactNativeHapticFeedback from "react-native-haptic-feedback";
 import React, { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Button } from "react-native";
@@ -31,12 +33,11 @@ import { createTodo, updateTodo, deleteTodo } from "./mutations.js";
 import Profile from "./assets/tabbarIcons/Profile.png";
 import Group from "./assets/buttonIcons/usersmultiple.png";
 import ReusableFlatList from "./UI/FlatlistStyled.js";
-import TouchableWithoutFeedback from "react-native";
 import ReusableButton from "./UI/ReusableButton";
 import { Modal } from "./UI/Modal";
 import ReusableTextField from "./UI/ReusableTextField.js";
-import _ from 'lodash';
-
+import _ from "lodash";
+import {Keyboard} from 'react-native';
 
 export default function HomeScreen() {
   const navigation = useNavigation();
@@ -47,6 +48,9 @@ export default function HomeScreen() {
   const [groupMembers, setGroupMembers] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [inputValue, setInputValue] = useState("");
+  const [isUser, setIsUser] = useState(false);
+  const [tappedUser, setTappedUser] = useState("");
+  const [tappedStatus, setTappedStatus] = useState("");
   const [
     addStatusHook,
     { data: createData, loading: createLoading, error: createError },
@@ -120,63 +124,159 @@ export default function HomeScreen() {
     // navigate user to new page where axios post is made (page still needs to be made)
     navigation.navigate("Calendar");
   };
-  const handlePressStatus = () => {
+  const options = {
+    enableVibrateFallback: true,
+    ignoreAndroidSystemSettings: true,
+  };
+  const handlePressStatus = (item) => {
+    setTappedUser(item.id);
+    setTappedStatus(item.status);
+    if (item.id == user.firstName + " " + user.lastName) {
+      console.log("true");
+      setIsUser(true);
+    } else {
+      setIsUser(false);
+    }
+    //varun would need to do this -> https://www.npmjs.com/package/react-native-haptic-feedback#manual-setup-guide---ios 
+  //ReactNativeHapticFeedback.trigger("impactLight", options);
     setIsModalVisible(true);
   };
 
   const handleSubmit = async (ns) => {
     setIsModalVisible(false);
     await handleAddStatus(ns);
+    setIsUser(false);
   };
 
   const handleInputChange = (text) => {
     setInputValue(text);
   };
 
-  const handleAddStatus = async (newStatus) => { 
+  const handleAddStatus = async (newStatus) => {
     const groupMembers2 = JSON.parse(JSON.stringify(data.getTodo.groupMembers));
-    var newData = groupMembers2.map(member => ({ id: member.id, status: member.status}));
-    let index = _.findIndex(groupMembers2, el => el?.id === user.firstName + " " + user.lastName);
+    var newData = groupMembers2.map((member) => ({
+      id: member.id,
+      status: member.status,
+    }));
+    let index = _.findIndex(
+      groupMembers2,
+      (el) => el?.id === user.firstName + " " + user.lastName
+    );
     newData[index].status[0] = newStatus;
-   await updateStatusHook({
-      variables: { input: { id: groupid, groupMembers: newData } },});
-    console.log("aaa")
-  }; 
+    await updateStatusHook({
+      variables: { input: { id: groupid, groupMembers: newData } },
+    });
+    //console.log("aaa")
+  };
+
+  //useless detective
+  const randomStrings = [
+    '🕵️',
+    '🕵🏼',
+    '🕵🏽',
+    '🕵🏾',
+    '🕵🏿',
+    '🕵️‍♂️',
+];
+
+// Function to pick a random string from the array
+const getRandomString = () => {
+    const randomIndex = Math.floor(Math.random() * randomStrings.length);
+    return "is currently " + randomStrings[randomIndex] + ": ";
+};
+
+  function renderModal() {
+    if (isUser) {
+      return (
+        <Modal
+          isVisible={isModalVisible}
+          onBackdropPress={() => setIsModalVisible(false)}
+        >
+      
+          <Modal.Container>
+         
+            <Modal.Header title="update status"/>
+            <Modal.Body>
+              <Text style={{fontFamily: Poppins, fontSize:20, paddingTop: "10%", fontWeight:"bold",}}>what are you up to? 👀</Text>
+              <TextInput
+                style={{
+                  width: "20",
+                  borderBottomWidth: 4,
+                  textAlign: "center",
+                  fontSize: 24,
+                  marginTop: "20%",
+                  marginBottom:"10%",
+                }}
+                placeholder="enter your status"
+                placeholderTextColor="#ada4a5" 
+                value={inputValue}
+                onChangeText={handleInputChange}
+              />
+              <ReusableButton
+                name="send it"
+                function={() => handleSubmit(inputValue)}
+                width={"80%"}
+                height={"20%"}
+  
+              />
+            </Modal.Body>
+          </Modal.Container>
+        </Modal>
+      );
+    } 
+    else {
+      return (
+        <Modal
+          isVisible={isModalVisible}
+          onBackdropPress={() => setIsModalVisible(false)}
+        >
+          <Modal.Container>
+            <Modal.Header title={tappedUser + " " + getRandomString()} />
+            <Modal.Body>
+              <Text style={{fontFamily: Poppins, fontSize:20, paddingTop: "10%", fontWeight:"bold", paddingBottom:"10%"}}>{tappedStatus}</Text>
+            </Modal.Body>
+          </Modal.Container>
+        </Modal>
+      );
+    }
+  }
 
   const renderItemGroup = ({ item, index }) => (
-    <View
-      style={{ justifyContent: "center", alignItems: "center", width: 150 }}
-    >
+    <TouchableOpacity onPress={() => handlePressStatus(item)}>
       <View
-        style={{
-          borderRadius: 50,
-          backgroundColor: "#ccc0ef",
-          height: 50,
-          width: 50,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
+        style={{ justifyContent: "center", alignItems: "center", width: 150 }}
       >
-        <Image
-          style={{ height: 30, width: 30, tintColor: "white" }}
-          source={Profile}
-        />
-      </View>
+        <View
+          style={{
+            borderRadius: 50,
+            backgroundColor: "#ccc0ef",
+            height: 50,
+            width: 50,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Image
+            style={{ height: 30, width: 30, tintColor: "white" }}
+            source={Profile}
+          />
+        </View>
 
-      <Text
-        style={{
-          fontFamily: Poppins,
-          fontSize: 16,
-          fontWeight: "bold",
-          paddingTop: "2%",
-        }}
-      >
-        {item.id}
-      </Text>
-      <Text style={{ fontFamily: Poppins, fontSize: 16, fontWeight: "bold" }}>
-        {item.status}
-      </Text> 
-    </View>
+        <Text
+          style={{
+            fontFamily: Poppins,
+            fontSize: 16,
+            fontWeight: "bold",
+            paddingTop: "2%",
+          }}
+        >
+          {item.id}
+        </Text>
+        <Text style={{ fontFamily: Poppins, fontSize: 16, fontWeight: "bold" }}>
+          {item.status}
+        </Text>
+      </View>
+    </TouchableOpacity>
   );
   const renderItemTask = ({ item, index }) => (
     <View style={styles.task}>
@@ -185,6 +285,8 @@ export default function HomeScreen() {
   );
   return (
     <SafeAreaView style={styles.homeContainer}>
+       
+      <Modal isVisible={isModalVisible}>{renderModal()}</Modal>
       <ProfileButton />
       <Text style={styles.homeTitle}>{currentUser + "!"}</Text>
       <View style={{ height: "10%" }}></View>
@@ -206,26 +308,6 @@ export default function HomeScreen() {
           <Image style={{ height: 45, width: 45 }} source={Group} />
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={handlePressStatus} style={styles.card}>
-          {isModalVisible ? (
-         
-      <Modal isVisible={isModalVisible}>
-        <Modal.Container>
-            <Modal.Header title="update status" />
-            <Modal.Body>
-              <Text style={styles.text}>what are you up to? 👀</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="enter your status"
-                onChangeText={handleInputChange}
-                value={inputValue}
-              />
-              <ReusableButton name="send it" function={() =>handleSubmit(inputValue)} width={"80%"}/>
-            </Modal.Body>
-        </Modal.Container>
-      </Modal>
-    ) : null}
-    
         <View style={styles.card}>
           <Text style={styles.cardTitle}>status 🪩</Text>
           <View
@@ -251,7 +333,6 @@ export default function HomeScreen() {
             />
           </View>
         </View>
-        </TouchableOpacity>
 
         <View style={styles.card}>
           <View

@@ -37,7 +37,7 @@ const ReusableButton = (props) => {
   } else {
     // Render button without image
     return (
-      <View style={styles.center2}>
+      <View style={[styles.center2, {height: props.height}]}>
         <TouchableOpacity style={[styles.buttonGradient, { width: props.width }]} onPress={props.function}>
           <LinearGradient
             style={styles.buttonGradient}
