@@ -6,7 +6,8 @@ import {
 	TextInput, 
 	TouchableOpacity, 
 	FlatList, 
-	StyleSheet, 
+	StyleSheet,
+	Keyboard 
 } from "react-native"; 
 import {styles} from "./Style.js";
 import {TodoScreen} from "./TodoTab.js";
@@ -29,6 +30,7 @@ import awsmobile from "./aws-exports.js";
 import {TabNavigation } from "./NavigationComponents/TabNav.js";
 import { LoadingScreen } from "./Loading.js";
 import { CalendarScreen } from "./Calendar.js";
+import NamesScreen from "./Names.js"
 
 const App = () => { 
 	
@@ -65,7 +67,11 @@ const App = () => {
 		  apiKey: awsmobile.aws_appsync_apiKey
 		},
 	  });
-	  
+	  handleUnhandledTouches = () =>{
+		Keyboard.dismiss
+		return false;
+	  }
+	 
 	  //this would be used to pass parameters to the log in screen?
 	  //if it contains clerk token route to signUp?
 	  //const prefix = Linking.createURL('/')
@@ -89,6 +95,7 @@ const App = () => {
 	
 
 	return (
+
 		<ApolloProvider client={client}>
         <ClerkProvider publishableKey={Constants.expoConfig.extra.clerkPublishableKey}>
              <NavigationContainer>
@@ -100,11 +107,13 @@ const App = () => {
 			<Stack.Screen name="Loading" component={LoadingScreen} options={{ gestureEnabled: false, headerShown: false  }} />
 			<Stack.Screen name="Groups" component={GroupingScreen} options={{headerShown: false,  gestureEnabled: false }}/>
 			<Stack.Screen name="Calendar" component={CalendarScreen} options={{headerShown:false}}/>
+			<Stack.Screen name="Names" component={NamesScreen} options={{headerShown:false}}/>
 			<Stack.Screen name="Groceries" component={GroceryScreen} />
             </Stack.Navigator>
                  </NavigationContainer>
         </ClerkProvider>
 		</ApolloProvider> 
+
 	); 
 }; 
 
