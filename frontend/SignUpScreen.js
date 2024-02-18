@@ -205,6 +205,7 @@ export default function SignUpScreen({ route }, components) {
             name="Verify"
             icon={CheckIcon}
             width={"100%"}
+            height={"40%"}
           />
         </View>
       )}

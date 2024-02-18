@@ -33,31 +33,9 @@ const GroupingScreen = () => {
   var url = Linking.useURL();
   var groupNameText = "";
   var groupCodeText = "";
-  // const [result, setResult] = useState(undefined);
 
-  /*
-  const { data , loading , error, refetch } = useQuery(getTodo, 
-    {
-      variables: { id: groupCodeText !== '' || null || undefined ? groupCodeText : 'default' },
-      pollInterval: 500
-    })
-    */
-  /*
-    useEffect(() => {
-      if (groupCodeText !== "" || null || undefined ) {
-        refetch();
-        console.log(groupCodeText);
-      }
-    },//[groupCodeText, refetch]);
-    [groupCodeText]);
-    */
-  /*
-    const { loading, error, data } = useQuery(getTodo, {
-      variables: { id: groupCodeText},
-      pollInterval: 500
-    });
-    */
-  //const url = Linking.useURL();
+
+  
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: null,
@@ -180,7 +158,7 @@ const GroupingScreen = () => {
         value={groupName}
         onChangeText={(text) => setGroupName(text)}
       />
-      <ReusableButton function={handleCreateGroup} name="Create" width={"100%"}/>
+      <ReusableButton function={handleCreateGroup} name="Create" width={"100%"} height={"40%"}/>
     </SafeAreaView>
   );
 };

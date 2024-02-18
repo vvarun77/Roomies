@@ -94,6 +94,7 @@ const InviteScreen = () =>  {
           function={handleInvite}
           name="Invite"
           width={"80%"}
+          height={"40%"}
         />
     </SafeAreaView>
 	); 
