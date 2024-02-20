@@ -20,6 +20,9 @@ import { ClerkProvider, SignedIn, SignedOut } from "@clerk/clerk-expo";
 import Constants from "expo-constants"
 import HomeScreen from "./HomeScreen.js";
 import SignInScreen from "./SignInScreen.js";
+import JoinGroupScreen from "./JoinGroup.js";
+import JoinGroupScreenSignInScreen from "./JoinGroupSignIn.js";
+
 import { GroceryScreen } from "./Groceries.js";
 import { createStackNavigator } from '@react-navigation/stack';
 import { SignUpButton } from "@clerk/clerk-react";
@@ -27,7 +30,7 @@ import { SignInWithMetamaskButton } from "@clerk/clerk-react";
 import { ApolloClient, InMemoryCache, ApolloProvider, createHttpLink } from '@apollo/client';
 import { setContext } from "apollo-link-context";
 import awsmobile from "./aws-exports.js";
-
+import InBetweenScreen from "./InBetween.js";
 import {TabNavigation } from "./NavigationComponents/TabNav.js";
 import { LoadingScreen } from "./Loading.js";
 import { CalendarScreen } from "./Calendar.js";
@@ -110,7 +113,10 @@ const App = () => {
 			<Stack.Screen name="Calendar" component={CalendarScreen} options={{headerShown:false}}/>
 			<Stack.Screen name="Names" component={NamesScreen} options={{headerShown:false}}/>
 			<Stack.Screen name="GroupInfo" component={GroupInfoScreen} options={{headerShown:false}}/>
-			<Stack.Screen name="Groceries" component={GroceryScreen} />
+			<Stack.Screen name="Groceries" component={GroceryScreen}  options={{headerShown:false}}/>
+			<Stack.Screen name="InBetween" component={InBetweenScreen}  options={{headerShown:false}}/>
+			<Stack.Screen name="JoinGroup" component={JoinGroupScreen}  options={{headerShown:false}}/>
+			<Stack.Screen name="JoinGroupSignIn" component={JoinGroupScreenSignInScreen}  options={{headerShown:false}}/>
             </Stack.Navigator>
                  </NavigationContainer>
         </ClerkProvider>

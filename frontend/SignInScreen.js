@@ -22,7 +22,7 @@ export default function SignInScreen() {
 	const handleURL = (url) => {
 		const { hostname, path, queryParams } = Linking.parse(url);
 		if (path === 'signup') {      
-			navigation.navigate('Names')
+			navigation.navigate('InBetween')
 		} else {
 			console.log(path, queryParams);
 		}
@@ -41,7 +41,7 @@ export default function SignInScreen() {
   const [password, setPassword] = React.useState("");
   const onNewUserPress = async () => {
     console.log('linked')
-    navigation.navigate('Names');
+    navigation.navigate('SignUp');
   }
 
   const onSignInPress = async () => {
