@@ -12,6 +12,7 @@ import PasswordIcon from "./assets/textfieldIcons/Lock.png";
 import LogInIcon from "./assets/buttonIcons/Login.png";
 import * as Linking from 'expo-linking';
 import {Keyboard} from 'react-native';
+import BackButton from "./UI/BackButton.js";
 
 export default function SignInScreen() {
   // add logic to check for sign up token
@@ -41,7 +42,7 @@ export default function SignInScreen() {
   const [password, setPassword] = React.useState("");
   const onNewUserPress = async () => {
     console.log('linked')
-    navigation.navigate('SignUp');
+    navigation.navigate('Names');
   }
 
   const onSignInPress = async () => {

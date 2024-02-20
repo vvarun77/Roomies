@@ -130,7 +130,7 @@ const InviteScreen = () =>  {
           width={"80%"}
           height={"40%"}
         />
-         <Text style={{textAlign: "center", marginBottom: 10,}}>Does your roommate already have an account?<TouchableOpacity onPress={alreadyHaveAccount}><Text style={{color: '#92a3fd', textDecorationLine: 'underline',  textDecorationColor: "#92a3fd",}}>Join here instead!</Text></TouchableOpacity> </Text>
+         <Text style={{textAlign: "center", marginBottom: 10,}}>Does your roommate already have an account?<TouchableOpacity onPress={alreadyHaveAccount}><Text style={{color: '#92a3fd', textDecorationLine: 'underline',  textDecorationColor: "#92a3fd",}}>Use the code here instead!</Text></TouchableOpacity> </Text>
     </SafeAreaView>
 	); 
 }; 

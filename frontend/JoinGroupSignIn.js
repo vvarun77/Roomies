@@ -35,7 +35,7 @@ export default function JoinGroupSignInScreen () {
     const [password, setPassword] = React.useState("");
     const onNewUserPress = async () => {
       console.log('linked')
-      navigation.navigate('SignUp');
+      navigation.navigate('Names');
     }
   
     const onSignInPress = async () => {
@@ -84,7 +84,7 @@ export default function JoinGroupSignInScreen () {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <SafeAreaView style={styles.newcontainer}>
           <View style={styles.containerClass}>
-         
+          <BackButton back={"InBetween"}/>
         
             <Text style={styles.header}>Sign In to Join Group 🔮</Text>
       

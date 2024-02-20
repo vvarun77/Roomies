@@ -114,7 +114,7 @@ const App = () => {
 			<Stack.Screen name="Names" component={NamesScreen} options={{headerShown:false}}/>
 			<Stack.Screen name="GroupInfo" component={GroupInfoScreen} options={{headerShown:false}}/>
 			<Stack.Screen name="Groceries" component={GroceryScreen}  options={{headerShown:false}}/>
-			<Stack.Screen name="InBetween" component={InBetweenScreen}  options={{headerShown:false}}/>
+			<Stack.Screen name="InBetween" component={InBetweenScreen}  options={{headerShown:false, gestureEnabled: false }}/>
 			<Stack.Screen name="JoinGroup" component={JoinGroupScreen}  options={{headerShown:false}}/>
 			<Stack.Screen name="JoinGroupSignIn" component={JoinGroupScreenSignInScreen}  options={{headerShown:false}}/>
             </Stack.Navigator>

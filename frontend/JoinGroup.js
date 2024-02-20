@@ -51,7 +51,7 @@ const JoinGroupScreen = () => {
           });
         });
     };
-
+// add a variable for back --> that way it can be dynamic between screens
 
   return (
     <SafeAreaView style={styles.newcontainer}>
@@ -76,7 +76,6 @@ const JoinGroupScreen = () => {
         style={{
           width: "70",
           borderBottomWidth: 4,
-          textAlign: "center",
           fontSize: 24,
           marginTop: "10%",
         }}
@@ -95,7 +94,6 @@ const JoinGroupScreen = () => {
         style={{
           width: "70",
           borderBottomWidth: 4,
-          textAlign: "center",
           fontSize: 24,
           marginTop: "10%",
         }}
