@@ -98,7 +98,7 @@ export default function SignUpScreen({ route }, components) {
       // change the UI to our pending section.
       setPendingVerification(true);
     } catch (err) {
-      console.error(JSON.stringify(err, null, 2));
+      showAlert(err);
     }
   };
  

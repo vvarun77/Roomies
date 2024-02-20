@@ -12,13 +12,14 @@ import { styles } from "./Style.js";
 import { useAuth } from "@clerk/clerk-expo";
 import { useUser, useClerk } from "@clerk/clerk-react";
 import { useNavigation } from "@react-navigation/native";
-import { Button } from "react-native";
+import { Button
+} from "react-native";
 import ReusableButton from "./UI/ReusableButton.js";
 import ReusableTextField from "./UI/ReusableTextField.js";
 import { SafeAreaView } from "react-native-safe-area-context";
 import BackButton from "./UI/BackButton.js";
 import { Poppins } from "@expo-google-fonts/poppins"
-import * as Clipboard from 'expo-clipboard';
+import Clipboard from "@react-native-community/clipboard";
 
 
 const GroupInfoScreen = () => {
@@ -27,8 +28,8 @@ const GroupInfoScreen = () => {
   const groupName = user.unsafeMetadata.groupname;
   const [copiedText, setCopiedText] = useState('');
 
-  const copyToClipboard = async () => {
-    await Clipboard.setStringAsync(groupid);
+  const copyToClipboard = () => {
+    Clipboard.setString(groupid);
   };
   return (
     <SafeAreaView style={styles.newcontainer}>
