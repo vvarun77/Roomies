@@ -112,8 +112,8 @@ export function TodoScreen({route}, components) {
 					{editIndex !== -1 ? "Update Task" : "Add Task"} 
 				</Text> 
 			</TouchableOpacity> 
+		
 			<ReusableFlatList dataList={tasks} functionEdit={handleEditTask} functionDelete={handleDeleteTask}/>
-			
 	  </SafeAreaView>
     );
   }

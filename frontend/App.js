@@ -13,6 +13,7 @@ import {styles} from "./Style.js";
 import {TodoScreen} from "./TodoTab.js";
 import { PayScreen } from "./PayTab.js";
 import InviteScreen from "./Invite.js";
+import GroupInfoScreen from "./GroupInfo.js";
 import SignUpScreen from "./SignUpScreen.js";
 import GroupingScreen from "./GroupingScreen.js";
 import { ClerkProvider, SignedIn, SignedOut } from "@clerk/clerk-expo";
@@ -108,6 +109,7 @@ const App = () => {
 			<Stack.Screen name="Groups" component={GroupingScreen} options={{headerShown: false,  gestureEnabled: false }}/>
 			<Stack.Screen name="Calendar" component={CalendarScreen} options={{headerShown:false}}/>
 			<Stack.Screen name="Names" component={NamesScreen} options={{headerShown:false}}/>
+			<Stack.Screen name="GroupInfo" component={GroupInfoScreen} options={{headerShown:false}}/>
 			<Stack.Screen name="Groceries" component={GroceryScreen} />
             </Stack.Navigator>
                  </NavigationContainer>

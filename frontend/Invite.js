@@ -6,16 +6,17 @@ import {
 	TouchableOpacity, 
 	FlatList, 
 	StyleSheet, 
+  Alert,
 } from "react-native"; 
 import {styles} from "./Style.js"; 
 import {useAuth} from "@clerk/clerk-expo"
 import {useUser, useClerk} from "@clerk/clerk-react";
-import {useNavigation} from '@react-navigation/native';
 import { Button } from "react-native";
 import ReusableButton from "./UI/ReusableButton.js";
 import ReusableTextField from "./UI/ReusableTextField.js";
 import EmailIcon from "./assets/textfieldIcons/Message.png";
 import { SafeAreaView } from "react-native-safe-area-context";
+import {useNavigation} from '@react-navigation/native';
 
 import axios from "axios";
 import queryString from 'query-string';
@@ -26,7 +27,7 @@ const InviteScreen = () =>  {
     
     const { isLoaded, userId, sessionId, getToken, User } = useAuth()
     const { user } = useUser();
-
+    const navigation = useNavigation();
     const groupId = user.unsafeMetadata.groupid;
     const groupName = user.unsafeMetadata.groupname;
     const [emailAddress, setEmailAddress] = useState("");
@@ -46,6 +47,36 @@ const InviteScreen = () =>  {
       const redirect_url = "Roomies://--/signup?" + queryStringified;
       return redirect_url;
     }
+    const showAlert = (err) =>
+    Alert.alert(
+      
+      err.errors[0].message,
+      err.errors[0].longMessage,
+      
+        {
+          cancelable: true,
+          text: 'Cancel',
+          onPress: () => Alert.alert('Cancel Pressed'),
+          style: 'cancel',
+        },
+    
+    );
+    const showAlertSuccess = (err) =>
+    Alert.alert(
+      'invite sent! ',
+      'they\'re otw 🏃💨',
+        {
+          cancelable: true,
+          text: 'Cancel',
+          onPress: () => Alert.alert('Cancel Pressed'),
+          style: 'cancel',
+        },
+    
+    );
+    const alreadyHaveAccount = () => {
+      navigation.navigate("GroupInfo")
+    }
+
 
     const handleInvite = async () => {
         //only one invite can be sent per email
@@ -69,10 +100,12 @@ const InviteScreen = () =>  {
         }
       )
       .then(response => {
-        console.log(JSON.stringify(response));
+        showAlertSuccess();
+       
       }).catch(error => {
         // Handle error
-        console.error('Axios request error:', error);
+        showAlert(error);
+       
       });
     };
     const handleEmailChange = (text) => {
@@ -94,7 +127,9 @@ const InviteScreen = () =>  {
           function={handleInvite}
           name="Invite"
           width={"80%"}
+          height={"40%"}
         />
+         <Text style={{textAlign: "center", marginBottom: 10,}}>Does your roommate already have an account?<TouchableOpacity onPress={alreadyHaveAccount}><Text style={{color: '#92a3fd', textDecorationLine: 'underline',  textDecorationColor: "#92a3fd",}}>Join here instead!</Text></TouchableOpacity> </Text>
     </SafeAreaView>
 	); 
 }; 
