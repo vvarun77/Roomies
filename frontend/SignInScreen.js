@@ -12,6 +12,7 @@ import PasswordIcon from "./assets/textfieldIcons/Lock.png";
 import LogInIcon from "./assets/buttonIcons/Login.png";
 import * as Linking from 'expo-linking';
 import {Keyboard} from 'react-native';
+import BackButton from "./UI/BackButton.js";
 
 export default function SignInScreen() {
   // add logic to check for sign up token
@@ -22,7 +23,7 @@ export default function SignInScreen() {
 	const handleURL = (url) => {
 		const { hostname, path, queryParams } = Linking.parse(url);
 		if (path === 'signup') {      
-			navigation.navigate('Names')
+			navigation.navigate('InBetween')
 		} else {
 			console.log(path, queryParams);
 		}

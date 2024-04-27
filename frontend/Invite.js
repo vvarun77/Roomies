@@ -44,6 +44,7 @@ const InviteScreen = () =>  {
       // will need to be changed later to scheme roomies:// somethiing like that
       // string should be changed to what you see when you run yarn start
       //exp://10.19.168.70:8081 - varun
+      //const redirect_url = "Roomies://--/signup?" + queryStringified;
       const redirect_url = "Roomies://--/signup?" + queryStringified;
       return redirect_url;
     }
@@ -129,7 +130,7 @@ const InviteScreen = () =>  {
           width={"80%"}
           height={"40%"}
         />
-         <Text style={{textAlign: "center", marginBottom: 10,}}>Does your roommate already have an account?<TouchableOpacity onPress={alreadyHaveAccount}><Text style={{color: '#92a3fd', textDecorationLine: 'underline',  textDecorationColor: "#92a3fd",}}>Join here instead!</Text></TouchableOpacity> </Text>
+         <Text style={{textAlign: "center", marginBottom: 10,}}>Does your roommate already have an account?<TouchableOpacity onPress={alreadyHaveAccount}><Text style={{color: '#92a3fd', textDecorationLine: 'underline',  textDecorationColor: "#92a3fd",}}>Use the code here instead!</Text></TouchableOpacity> </Text>
     </SafeAreaView>
 	); 
 }; 

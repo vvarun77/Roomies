@@ -22,6 +22,8 @@ import {Keyboard} from 'react-native';
 
 export default function NamesScreen() {
   const [autoJoin, setAutoJoin] = useState(); 
+  const [groupName, setGroupName] = useState("");
+  const [groupCode, setGroupCode] = useState("");
   var url = Linking.useURL(url);
   
 	const handleURL = (url) => {
